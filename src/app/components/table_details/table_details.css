@@ -1,0 +1,10 @@
+
+
+.details-content {
+    table-layout: fixed;
+}
+
+.detail-body {
+    white-space: nowrap;
+    overflow-x: scroll;
+}

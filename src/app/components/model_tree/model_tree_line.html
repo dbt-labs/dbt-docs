@@ -1,0 +1,37 @@
+<li class='unselectable'>
+
+    <a ng-if="!item.unique_id"
+       class='unselectable'
+       ng-class="getClass(item)"
+       ng-click="toggle(item)">
+        <span class="filename">
+            <span class="filename-normal">
+                <svg class="icn menu-icon-on"><use xlink:href="{{ getIcon(item.type, 'on') }}"></use></svg>
+                <svg class="icn menu-icon-off"><use xlink:href="{{ getIcon(item.type, 'off') }}"></use></svg>
+            </span>
+            <span class="filename-ellip">{{name.start}}</span>
+            <span class="filename-normal">{{name.end}}</span>
+        </span>
+    </a>
+
+    <a ng-if="item.unique_id"
+       class='unselectable'
+       ng-class="getClass(item)"
+       ng-click="activate(item)"
+       data-nav-unique-id="{{ item.unique_id }}"
+       ui-sref='dbt.model({unique_id: item.unique_id})'>
+        <span class="filename">
+            <span class="filename-normal">
+                <svg class="icn menu-icon-on"><use xlink:href="{{ getIcon(item.type, 'on') }}"></use></svg>
+                <svg class="icn menu-icon-off"><use xlink:href="{{ getIcon(item.type, 'off') }}"></use></svg>
+            </span>
+            <span class="filename-ellip">{{name.start}}</span>
+            <span class="filename-normal">{{name.end}}</span>
+        </span>
+    </a>
+
+
+    <ul ng-if="item.items">
+        <model-tree-line item="subitem" depth="depth + 1" ng-repeat="subitem in item.items" />
+    </ul>
+</li>

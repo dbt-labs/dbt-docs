@@ -1,0 +1,55 @@
+<div class="section-content">
+    <h6>Details</h6>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="details">
+                <div class="details-content">
+                    <div class="detail-group">
+                        <!--
+                        <div class="detail-header">
+                            <h6 class="detail-label">Details</h6>
+                        </div>
+                        -->
+                        <div class="detail-body">
+                            <dl class="detail">
+                                <dt class='detail-label'>Details</dt>
+                                <dd class='detail-value'></dd>
+                            </dl>
+                            <dl class="detail"
+                                ng-repeat="item in details">
+                                <dt class="detail-label">{{ item.name }}</dt>
+                                <dd class="detail-value">{{ item.value }}</dd>
+                            </dl>
+                            <dl class="detail" ng-if="show_extended">
+                                <dt class="detail-label">Advanced</dt>
+                                <dd class="detail-value">
+                                    <a ng-show="!show_expanded()" ng-click="show_expanded(true)">Show</a>
+                                    <a ng-show="show_expanded()"  ng-click="show_expanded(false)">Hide</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="detail-group" ng-if="show_extended && show_expanded()">
+                        <!--
+                        <div class="detail-header">
+                            <h6 class="detail-label">Table</h6>
+                        </div>
+                        -->
+                        <div class="detail-body">
+                            <dl class="detail">
+                                <dt class='detail-label'>Table</dt>
+                                <dd class='detail-value'></dd>
+                            </dl>
+                            <dl class="detail"
+                                ng-repeat="item in extended"
+                                ng-if="item.include">
+                                <dt data-toggle="tooltip" title="{{ item.description }}" class="detail-label">{{ item.label }}</dt>
+                                <dd class="detail-value">{{ item.value }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

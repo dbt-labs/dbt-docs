@@ -1,0 +1,38 @@
+<style>
+.menu ul ul {
+    margin-left: 12px;
+}
+</style>
+
+<div class="menu">
+    <ul>
+        <li><a ui-sref="dbt.overview()" class="menu-link menu-main">Overview</a></li>
+
+        <div class="switches">
+            <div class="switch ">
+                <a href="#"
+                   class="switch-label"
+                   ng-class="{active: (nav_selected == 'project')}"
+                   ng-click="nav_selected = 'project'">Project</a>
+            </div>
+            <div class="switch">
+                <a href="#"
+                   class="switch-label"
+                   ng-class="{active: (nav_selected == 'database')}"
+                   ng-click="nav_selected = 'database'">Database</a>
+            </div>
+        </div>
+
+        <div class="menu" ng-show="nav_selected == 'project'">
+            <model-tree-line
+                item="item"
+                ng-repeat="item in tree.project"></model-tree-line>
+        </div>
+
+        <div class="menu" ng-show="nav_selected == 'database'">
+            <model-tree-line
+                item="item"
+                ng-repeat="item in tree.database"></model-tree-line>
+        </div>
+    </ul>
+</div>

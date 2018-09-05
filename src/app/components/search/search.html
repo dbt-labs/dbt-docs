@@ -1,0 +1,42 @@
+<div class="app-scroll">
+    <style>
+    .search-result-match {
+        background-color: #eee;
+    }
+    </style>
+
+    <div class="app-title">
+        <div class="app-frame app-pad">
+            <h1>
+                <span class="break">{{ query }}</span>
+                <small><span>{{ results.length }}</span> search results</small>
+            </h1>
+        </div>
+    </div>
+    <div class="app-details">
+        <div class="app-frame app-pad">
+            <div class="results">
+                <a ui-sref="dbt.model({unique_id: result.model.unique_id})"
+                   class="result search-result"
+                   ng-click="onSelect()"
+                   ng-repeat="result in results | filter:limit_search | orderBy:'-model.name':true track by result.model.unique_id ">
+
+                    <div class="result-content">
+                        <div class="result-icn">
+                            <svg class="icn "><use xlink:href="#icn-doc"></use></svg>
+                        </div>
+                        <div class="result-body">
+                            <h4 class="a">
+                                <span ng-bind-html="highlight(result.model.name)"></span>
+                            </h4>
+                            <p ng-bind-html="highlight(result.model.description)"></p>
+                        </div>
+                    </div>
+                </a>
+                <a
+                    ng-show="results.length >= max_results && !show_all"
+                    ng-click="show_all = true">Show {{ results.length - max_results }} more</a>
+            </div>
+        </div>
+    </div>
+</div>

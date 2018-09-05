@@ -1,0 +1,201 @@
+
+<div class="launcher" data-launcher="{{ graphService.orientation }}" ng-class="{on: graphService.expanded}">
+    <style>
+    .dirty-submit {
+        background-color: #0094b3 !important;
+        color: white !important;
+        transition: .5s linear;
+    }
+
+    #submit-graph-selection:hover {
+        background-color: #0094b3 !important;
+        color: white !important;
+    }
+
+    .dropup select:hover~.field-label,
+    .dropup select:focus~.field-label {
+        color: #919599;
+    }
+
+    .dropup ul:hover~.field-label,
+    .dropup ul:focus~.field-label {
+        color: #919599;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+    }
+
+    .dropdown-menu li {
+        padding: 2px 10px;
+    }
+
+    .dropdown-menu li:hover {
+        background-color: #ededee !important;
+    }
+
+    li .checked {
+        width: 10px;
+        float: right;
+    }
+
+    </style>
+
+    <div class="launcher-section">
+        <div class="launcher-btn">
+            <a
+                class="btn btn-info btn-pill btn-lg btn-icon btn-shadow"
+                data-toggle="tooltip"
+                title="View Lineage Graph"
+                ng-click="onLauncherClick()">
+                <svg class="icn icn-md"><use xlink:href="#icn-flow"></use></svg>
+            </a>
+        </div>
+        <div class="launcher-content" ng-click="onWindowClick($event)">
+            <div class="launcher-window">
+                <div class="launcher-header">
+                    <div class="launcher-cell">
+                        <h6>Lineage Graph</h6>
+                    </div>
+                    <div class="launcher-actions">
+                        <a
+                            ng-click="showExpanded()"
+                            ng-show="graphService.orientation == 'sidebar'"
+                            data-large
+                            class="btn btn-text btn-lg btn-icon btn-shadow"
+                            data-toggle="tooltip"
+                            title="View Fullscreen">
+                                <svg class="icn icn-md"><use xlink:href="#icn-expand"></use></svg>
+                        </a>
+                        <a
+                            ng-click="showContracted()"
+                            ng-show="graphService.orientation == 'fullscreen' && selectorService.getViewNode()"
+                            class="btn btn-text btn-lg btn-icon btn-shadow"
+                            data-toggle="tooltip"
+                            title="View Fullscreen">
+                                <svg class="icn icn-md"><use xlink:href="#icn-contract"></use></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="launcher-body">
+                    <div class="launcher-embed">
+                        <div ng-controller="GraphCtrl" style="height: 100%" id="graph-viz-wrapper">
+                            <div graph-viz
+                                viz-options="graph.options"
+                                viz-elements="graph.elements"
+                                viz-style="graph.style"
+                                viz-layout="graph.layout"
+                                viz-ready="graph.ready"
+                                viz-rendered="graphRendered"
+                                viz-size="{size: graphService.orientation, expanded: graphService.expanded}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="launcher-footer">
+                    <div class="launcher-cell launcher-flush">
+                        <div class="component bg-navy text-navy-lightest margin">
+                            <form class="fields fields-flush launcher-hide-sidebar"
+                                  ng-class="{visible: filters_visible}"
+                                  ng-submit="onUpdateSelector()">
+                                <label class="field">
+                                    <div class="dropup" data-form-type="packages">
+                                        <select
+                                            data-toggle="dropdown"
+                                            class='field-input form-control input-dark'
+                                            ng-click="onSelectClick('packages')"
+                                            ng-blur="onSelectBlur('packages')">
+                                            <option selected disabled hidden>
+                                                <span>{{ selectionLabel('packages') }}</span>
+                                            </option>
+                                        </select>
+                                        <ul
+                                            class="dropdown-menu"
+                                            ng-show="isVisible('packages')"
+                                            style="display: block">
+                                            <li
+                                                class='text-dark'
+                                                ng-repeat="item in selectorService.options.packages"
+                                                ng-click="onItemSelect('packages', item, $event)">
+                                                {{ item }}
+                                                <span ng-show="isSelected('packages', item)">
+                                                    <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div class="field-label">packages</div>
+                                    </div>
+                                </label>
+                                <label class="field">
+                                    <div class="dropup" data-form-type="node_types">
+                                        <select
+                                            data-toggle="dropdown"
+                                            class='field-input form-control input-dark'
+                                            ng-click="onSelectClick('node_types')"
+                                            ng-blur="onSelectBlur('node_types', $event)">
+                                            <option selected disabled hidden>
+                                                <span>{{ selectionLabel('node_types') }}</span>
+                                            </option>
+                                        </select>
+                                        <ul
+                                            class="dropdown-menu"
+                                            ng-show="isVisible('node_types')"
+                                            style="display: block">
+                                            <li
+                                                class='text-dark'
+                                                ng-repeat="item in selectorService.options.node_types"
+                                                ng-click="onItemSelect('node_types', item, $event)">
+                                                {{ item }}
+                                                <span ng-show="isSelected('node_types', item)">
+                                                    <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div class="field-label">node types</div>
+                                    </div>
+                                </label>
+                                <label class="field" style="flex: 4 0 160px">
+                                    <input type="text"
+                                           class="field-input form-control input-dark"
+                                           ng-model="selectorService.selection.dirty.include"
+                                           placeholder="..." />
+                                    <div class="field-label">--models</div>
+                                </label>
+                                <label class="field" style="flex: 4 0 160px">
+                                    <input type="text"
+                                           class="field-input form-control input-dark"
+                                           ng-model="selectorService.selection.dirty.exclude"
+                                           placeholder="..." />
+                                    <div class="field-label">--exclude</div>
+                                </label>
+                                <label class="field" style="flex: 0 0 80px">
+                                    <input type="submit"
+                                           id="submit-graph-selection"
+                                           class="field-input form-control input-dark"
+                                           ng-class="{'dirty-submit': selectorService.isDirty()}"
+                                           value="Update Graph" />
+                                    <div class="field-label text-center" style="width: 100%"></div>
+                                </label>
+                                <label class="field" style="flex: 0 0 80px">
+                                    <button type="button"
+                                        ng-click="closeGraph()"
+                                        class="field-input form-control input-dark text-center"
+                                        ><svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
+                                    </button>
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+                    <!--<div class="launcher-spacer"></div>-->
+                    <div class="launcher-actions" ng-show="graphService.orientation == 'sidebar'">
+                        <button type="button"
+                            ng-click="closeGraph()"
+                            class="btn btn-text btn-lg btn-icon btn-shadow"
+                            data-toggle="tooltip"
+                            title="Close Graph"><svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

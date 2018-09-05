@@ -1,0 +1,37 @@
+
+td.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    text-align: right;
+    color: #ccc;
+    padding-right: 20px;
+    padding-left: 10px;
+
+    vertical-align: top;
+}
+
+.nav-tabs li.nav-pull-right {
+    flex: 1 0 auto;
+    text-align: right;
+}
+
+tr.column-row-selected {
+
+}
+
+td.column-expanded{
+    padding: 0px !important;
+}
+
+td.column-expanded > div {
+    padding: 5px 10px;
+    margin-left: 20px;
+    height: 100%;
+
+    border-left: 1px solid #ccc !important;
+}

@@ -1,0 +1,51 @@
+
+<div>
+    <graph-launcher></graph-launcher>
+
+    <div class="app app-row">
+        <div class="app-menu app-column">
+            <div class="app-overlay" data-toggle=".app-menu"></div>
+            <div class="app-header app-navbar app-shadow app-pad">
+                <div class="app-row app-middle">
+                    <div class="app-body">
+                        <img class="app-logo" ng-src="{{ logo }}" alt="dbt" />
+                    </div>
+                    <div class="app-footer app-toggle app-icn" data-toggle=".app-menu">
+                        <svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="app-body">
+                <div class="app-scroll app-pad app-flush-right">
+                    <model-tree tree="tree"></model-tree>
+                </div>
+            </div>
+        </div>
+        <div class="app-content app-column">
+            <div class="app-header app-navbar app-shadow">
+                <div class="app-frame app-pad app-row app-middle">
+                    <div class="app-header app-icn app-toggle" data-toggle=".app-menu">
+                        <svg class="icn icn-md"><use xlink:href="#icn-dbt"></use></svg>
+                    </div>
+                    <div class="app-body">
+                        <input
+                            id="search"
+                            ng-model="search.query"
+                            ng-focus="onSearchFocus($event, true)"
+                            ng-keydown="onSearchKeypress($event)"
+                            type="text"
+                            class="form-control"
+                            placeholder="Search for models..." />
+                    </div>
+                    <div class="app-footer app-icn" ng-show="search.is_focused" ng-click="clearSearch()">
+                        <svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
+                    </div>
+                </div>
+            </div>
+            <div class='app-body' ng-show='!search.is_focused' ui-view></div>
+            <div class="app-body" ng-show="search.is_focused">
+                <docs-search query="search.query" results="search.results" on-select="clearSearch()"></docs-search>
+            </div>
+        </div>
+    </div>
+</div>

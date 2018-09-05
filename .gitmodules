@@ -1,0 +1,3 @@
+[submodule "dbt-styleguide"]
+	path = styles
+	url = git@github.com:fishtown-analytics/dbt-styleguide.git
