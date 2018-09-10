@@ -45,10 +45,19 @@ angular
     }
 
     $scope.get_columns = function(model) {
-        return _.chain(model.columns)
+        var columns = _.chain(model.columns)
                 .values()
                 .sortBy('index')
-                .value()
+                .value();
+
+        // re-number columns because index comes from the catalog, and index may not always be present
+        // this prevents errors with the view's `track by column.index`
+
+        _.each(columns, function(col, i) {
+            col.index = i;
+        });
+
+        return columns;
     }
 
     $scope.model = {};
