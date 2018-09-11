@@ -187,7 +187,9 @@ angular
                 if (depends_on.length) {
                     var model = depends_on[0];
                     var node = project.nodes[model];
-                    var column = node.columns[test.column_name];
+                    var column = _.find(node.columns, function(col, col_name) {
+                        return col_name.toLowerCase() == test.column_name.toLowerCase();
+                    });
 
                     if (!column) {
                         return;
