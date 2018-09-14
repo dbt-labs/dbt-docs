@@ -158,7 +158,7 @@
                                 <li class='nav-pull-right'></li>
                                 <li>
                                     <a class='unselectable'
-                                       ng-click="copy_to_clipboard(view_compiled_sql ? model.compiled_sql : model.raw_sql)"
+                                       ng-click="copy_to_clipboard(view_compiled_sql ? model.injected_sql : model.raw_sql)"
                                        >{{ copied ? 'copied' : 'copy to clipboard' }}</a>
                                 </li>
                             </ul>
