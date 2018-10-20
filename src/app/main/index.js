@@ -149,8 +149,15 @@ angular
         $scope.search.results = projectService.search('');
 
         var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name'))
+        var all_tags = [];
+        _.each(project.nodes, function(node) {
+            if (node.resource_type == 'model') {
+                var tags = node.tags;
+                all_tags = _.union(all_tags, tags);
+            };
+        });
 
-        selectorService.init({packages: packages})
+        selectorService.init({packages: packages, tags: all_tags})
         setSelectedModel($state.params.unique_id);
 
         var cur_state = locationService.parseState($state.params);

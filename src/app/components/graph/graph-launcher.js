@@ -22,7 +22,7 @@ angular
             scope.selectorService = selectorService;
 
             var forms = {
-                node_types: {
+                tags: {
                     visible: false,
                 },
                 packages: {
@@ -35,7 +35,7 @@ angular
 
                 var closest_dropup = $(e.target).closest(".dropup");
                 if (!closest_dropup.length) {
-                    forms.node_types.visible = false;
+                    forms.tags.visible = false;
                     forms.packages.visible = false;
                 }
 

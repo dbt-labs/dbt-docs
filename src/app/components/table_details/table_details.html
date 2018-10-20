@@ -11,9 +11,10 @@
                         </div>
                         -->
                         <div class="detail-body">
-                            <dl class="detail">
-                                <dt class='detail-label'>Details</dt>
-                                <dd class='detail-value'></dd>
+                            <dl class='detail'>
+                                <dt class="detail-label">Tags</dt>
+                                <dd ng-if="model.tags.length > 0" class="detail-value">{{ model.tags.join(", ") }}</dd>
+                                <dd ng-if="model.tags.length == 0" class="detail-value">None</dd>
                             </dl>
                             <dl class="detail"
                                 ng-repeat="item in details">
@@ -36,10 +37,6 @@
                         </div>
                         -->
                         <div class="detail-body">
-                            <dl class="detail">
-                                <dt class='detail-label'>Table</dt>
-                                <dd class='detail-value'></dd>
-                            </dl>
                             <dl class="detail"
                                 ng-repeat="item in extended"
                                 ng-if="item.include">
