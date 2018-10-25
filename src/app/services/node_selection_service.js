@@ -18,7 +18,7 @@ angular
         include: '',
         exclude: '',
         packages: [],
-        tags: [],
+        tags: [null],
         depth: 1,
     };
 
@@ -32,23 +32,18 @@ angular
 
         options: {
             packages: [],
-            tags: [],
+            tags: [null],
         }
     };
 
     service.init = function(defaults) {
-        var all_packages = defaults.packages;
-        var all_tags = defaults.tags;
+        _.each(defaults, function(value, attr) {
+            service.options[attr] = value;
+            initial_selector[attr] = value;
+            service.selection.clean[attr] = value;
+            service.selection.dirty[attr] = value;
+        });
 
-        service.options.packages = all_packages;
-        initial_selector.packages = all_packages;
-        service.selection.clean.packages = all_packages;
-        service.selection.dirty.packages = all_packages;
-
-        service.options.tags = all_tags;
-        initial_selector.tags = all_tags;
-        service.selection.clean.tags = all_tags;
-        service.selection.dirty.tags = all_tags;
     }
 
     service.resetSelection = function(node) {
@@ -334,8 +329,9 @@ angular
 
             var matched_package = _.includes(selected_spec.packages, node.data.package_name);
             var matched_tags = _.intersection(selected_spec.tags, node.data.tags).length > 0;
+            var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 0);
 
-            if (!matched_package || !matched_tags) {
+            if (!matched_package || (!matched_tags && !matched_untagged)) {
                 nodes_to_prune.push(node.data.unique_id);
             }
         })

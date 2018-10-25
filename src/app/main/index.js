@@ -149,7 +149,7 @@ angular
         $scope.search.results = projectService.search('');
 
         var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name'))
-        var all_tags = [];
+        var all_tags = [null];
         _.each(project.nodes, function(node) {
             if (node.resource_type == 'model') {
                 var tags = node.tags;
