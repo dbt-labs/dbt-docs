@@ -5,20 +5,20 @@ const _ = require('underscore');
 var SELECTOR_PARENTS = '+'
 var SELECTOR_CHILDREN = '+'
 var SELECTOR_GLOB = '*'
+var SELECTOR_TYPE = {
+    FQN: 'fqn:',
+    TAG: 'tag:'
+}
 
 angular
 .module('dbt')
 .factory('selectorService', ["$state", function($state) {
 
-    var node_types = [
-        'model',
-    ]
-
     var initial_selector = {
         include: '',
         exclude: '',
         packages: [],
-        node_types: node_types,
+        tags: [null],
         depth: 1,
     };
 
@@ -32,17 +32,18 @@ angular
 
         options: {
             packages: [],
-            node_types: node_types,
+            tags: [null],
         }
     };
 
     service.init = function(defaults) {
-        var all_packages = defaults.packages;
+        _.each(defaults, function(value, attr) {
+            service.options[attr] = value;
+            initial_selector[attr] = value;
+            service.selection.clean[attr] = value;
+            service.selection.dirty[attr] = value;
+        });
 
-        service.options.packages = all_packages;
-        initial_selector.packages = all_packages;
-        service.selection.clean.packages = all_packages;
-        service.selection.dirty.packages = all_packages;
     }
 
     service.resetSelection = function(node) {
@@ -87,7 +88,7 @@ angular
     }
 
     service.isDirty = function() {
-        var keys = ['include', 'exclude', 'packages', 'node_types']
+        var keys = ['include', 'exclude', 'packages', 'tags']
         var res = _.isEqual(service.selection.clean, service.selection.dirty);
         return !res
     }
@@ -148,12 +149,22 @@ angular
         }
 
         var node_selector = node_spec.substring(index_start, index_end)
-        var qualified_node_name = node_selector.split('.');
+
+        var selector_type;
+        var selector_val;
+        if (node_selector.startsWith(SELECTOR_TYPE.TAG)) {
+            selector_type = SELECTOR_TYPE.TAG;
+            selector_val = node_selector.replace(selector_type, '');
+        } else {
+            selector_type = SELECTOR_TYPE.FQN;
+            selector_val = node_selector.replace(selector_type, '').split('.');
+        }
 
         return {
             select_parents: select_parents,
             select_children: select_children,
-            qualified_node_name: qualified_node_name,
+            selector_type: selector_type,
+            selector_value: selector_val,
             raw: node_spec
         }
     }
@@ -231,8 +242,24 @@ angular
         return _.uniq(nodes);
     }
 
+    function get_nodes_by_tag(elements, tag) {
+        var nodes = [];
+        _.each(elements, function(node_obj) {
+            var present_tags = node_obj.data.tags;
+            if (_.includes(present_tags, tag)) {
+                nodes.push(node_obj.data);
+            }
+        })
+        return nodes;
+    }
+
     function get_nodes_from_spec(dag, pristine_nodes, hops, selector) {
-        var nodes = get_nodes_by_qualified_name(pristine_nodes, selector.qualified_node_name);
+        var nodes = [];
+        if (selector.selector_type == SELECTOR_TYPE.FQN) {
+            nodes = get_nodes_by_qualified_name(pristine_nodes, selector.selector_value);
+        } else if (selector.selector_type == SELECTOR_TYPE.TAG) {
+            nodes = get_nodes_by_tag(pristine_nodes, selector.selector_value);
+        }
 
         var selected_nodes = [];
         var matched_nodes = [];
@@ -301,9 +328,10 @@ angular
             var node = pristine[node_id];
 
             var matched_package = _.includes(selected_spec.packages, node.data.package_name);
-            var matched_type = _.includes(selected_spec.node_types, node.data.resource_type);
+            var matched_tags = _.intersection(selected_spec.tags, node.data.tags).length > 0;
+            var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 0);
 
-            if (!matched_package || !matched_type) {
+            if (!matched_package || (!matched_tags && !matched_untagged)) {
                 nodes_to_prune.push(node.data.unique_id);
             }
         })

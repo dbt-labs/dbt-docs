@@ -11,9 +11,12 @@
                         </div>
                         -->
                         <div class="detail-body">
-                            <dl class="detail">
-                                <dt class='detail-label'>Details</dt>
-                                <dd class='detail-value'></dd>
+                            <dl class='detail'>
+                                <dt class="detail-label">Tags</dt>
+                                <dd ng-if="model.tags.length > 0" class="detail-value">
+                                    <span ng-repeat="tag in model.tags"><code>{{ tag }}</code>&nbsp;</span>
+                                </dd>
+                                <dd ng-if="model.tags.length == 0" class="detail-value">untagged</dd>
                             </dl>
                             <dl class="detail"
                                 ng-repeat="item in details">
@@ -36,10 +39,6 @@
                         </div>
                         -->
                         <div class="detail-body">
-                            <dl class="detail">
-                                <dt class='detail-label'>Table</dt>
-                                <dd class='detail-value'></dd>
-                            </dl>
                             <dl class="detail"
                                 ng-repeat="item in extended"
                                 ng-if="item.include">

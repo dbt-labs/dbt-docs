@@ -22,7 +22,7 @@ angular
             scope.selectorService = selectorService;
 
             var forms = {
-                node_types: {
+                tags: {
                     visible: false,
                 },
                 packages: {
@@ -35,7 +35,7 @@ angular
 
                 var closest_dropup = $(e.target).closest(".dropup");
                 if (!closest_dropup.length) {
-                    forms.node_types.visible = false;
+                    forms.tags.visible = false;
                     forms.packages.visible = false;
                 }
 
@@ -99,14 +99,14 @@ angular
                 }
             }
 
-            scope.selectionLabel = function(form) {
+            scope.selectionLabel = function(form, fallback_string) {
                 var model = selectorService.selection.dirty[form];
                 var all = selectorService.options[form];
 
                 if (model.length == 0) {
                     return "None selected";
                 } else if (model.length == 1) {
-                    return model[0];
+                    return model[0] || fallback_string;
                 } else if (model.length == all.length) {
                     return "All selected";
                 } else {

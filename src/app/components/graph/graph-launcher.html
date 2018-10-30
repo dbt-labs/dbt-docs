@@ -126,31 +126,32 @@
                                     </div>
                                 </label>
                                 <label class="field">
-                                    <div class="dropup" data-form-type="node_types">
+                                    <div class="dropup" data-form-type="tags">
                                         <select
                                             data-toggle="dropdown"
                                             class='field-input form-control input-dark'
-                                            ng-click="onSelectClick('node_types')"
-                                            ng-blur="onSelectBlur('node_types', $event)">
+                                            ng-click="onSelectClick('tags')"
+                                            ng-blur="onSelectBlur('tags', $event)">
                                             <option selected disabled hidden>
-                                                <span>{{ selectionLabel('node_types') }}</span>
+                                                <span>{{ selectionLabel('tags', 'untagged') }}</span>
                                             </option>
                                         </select>
                                         <ul
                                             class="dropdown-menu"
-                                            ng-show="isVisible('node_types')"
+                                            ng-show="isVisible('tags')"
                                             style="display: block">
                                             <li
                                                 class='text-dark'
-                                                ng-repeat="item in selectorService.options.node_types"
-                                                ng-click="onItemSelect('node_types', item, $event)">
-                                                {{ item }}
-                                                <span ng-show="isSelected('node_types', item)">
+                                                ng-repeat="item in selectorService.options.tags"
+                                                ng-click="onItemSelect('tags', item, $event)">
+                                                <span ng-if='item == null'>untagged</span>
+                                                <span ng-if='item != null'>{{ item }}</span>
+                                                <span ng-show="isSelected('tags', item)">
                                                     <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                                                 </span>
                                             </li>
                                         </ul>
-                                        <div class="field-label">node types</div>
+                                        <div class="field-label">tags</div>
                                     </div>
                                 </label>
                                 <label class="field" style="flex: 4 0 160px">
