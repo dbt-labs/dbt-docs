@@ -11,6 +11,7 @@ angular
     return {
         scope: {
             model: '=',
+            extras: '='
         },
         templateUrl: template,
         link: function(scope) {
@@ -62,6 +63,15 @@ angular
                 var is_ephemeral = !model.metadata;
                 var metadata = model.metadata || {};
 
+                var relation;
+                if (is_ephemeral) {
+                    relation = undefined;
+                } else if (model.resource_type == 'source') {
+                    relation = model.database + "." + model.schema + "." + model.identifier;
+                } else {
+                    relation = model.database + "." + model.schema + "." + model.alias;
+                }
+
                 var stats = [
                     {
                         name: "Owner",
@@ -77,7 +87,7 @@ angular
                     },
                     {
                         name: "Relation",
-                        value: is_ephemeral ? undefined : (model.schema + "." + model.alias)
+                        value: relation
                     },
                 ]
 
@@ -111,6 +121,11 @@ angular
 
                 scope.details = getBaseStats(nv);
                 scope.extended = getExtendedStats(nv.stats);
+
+                if (scope.extras) {
+                    scope.details = scope.details.concat(scope.extras);
+                }
+
                 scope.show_extended = _.where(scope.extended, {include: true}).length > 0;
             });
         }

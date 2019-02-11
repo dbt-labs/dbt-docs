@@ -149,17 +149,24 @@ angular
                     column: test.column_name,
                 };
 
-                if (test.name.startsWith("not_null")) {
+                // TODO : All of this is unacceptably bad
+                var test_name = test.name;
+                if (test_name.startsWith("source_")) {
+                    test_name = test_name.replace(/^source_/, "")
+                }
+
+                if (test_name.startsWith("not_null")) {
                     test_info.label = "Not Null";
                     test_info.short = "N";
-                } else if (test.name.startsWith("unique")) {
+                } else if (test_name.startsWith("unique")) {
                     test_info.label = "Unique";
                     test_info.short = "U";
-                } else if (test.name.startsWith("relationships")) {
+                } else if (test_name.startsWith("relationships")) {
                     test_info.label = "Foreign Key";
                     test_info.short = "F";
 
                     // hacks
+                    // TODO : Make this work for sources?
                     if (test.refs.length != 2) {
                         return;
                     } else {
@@ -177,7 +184,7 @@ angular
                             return
                         }
                     }
-                //} else if (test.name.startsWith("accepted_values")) {
+                //} else if (test_name.startsWith("accepted_values")) {
                 //    test_info.label = "Values";
                 //    test_info.short = "A";
                 } else {
