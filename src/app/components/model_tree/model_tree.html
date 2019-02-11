@@ -24,12 +24,22 @@
         </div>
 
         <div class="menu" ng-show="nav_selected == 'project'">
+            <span ng-show="tree.sources.length > 0">
+                <strong>Sources</strong>
+                <model-tree-line
+                    item="item"
+                    ng-repeat="item in tree.sources"></model-tree-line>
+                <br />
+            </span>
+
+            <strong>Models</strong>
             <model-tree-line
                 item="item"
                 ng-repeat="item in tree.project"></model-tree-line>
         </div>
 
         <div class="menu" ng-show="nav_selected == 'database'">
+            <strong>Tables and Views</strong>
             <model-tree-line
                 item="item"
                 ng-repeat="item in tree.database"></model-tree-line>

@@ -15,7 +15,8 @@ angular
         project: {},
         tree: {
             project: [],
-            database: []
+            database: [],
+            sources: []
         },
         files: {
             manifest: {},
@@ -261,6 +262,9 @@ angular
             var models = _.filter(service.project.nodes, {resource_type: 'model'});
             service.tree.database = buildDatabaseTree(models, select);
             service.tree.project = buildProjectTree(models, select);
+
+            var sources = _.filter(service.project.nodes, {resource_type: 'source'});
+            service.tree.sources = buildSourceTree(sources, select);
             cb(service.tree);
         });
     }
@@ -287,6 +291,7 @@ angular
     service.updateSelected = function(select) {
         service.updateSelectedInTree(select, service.tree.project);
         service.updateSelectedInTree(select, service.tree.database);
+        service.updateSelectedInTree(select, service.tree.sources);
 
         return service.tree;
     }
@@ -305,6 +310,46 @@ angular
         })
 
         return res;
+    }
+
+    function buildSourceTree(nodes, select) {
+        var sources = {}
+
+        _.each(nodes, function(node) {
+            var source = node.source_name;
+            var name = node.name;
+            var is_active = node.unique_id == select;
+
+            if (!sources[source]) {
+                sources[source] = {
+                    type: "folder",
+                    name: source,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                sources[source].active = true;
+            }
+
+            sources[source].items.push({
+                type: 'file',
+                name: name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'source'
+            })
+        });
+
+        // sort schemas
+        var sources = _.sortBy(_.values(sources), 'name');
+
+        // sort tables in the schema
+        _.each(sources, function(source) {
+            source.items = _.sortBy(source.items, 'name');
+        });
+
+        return sources
     }
 
     function buildProjectTree(nodes, select) {
@@ -343,6 +388,7 @@ angular
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
+                node_type: 'model'
             }
         });
 
@@ -379,7 +425,8 @@ angular
                 name: node.alias,
                 node: node,
                 active: is_active,
-                unique_id: node.unique_id
+                unique_id: node.unique_id,
+                node_type: 'model'
             })
         });
 
@@ -400,6 +447,9 @@ angular
         var models = _.filter(service.project.nodes, {resource_type: 'model'});
         service.tree.database = buildDatabaseTree(models);
         service.tree.project = buildProjectTree(models);
+
+        var sources = _.filter(service.project.nodes, {resource_type: 'source'});
+        service.tree.sources = buildSourceTree(sources);
     }
 
     return service;

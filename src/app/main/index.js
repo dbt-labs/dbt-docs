@@ -21,7 +21,8 @@ angular
 
     $scope.tree = {
         database: {},
-        project: {}
+        project: {},
+        sources: {},
     }
 
     $scope.search = {
@@ -74,7 +75,8 @@ angular
     // populate tree when data is loaded
     projectService.getModelTree($state.params.unique_id, function(tree) {
         $scope.tree.database = tree.database;
-        $scope.tree.project = tree.project
+        $scope.tree.project = tree.project;
+        $scope.tree.sources = tree.sources;
 
         setTimeout(function() {
             scrollToSelectedModel($scope.model_uid);
@@ -114,6 +116,7 @@ angular
             var tree = projectService.updateSelected(params.unique_id);
             $scope.tree.database = tree.database;
             $scope.tree.project = tree.project;
+            $scope.tree.sources = tree.sources;
             $scope.search.query = ""
 
             console.log("updating selected model to: ", params);
