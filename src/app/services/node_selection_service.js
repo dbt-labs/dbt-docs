@@ -49,8 +49,10 @@ angular
 
     service.resetSelection = function(node) {
         var include_selection;
-        if (node) {
+        if (node && node.resource_type == 'model') {
             include_selection = '+' + node.name + '+';
+        } else if (node && node.resource_type == 'source') {
+            include_selection = '+source:' + node.source_name + "." + node.name + '+';
         } else {
             include_selection = "";
         }
@@ -70,13 +72,21 @@ angular
     }
 
     service.excludeNode = function(node, opts) {
-        var node_name = node.name;
-
         var exclude = service.selection.dirty.exclude;
 
         var pre = opts.parents ? "+" : "";
         var post = opts.children ? "+" : "";
         var spacer = exclude.length > 0 ? " " : "";
+
+        var node_name;
+
+        if (node.resource_type == 'source') {
+            pre += "source:"
+            node_name = node.source_name + "." + node.name;
+        } else {
+            node_name = node.name;
+        }
+
         var new_exclude = exclude + spacer + pre + node_name + post;
 
         service.selection.dirty.exclude = new_exclude;
@@ -231,7 +241,7 @@ angular
             var fqn_ish = node.fqn;
 
             if (!fqn_ish) {
-                fqn_ish = [node.package_name, node.source_name, node.name]
+                return;
             }
 
             if (qualified_name.length == 1 && _.last(fqn_ish) == qualified_name[0]) {
