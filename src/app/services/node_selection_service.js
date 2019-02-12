@@ -84,6 +84,14 @@ angular
         return service.updateSelection();
     }
 
+    service.selectSource = function(source, opts) {
+        var post = opts.children ? "+" : "";
+        var new_include = 'source:' + source + post;
+
+        service.selection.dirty.include = new_include;
+        return service.updateSelection();
+    }
+
     service.clearViewNode = function() {
         service.view_node = null;
     }

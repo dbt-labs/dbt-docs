@@ -93,9 +93,9 @@ angular
                 value: $scope.model.loader
             },
             {
-                name: "Loaded At Field",
-                value: $scope.model.loaded_at_field
-            }
+                name: "Source",
+                value: $scope.model.source_name
+            },
         ]
     })
 

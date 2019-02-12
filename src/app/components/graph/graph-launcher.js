@@ -6,8 +6,8 @@ const $ = require('jquery');
 
 angular
 .module('dbt')
-.directive('graphLauncher', ['$q', 'graph', 'selectorService', 'project', 'trackingService', 'locationService',
-    function($q, graph, selectorService, project, trackingService, locationService) {
+.directive('graphLauncher', ['$state', '$q', 'graph', 'selectorService', 'project', 'trackingService', 'locationService',
+    function($state, $q, graph, selectorService, project, trackingService, locationService) {
 
     var directive = {
         restrict: 'EA',
@@ -147,6 +147,13 @@ angular
                 if (node) {
                     selectorService.resetSelection(node)
                     scope.showContracted()
+                } else if ($state.params.source) {
+                    selectorService.resetSelection();
+                    scope.showExpanded();
+                    var spec = selectorService.selectSource($state.params.source, {children: true});
+                    setTimeout(function() {
+                        graph.updateGraph(spec)
+                    });
                 } else {
                     selectorService.resetSelection();
                     scope.showExpanded();
