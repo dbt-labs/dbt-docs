@@ -22,6 +22,14 @@ angular
                 return (index < scope.max_results || scope.show_all);
             }
 
+            scope.getModelName = function(model) {
+                if (model.resource_type == 'source') {
+                    return model.source_name + "." + model.name;
+                } else {
+                    return model.name;
+                }
+            }
+
             scope.highlight = function(text) {
                 if (!scope.query || !text) {
                     return $sce.trustAsHtml(text);

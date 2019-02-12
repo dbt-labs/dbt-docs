@@ -27,7 +27,8 @@
                         </div>
                         <div class="result-body">
                             <h4 class="a">
-                                <span ng-bind-html="highlight(result.model.name)"></span>
+                                <span ng-bind-html="highlight(getModelName(result.model))"></span>
+                                <small>{{result.model.resource_type}}</small>
                             </h4>
                             <p ng-bind-html="highlight(result.model.description)"></p>
                         </div>

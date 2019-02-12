@@ -220,7 +220,9 @@ angular
             service.project = compiled_project;
 
             // performance hack
-            service.project.searchable = _.filter(service.project.nodes, {resource_type: 'model'});
+            service.project.searchable = _.filter(service.project.nodes, function(node) {
+                return _.includes(['model', 'source'], node.resource_type);
+            });
 
             service.loaded.resolve();
         });

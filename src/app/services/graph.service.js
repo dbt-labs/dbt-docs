@@ -175,7 +175,7 @@ angular
                 {
                     selector: 'node[resource_type="source"]',
                     style: {
-                        'background-color': '#002934',
+                        'background-color': '#5fb825',
                     }
                 },
                 {
