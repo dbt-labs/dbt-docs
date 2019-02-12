@@ -47,3 +47,9 @@
 .cy-context-menus-divider {
   border-bottom:1px solid #A0A0A0;
 }
+
+
+select:not([multiple]).form-control {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cG9seWxpbmUgcG9pbnRzPSI0LjUgNiA4IDkuNSAxMS41IDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwOTRiMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiAvPjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==");
+    background-size: 1.25em 1.25em;
+}

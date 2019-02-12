@@ -4,8 +4,7 @@ const angular = require('angular');
 const _ = require('underscore');
 const $ = require('jquery');
 
-// this should go somewhere else...
-const logo = require('!!svg-url-loader?noquotes!../../assets/img/logos/dbt.svg');
+const logo = require('./../../assets/images/logo.svg');
 
 require('../services/project_service.js');
 require('../services/graph.service.js');
