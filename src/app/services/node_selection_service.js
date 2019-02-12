@@ -7,7 +7,8 @@ var SELECTOR_CHILDREN = '+'
 var SELECTOR_GLOB = '*'
 var SELECTOR_TYPE = {
     FQN: 'fqn:',
-    TAG: 'tag:'
+    TAG: 'tag:',
+    SOURCE: 'source:'
 }
 
 angular
@@ -155,6 +156,9 @@ angular
         if (node_selector.startsWith(SELECTOR_TYPE.TAG)) {
             selector_type = SELECTOR_TYPE.TAG;
             selector_val = node_selector.replace(selector_type, '');
+        } else if (node_selector.startsWith(SELECTOR_TYPE.SOURCE)) {
+            selector_type = SELECTOR_TYPE.SOURCE;
+            selector_val = node_selector.replace(selector_type, '');
         } else {
             selector_type = SELECTOR_TYPE.FQN;
             selector_val = node_selector.replace(selector_type, '').split('.');
@@ -218,6 +222,10 @@ angular
             var node = node_obj.data;
             var fqn_ish = node.fqn;
 
+            if (!fqn_ish) {
+                fqn_ish = [node.package_name, node.source_name, node.name]
+            }
+
             if (qualified_name.length == 1 && _.last(fqn_ish) == qualified_name[0]) {
 
                 nodes.push(node);
@@ -253,9 +261,25 @@ angular
         return nodes;
     }
 
+    function get_nodes_by_source(elements, source) {
+        var nodes = [];
+        _.each(elements, function(node_obj) {
+            var source_name = node_obj.data.source_name;
+            var name = node_obj.data.name;
+            if (source == source_name + "." + name) {
+                nodes.push(node_obj.data);
+            } else if (source == source_name) {
+                nodes.push(node_obj.data);
+            }
+        })
+        return nodes;
+    }
+
     function get_nodes_from_spec(dag, pristine_nodes, hops, selector) {
         var nodes = [];
-        if (selector.selector_type == SELECTOR_TYPE.FQN) {
+        if (selector.selector_type == SELECTOR_TYPE.SOURCE) {
+            nodes = get_nodes_by_source(pristine_nodes, selector.selector_value);
+        } else if (selector.selector_type == SELECTOR_TYPE.FQN) {
             nodes = get_nodes_by_qualified_name(pristine_nodes, selector.selector_value);
         } else if (selector.selector_type == SELECTOR_TYPE.TAG) {
             nodes = get_nodes_by_tag(pristine_nodes, selector.selector_value);
@@ -326,6 +350,10 @@ angular
         var nodes_to_prune = [];
         _.each(nodes_to_include, function(node_id) {
             var node = pristine[node_id];
+
+            if (!node.data.tags) {
+                node.data.tags = [];
+            }
 
             var matched_package = _.includes(selected_spec.packages, node.data.package_name);
             var matched_tags = _.intersection(selected_spec.tags, node.data.tags).length > 0;

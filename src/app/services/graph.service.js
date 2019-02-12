@@ -141,7 +141,7 @@ angular
                         'width': '5px',
                         'height': '5px',
                         'padding': '5px',
-                        'content': 'data(name)',
+                        'content': 'data(label)',
                         'font-weight': 300,
                         'text-valign': 'center',
                         'text-halign': 'right',
@@ -157,7 +157,7 @@ angular
                         'width': 'label',
                         'height': 'label',
                         'padding': '12px',
-                        'content': 'data(name)',
+                        'content': 'data(label)',
                         'font-weight': 300,
                         'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
                         'text-valign': 'center',
@@ -170,6 +170,12 @@ angular
                         'text-outline-color': '#000',
                         'text-outline-width': '1px',
                         'text-outline-opacity': 0.2
+                    }
+                },
+                {
+                    selector: 'node[resource_type="source"]',
+                    style: {
+                        'background-color': '#48a71c',
                     }
                 },
                 {
@@ -304,12 +310,12 @@ angular
 
 
         _.each(_.filter(service.manifest.nodes, function(node) {
-                return _.includes(['model', 'seed'], node.resource_type);
+                return _.includes(['model', 'seed', 'source'], node.resource_type);
         }), function(node) {
             var node_obj = {
                 group: "nodes",
                 data: _.assign(node, {
-                    parent: _.initial(node.fqn).join('.'),
+                    parent: node.package_name,
                     id: node.unique_id,
                     is_group: 'false'
                 })
@@ -323,7 +329,7 @@ angular
                 var parent_node = service.manifest.nodes[parent];
                 var child_node = service.manifest.nodes[child];
 
-                if (parent_node.resource_type != 'model' || child_node.resource_type != 'model') {
+                if (!_.includes(['model', 'source'], parent_node.resource_type) || child_node.resource_type != 'model') {
                     return;
                 };
 

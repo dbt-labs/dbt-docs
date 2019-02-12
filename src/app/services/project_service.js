@@ -132,6 +132,14 @@ angular
                 }
             });
 
+            _.each(service.files.manifest.nodes, function(node) {
+                if (node.resource_type == 'source') {
+                    node.label = "" + node.source_name + "." + node.name;
+                } else {
+                    node.label = node.name;
+                }
+            });
+
             var project = incorporate_catalog(service.files.manifest, service.files.catalog);
             var compiled_project = incorporate_run_results(project, service.files.run_results);
 
