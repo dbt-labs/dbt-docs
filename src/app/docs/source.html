@@ -1,0 +1,175 @@
+<style>
+/* TODO */
+.section-target {
+    top: -8em;
+}
+
+.noflex {
+    flex: 0 0 160px !important;
+}
+
+.highlight {
+    color: #24292e;
+    background-color: white;
+}
+
+</style>
+
+<div class='app-scroll'>
+    <div class="app-links app-sticky">
+        <div class="app-title">
+            <div class="app-frame app-pad app-flush-bottom">
+                <h1>
+                    <span class="break">{{ model.source_name }}.{{ model.name }}</span>
+                    <small>source table</small>
+                </h1>
+            </div>
+        </div>
+        <div class="app-frame app-pad-h">
+            <ul class="nav nav-tabs">
+                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'details'})">Details</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'columns'})">Columns</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'sql'})">SQL</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="app-details">
+        <div class="app-frame app-pad">
+            <section class="section">
+                <div class="section-target" id="details"></div>
+                <table-details model="model" extras="extra_table_fields"/>
+            </section>
+
+            <section class="section">
+                <div class="section-target" id="description"></div>
+                <div class="section-content">
+                    <h6>Description</h6>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div ng-if="model.description" class="model-markdown" marked="model.description"></div>
+                            <div ng-if="!model.description">This {{ model.resource_type }} is not currently documented</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="section">
+                <div class="section-target" id="columns"></div>
+                <div class="section-content">
+                    <h6>Columns</h6>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div ng-if="_.isEmpty(model.columns)">
+                                Column information is not available for this model
+                            </div>
+                            <div class="table-responsive" style="max-height: 800px; overflow-y: scroll;" ng-if="!_.isEmpty(model.columns)">
+                                <table class="table table-borderless table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Column</th>
+                                            <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Type</th>
+                                            <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
+                                            <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Tests</th>
+                                            <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>More?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            ng-repeat-start="column in get_columns(model) track by column.index"
+                                            ng-click="toggle_column_expanded(column)"
+                                            class="column-row"
+                                            ng-class="{'column-row-selected': column.expanded}"
+                                            ng-style="{cursor: has_more_info(column) ? 'pointer' : 'auto'}">
+                                            <td>
+                                                <div>
+                                                    <span class='text-dark'>{{ column.name }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class='text-dark'>{{ column.type }}</p>
+                                            </td>
+                                            <td style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap; max-width: 1px;">
+                                                <span ng-show="!column.expanded">{{ column.description }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-light" ng-show="!column.expanded">
+                                                    <span data-toggle="tooltip" title="Unique" ng-if="has_test(column, 'U')">U</span>
+                                                    <span data-toggle="tooltip" title="Not Null" ng-if="has_test(column, 'N')">N</span>
+                                                    <span data-toggle="tooltip" title="Foreign Key" ng-if="has_test(column, 'F')">F</span>
+                                                </span>
+                                            </td>
+                                            <td class='text-center'>
+                                                <span class='text-light' ng-show="has_more_info(column)">
+                                                    <span ng-if="column.expanded">
+                                                        <svg class="icn"><use xlink:href="#icn-up"></use></svg>
+                                                    </span>
+                                                    <span ng-if="!column.expanded">
+                                                        <svg class="icn"><use xlink:href="#icn-right"></use></svg>
+                                                    </span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat-end ng-show="column.expanded" style="background-color: white; padding: 10px">
+                                            <td colspan="5" class="column-expanded">
+                                                <div style="padding: 5px 20px">
+                                                    <div style="margin-bottom: 15px">
+                                                        <h5>Description</h5>
+                                                        <span marked="column.description"></span>
+                                                    </div>
+
+                                                    <div ng-show="column.tests && column.tests.length" style="margin-bottom: 15px">
+                                                        <h5>Schema Tests</h5>
+                                                        <ul class="list-unstyled" style="margin-top: 2px">
+                                                            <li ng-repeat="test in column.tests" ng-switch on="test.short" class='text-light'>
+                                                                <span ng-switch-when="F">
+                                                                    Foreign key to
+                                                                    <a ui-sref="dbt.model({unique_id: test.fk_model.unique_id})">
+                                                                        {{ test.fk_model.name }}
+                                                                    </a> on <code>{{ test.fk_field }}</code>
+                                                                </span>
+                                                                <span ng-switch-when="P">Primary Key</span>
+                                                                <span ng-switch-when="U">Unique</span>
+                                                                <span ng-switch-when="N">Not Null</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-target" id="sql"></div>
+                <div class="section-content">
+                    <h6>SQL</h6>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class='row'>
+                                <div class='col-md-6'>
+                                    <h4>Example SQL</h4>
+                                </div>
+                                <div class='col-md-6 text-right'>
+                                    <a class='unselectable'
+                                       ng-click="copy_to_clipboard(sample_sql)"
+                                       >{{ copied ? 'copied' : 'copy to clipboard' }}</a>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1px">
+                                <pre
+                                    class="source-code highlight sql"
+                                    ng-bind-html="highlighted.source"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

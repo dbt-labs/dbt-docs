@@ -6,33 +6,66 @@
 
 <div class="menu">
     <ul>
-        <li><a ui-sref="dbt.overview()" class="menu-link menu-main">Overview</a></li>
+        <li>
+            <a ui-sref="dbt.overview()" class="menu-link menu-main">
+                <i data-icon="home" data-placement="right"></i>
+                Overview
+            </a>
+        </li>
 
-        <div class="switches">
-            <div class="switch ">
-                <a href="#"
-                   class="switch-label"
-                   ng-class="{active: (nav_selected == 'project')}"
-                   ng-click="nav_selected = 'project'">Project</a>
+        <li>
+            <div class="switches">
+                <div class="switch ">
+                    <span
+                       class="switch-label btn btn-sm"
+                       ng-class="{active: (nav_selected == 'project')}"
+                       ng-click="nav_selected = 'project'">
+                        <svg class="icn menu-icon-on"><use xlink:href="#icn-dir-on"></use></svg>
+                        Project
+                    </span>
+                </div>
+                <div class="switch">
+                    <span
+                       class="switch-label btn btn-sm"
+                       ng-class="{active: (nav_selected == 'database')}"
+                       ng-click="nav_selected = 'database'">
+                        <svg class="icn menu-icon-on"><use xlink:href="#icn-tree-on"></use></svg>
+                        Database
+                    </span>
+                </div>
             </div>
-            <div class="switch">
-                <a href="#"
-                   class="switch-label"
-                   ng-class="{active: (nav_selected == 'database')}"
-                   ng-click="nav_selected = 'database'">Database</a>
+        </li>
+
+        <li>
+            <div class="menu" ng-show="nav_selected == 'project'">
+                <div ng-show="tree.sources.length > 0">
+                    <strong>Sources</strong>
+                    <ul style="display: block">
+                        <source-tree-line
+                            item="item"
+                            ng-repeat="item in tree.sources"></source-tree-line>
+                    </ul>
+                    <br />
+                </div>
+
+                <strong>Models</strong>
+                <ul>
+                    <model-tree-line
+                        item="item"
+                        ng-repeat="item in tree.project"></model-tree-line>
+                </ul>
             </div>
-        </div>
+        </li>
 
-        <div class="menu" ng-show="nav_selected == 'project'">
-            <model-tree-line
-                item="item"
-                ng-repeat="item in tree.project"></model-tree-line>
-        </div>
-
-        <div class="menu" ng-show="nav_selected == 'database'">
-            <model-tree-line
-                item="item"
-                ng-repeat="item in tree.database"></model-tree-line>
-        </div>
+        <li>
+            <div class="menu" ng-show="nav_selected == 'database'">
+                <strong>Tables and Views</strong>
+                <ul>
+                    <model-tree-line
+                        item="item"
+                        ng-repeat="item in tree.database"></model-tree-line>
+                </ul>
+            </div>
+        </li>
     </ul>
 </div>

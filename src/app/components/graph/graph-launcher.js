@@ -6,8 +6,8 @@ const $ = require('jquery');
 
 angular
 .module('dbt')
-.directive('graphLauncher', ['$q', 'graph', 'selectorService', 'project', 'trackingService', 'locationService',
-    function($q, graph, selectorService, project, trackingService, locationService) {
+.directive('graphLauncher', ['$state', '$q', 'graph', 'selectorService', 'project', 'trackingService', 'locationService',
+    function($state, $q, graph, selectorService, project, trackingService, locationService) {
 
     var directive = {
         restrict: 'EA',
@@ -124,14 +124,23 @@ angular
             scope.showExpanded = function() {
                 var node = selectorService.getViewNode();
                 var node_name = node ? node.name : null;
-                var nodes = graph.showFullGraph(node_name);
+
+                if (node && node.resource_type == 'source') {
+                    var nodes = graph.showFullGraph('source:' + node.source_name + "." + node.name);
+                } else {
+                    var nodes = graph.showFullGraph(node_name);
+                }
 
                 trackingService.track_graph_interaction('show-expanded', nodes.length);
             }
 
             scope.showContracted = function() {
                 var node = selectorService.getViewNode();
-                var nodes = graph.showVerticalGraph(node.name, true);
+                if (node && node.resource_type == 'source') {
+                    var nodes = graph.showVerticalGraph('source:' + node.source_name + "." + node.name, true);
+                } else {
+                    var nodes = graph.showVerticalGraph(node.name, true);
+                }
 
                 locationService.clearState();
                 trackingService.track_graph_interaction('show-contracted', nodes.length);
@@ -147,6 +156,13 @@ angular
                 if (node) {
                     selectorService.resetSelection(node)
                     scope.showContracted()
+                } else if ($state.params.source) {
+                    selectorService.resetSelection();
+                    scope.showExpanded();
+                    var spec = selectorService.selectSource($state.params.source, {children: true});
+                    setTimeout(function() {
+                        graph.updateGraph(spec)
+                    });
                 } else {
                     selectorService.resetSelection();
                     scope.showExpanded();

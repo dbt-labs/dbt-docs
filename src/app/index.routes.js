@@ -6,6 +6,8 @@ const templates = {
     overview: require('./overview/overview.html'),
     graph: require('./graph/graph.html'),
     model: require('./docs/model.html'),
+    source: require('./docs/source.html'),
+    source_list: require('./sources/source_list.html'),
 }
 
 angular
@@ -38,6 +40,22 @@ angular
             templateUrl: templates.model,
             params: {
                 unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.source', {
+            url: 'source/:unique_id?section&' + graph_params,
+            controller: 'SourceCtrl',
+            templateUrl: templates.source,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.source_list', {
+            url: 'source_list/:source?' + graph_params,
+            controller: 'SourceListCtrl',
+            templateUrl: templates.source_list,
+            params: {
+                source: {type: 'string'}
             },
         })
 

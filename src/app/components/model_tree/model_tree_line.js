@@ -1,25 +1,12 @@
 'use strict';
 
-const template = require('./model_tree_line.html');
+const source_template = require('./source_tree_line.html');
+const model_template = require('./model_tree_line.html');
 const _ = require('underscore');
 
 require("./model_tree_line.css");
 
-angular
-.module('dbt')
-.directive('modelTreeLine', [function() {
-    var directive =  {
-        scope: {
-            item: '=',
-            depth: '<',
-        },
-        link: linkFn,
-        replace: true,
-        templateUrl: template
-    }
-
-    return directive;
-
+function wrapLinkFn($state) {
     function linkFn(scope,element,attrs,ctrlFn) {
         if (!scope.depth) {
             scope.depth = 0;
@@ -44,6 +31,12 @@ angular
 
         scope.toggle = function(item) {
             item.active = !item.active;
+        }
+
+        scope.toggleAndSelectSource = function(item) {
+            var source_name = item.name;
+            $state.go('dbt.source_list', {source: source_name});
+            scope.toggle(item);
         }
 
         scope.activate = function(item) {
@@ -88,4 +81,37 @@ angular
 
     }
 
+    return linkFn;
+}
+
+angular
+.module('dbt')
+.directive('modelTreeLine', ['$state', function($state) {
+    var directive =  {
+        scope: {
+            item: '=',
+            depth: '<',
+        },
+        link: wrapLinkFn($state),
+        replace: true,
+        templateUrl: model_template
+    }
+
+    return directive;
+}]);
+
+angular
+.module('dbt')
+.directive('sourceTreeLine', ['$state', function($state) {
+    var directive =  {
+        scope: {
+            item: '=',
+            depth: '<',
+        },
+        link: wrapLinkFn($state),
+        replace: true,
+        templateUrl: source_template
+    }
+
+    return directive;
 }]);

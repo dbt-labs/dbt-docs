@@ -1,3 +1,13 @@
+<style>
+.no-x-overflow {
+    overflow-x: hidden;
+}
+
+.logo {
+    width: 140px;
+    height: 46px ;
+}
+</style>
 
 <div>
     <graph-launcher></graph-launcher>
@@ -8,15 +18,14 @@
             <div class="app-header app-navbar app-shadow app-pad">
                 <div class="app-row app-middle">
                     <div class="app-body">
-                        <img class="app-logo" ng-src="{{ logo }}" alt="dbt" />
-                    </div>
-                    <div class="app-footer app-toggle app-icn" data-toggle=".app-menu">
-                        <svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
+                        <div class="logo">
+                            <img class="logo" ng-src="{{ logo }}" />
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="app-body">
-                <div class="app-scroll app-pad app-flush-right">
+                <div class="app-scroll app-pad app-flush-right no-x-overflow">
                     <model-tree tree="tree"></model-tree>
                 </div>
             </div>
@@ -24,9 +33,6 @@
         <div class="app-content app-column">
             <div class="app-header app-navbar app-shadow">
                 <div class="app-frame app-pad app-row app-middle">
-                    <div class="app-header app-icn app-toggle" data-toggle=".app-menu">
-                        <svg class="icn icn-md"><use xlink:href="#icn-dbt"></use></svg>
-                    </div>
                     <div class="app-body">
                         <input
                             id="search"

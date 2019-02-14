@@ -4,8 +4,7 @@ const angular = require('angular');
 const _ = require('underscore');
 const $ = require('jquery');
 
-// this should go somewhere else...
-const logo = require('!!svg-url-loader?noquotes!../../assets/img/logos/dbt.svg');
+const logo = require('./../../assets/images/logo.svg');
 
 require('../services/project_service.js');
 require('../services/graph.service.js');
@@ -21,7 +20,8 @@ angular
 
     $scope.tree = {
         database: {},
-        project: {}
+        project: {},
+        sources: {},
     }
 
     $scope.search = {
@@ -74,7 +74,8 @@ angular
     // populate tree when data is loaded
     projectService.getModelTree($state.params.unique_id, function(tree) {
         $scope.tree.database = tree.database;
-        $scope.tree.project = tree.project
+        $scope.tree.project = tree.project;
+        $scope.tree.sources = tree.sources;
 
         setTimeout(function() {
             scrollToSelectedModel($scope.model_uid);
@@ -114,6 +115,7 @@ angular
             var tree = projectService.updateSelected(params.unique_id);
             $scope.tree.database = tree.database;
             $scope.tree.project = tree.project;
+            $scope.tree.sources = tree.sources;
             $scope.search.query = ""
 
             console.log("updating selected model to: ", params);

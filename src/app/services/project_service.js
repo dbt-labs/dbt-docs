@@ -15,7 +15,8 @@ angular
         project: {},
         tree: {
             project: [],
-            database: []
+            database: [],
+            sources: []
         },
         files: {
             manifest: {},
@@ -139,6 +140,14 @@ angular
                 }
             });
 
+            _.each(service.files.manifest.nodes, function(node) {
+                if (node.resource_type == 'source') {
+                    node.label = "" + node.source_name + "." + node.name;
+                } else {
+                    node.label = node.name;
+                }
+            });
+
             var project = incorporate_catalog(service.files.manifest, service.files.catalog);
             var compiled_project = incorporate_run_results(project, service.files.run_results);
 
@@ -156,17 +165,24 @@ angular
                     column: test.column_name,
                 };
 
-                if (test.name.startsWith("not_null")) {
+                // TODO : All of this is unacceptably bad
+                var test_name = test.name;
+                if (test_name.startsWith("source_")) {
+                    test_name = test_name.replace(/^source_/, "")
+                }
+
+                if (test_name.startsWith("not_null")) {
                     test_info.label = "Not Null";
                     test_info.short = "N";
-                } else if (test.name.startsWith("unique")) {
+                } else if (test_name.startsWith("unique")) {
                     test_info.label = "Unique";
                     test_info.short = "U";
-                } else if (test.name.startsWith("relationships")) {
+                } else if (test_name.startsWith("relationships")) {
                     test_info.label = "Foreign Key";
                     test_info.short = "F";
 
                     // hacks
+                    // TODO : Make this work for sources?
                     if (test.refs.length != 2) {
                         return;
                     } else {
@@ -184,7 +200,7 @@ angular
                             return
                         }
                     }
-                //} else if (test.name.startsWith("accepted_values")) {
+                //} else if (test_name.startsWith("accepted_values")) {
                 //    test_info.label = "Values";
                 //    test_info.short = "A";
                 } else {
@@ -212,7 +228,9 @@ angular
             service.project = compiled_project;
 
             // performance hack
-            service.project.searchable = _.filter(service.project.nodes, {resource_type: 'model'});
+            service.project.searchable = _.filter(service.project.nodes, function(node) {
+                return _.includes(['model', 'source'], node.resource_type);
+            });
 
             service.loaded.resolve();
         });
@@ -269,6 +287,9 @@ angular
             var models = _.filter(service.project.nodes, {resource_type: 'model'});
             service.tree.database = buildDatabaseTree(models, select);
             service.tree.project = buildProjectTree(models, select);
+
+            var sources = _.filter(service.project.nodes, {resource_type: 'source'});
+            service.tree.sources = buildSourceTree(sources, select);
             cb(service.tree);
         });
     }
@@ -295,6 +316,7 @@ angular
     service.updateSelected = function(select) {
         service.updateSelectedInTree(select, service.tree.project);
         service.updateSelectedInTree(select, service.tree.database);
+        service.updateSelectedInTree(select, service.tree.sources);
 
         return service.tree;
     }
@@ -313,6 +335,46 @@ angular
         })
 
         return res;
+    }
+
+    function buildSourceTree(nodes, select) {
+        var sources = {}
+
+        _.each(nodes, function(node) {
+            var source = node.source_name;
+            var name = node.name;
+            var is_active = node.unique_id == select;
+
+            if (!sources[source]) {
+                sources[source] = {
+                    type: "folder",
+                    name: source,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                sources[source].active = true;
+            }
+
+            sources[source].items.push({
+                type: 'file',
+                name: name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'source'
+            })
+        });
+
+        // sort schemas
+        var sources = _.sortBy(_.values(sources), 'name');
+
+        // sort tables in the schema
+        _.each(sources, function(source) {
+            source.items = _.sortBy(source.items, 'name');
+        });
+
+        return sources
     }
 
     function buildProjectTree(nodes, select) {
@@ -351,6 +413,7 @@ angular
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
+                node_type: 'model'
             }
         });
 
@@ -387,7 +450,8 @@ angular
                 name: node.alias,
                 node: node,
                 active: is_active,
-                unique_id: node.unique_id
+                unique_id: node.unique_id,
+                node_type: 'model'
             })
         });
 
@@ -408,6 +472,9 @@ angular
         var models = _.filter(service.project.nodes, {resource_type: 'model'});
         service.tree.database = buildDatabaseTree(models);
         service.tree.project = buildProjectTree(models);
+
+        var sources = _.filter(service.project.nodes, {resource_type: 'source'});
+        service.tree.sources = buildSourceTree(sources);
     }
 
     return service;
