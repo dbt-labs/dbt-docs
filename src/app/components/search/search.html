@@ -3,6 +3,12 @@
     .search-result-match {
         background-color: #eee;
     }
+    .spacing {
+        margin-right: 0.25em;
+    }
+    .columns {
+        margin-left: 36px;
+    }
     </style>
 
     <div class="app-title">
@@ -16,24 +22,34 @@
     <div class="app-details">
         <div class="app-frame app-pad">
             <div class="results">
-                <a ui-sref="dbt.model({unique_id: result.model.unique_id})"
-                   class="result search-result"
-                   ng-click="onSelect()"
-                   ng-repeat="result in results | filter:limit_search | orderBy:'-model.name':true track by result.model.unique_id ">
-
-                    <div class="result-content">
-                        <div class="result-icn">
-                            <svg class="icn "><use xlink:href="#icn-doc"></use></svg>
+                <span ng-repeat="result in results | filter:limit_search | orderBy:'-model.name':true track by result.model.unique_id ">
+                    <a ui-sref="dbt.model({unique_id: result.model.unique_id})"
+                        ng-click="onSelect()"
+                        class="result search-result">
+                        <div class="result-content">
+                            <div class="result-icn">
+                                <svg class="icn "><use xlink:href="#icn-doc"></use></svg>
+                            </div>
+                            <div class="result-body">
+                                <h4 class="a">
+                                    <span ng-bind-html="highlight(getModelName(result.model))"></span>
+                                    <small>{{result.model.resource_type}}</small>
+                                </h4>
+                                <p ng-bind-html="highlight(result.model.description)"></p>
+                            </div>
                         </div>
-                        <div class="result-body">
-                            <h4 class="a">
-                                <span ng-bind-html="highlight(getModelName(result.model))"></span>
-                                <small>{{result.model.resource_type}}</small>
-                            </h4>
-                            <p ng-bind-html="highlight(result.model.description)"></p>
-                        </div>
+                    </a>
+                    <div class="columns" ng-show="query.length > 0">
+                        <span ng-repeat="column in columnFilter(result.model.columns) | limitTo:limitColumns(result.model.unique_id)">
+                            <span ng-show="$first === true">columns:</span>
+                            <span ng-bind-html="highlight(column + ',')" ng-show="$last === false"></span>
+                            <span ng-bind-html="highlight(column)" ng-show="$last === true"></span>
+                        </span>
+                        <a
+                            ng-show="columnFilter(result.model.columns).length > max_results_columns && !limit_columns[result.model.unique_id]"
+                            ng-click="limit_columns[result.model.unique_id] = 100">Show {{ columnFilter(result.model.columns).length - max_results_columns }} more</a>
                     </div>
-                </a>
+                </span>
                 <a
                     ng-show="results.length >= max_results && !show_all"
                     ng-click="show_all = true">Show {{ results.length - max_results }} more</a>

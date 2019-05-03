@@ -244,15 +244,21 @@ angular
 
     function fuzzySearchObj(val, obj) {
         var objects = [];
-        var search_keys = {'name':null, 'description':null};
+        var search_keys = {'name':'string', 'description':'string', 'columns':'object'};
 
         var search = new RegExp(val, "i")
 
         for (var i in search_keys) {
             if (!obj[i]) {
                continue;
-            } else if (obj[i].toLowerCase().indexOf(val.toLowerCase()) != -1) {
+            } else if (search_keys[i] === 'string' && obj[i].toLowerCase().indexOf(val.toLowerCase()) != -1) {
                 objects.push({key: i, value: val});
+            } else if (search_keys[i] === 'object') {
+                for (var column_name in obj[i]) {
+                    if (obj[i][column_name]["name"].toLowerCase().indexOf(val.toLowerCase()) != -1) {
+                        objects.push({key: i, value: val});
+                    }
+                }
             }
         }
 
