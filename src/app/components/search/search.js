@@ -17,6 +17,8 @@ angular
         link: function(scope) {
             scope.max_results = 20;
             scope.show_all = false;
+            scope.max_results_columns = 3;
+            scope.limit_columns = {};
 
             scope.limit_search = function(res, index, results) {
                 return (index < scope.max_results || scope.show_all);
@@ -40,8 +42,23 @@ angular
             scope.$watch("query", function(nv, ov) {
                 if (nv.length == 0) {
                     scope.show_all = false;
+                    scope.limit_columns = {};
                 }
             });
+
+            scope.columnFilter = function(columns) {
+                var matches = [];
+                for (var column in columns) {
+                    if (column.toLowerCase().indexOf(scope.query.toLowerCase()) != -1) {
+                        matches.push(column);
+                    }
+                }
+                return matches;
+            }
+
+            scope.limitColumns = function(id) {
+                return scope.limit_columns[id] !== undefined? scope.limit_columns[id] : 3;
+            }
         }
     }
 }]);
