@@ -58,6 +58,11 @@ angular
         $scope.clearSearch();
     });
 
+    $scope.$on('query', function(event, search) {
+        $scope.search.is_focused = true;
+        $scope.search.query = search;
+    });
+
     $scope.onSearchKeypress = function(e) {
         console.log(e);
         if (e.key == 'Escape') {
