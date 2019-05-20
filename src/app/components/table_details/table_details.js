@@ -34,7 +34,7 @@ angular
                 }
                 if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
                 if (typeof precision === 'undefined') precision = 0;
-                var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
+                var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'],
                     number = Math.floor(Math.log(bytes) / Math.log(1024));
                 return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
             }
@@ -95,11 +95,16 @@ angular
             }
 
             function getExtendedStats(stats) {
+                // TODO : This logic should be pushed into dbt's catalog generation
                 var format = {
-                    rows: asNumber,
+                    rows: asNumber, // Redshift
+                    row_count: asNumber, // Snowflake
+                    num_rows: asNumber, // BigQuery
                     max_varchar: asNumber,
                     pct_used: asPercent,
-                    size: asBytes,
+                    size: asBytes, // Redshift
+                    bytes: asBytes, // Snowflake
+                    num_bytes: asBytes, // BigQuery
                 }
 
                 var sorted_stats = _.sortBy(_.values(stats), 'label');

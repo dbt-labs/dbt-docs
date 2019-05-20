@@ -2,6 +2,7 @@
 const $ = require('jquery');
 const _ = require('underscore');
 
+var SELECTOR_AT = '@'
 var SELECTOR_PARENTS = '+'
 var SELECTOR_CHILDREN = '+'
 var SELECTOR_GLOB = '*'
@@ -120,6 +121,19 @@ angular
         return service.selection.clean;
     }
 
+    // Returns all parents of all children of the node
+    function select_at(dag, node) {
+        var selected = [node];
+        var children = _.union([node], descendents(dag, node));
+
+        _.each(children, function(child) {
+            var ancestor_nodes = ancestors(dag, child);
+            selected = _.union(selected, ancestor_nodes, [child]);
+        });
+
+        return selected;
+    }
+
     function ancestors(dag, node, max_hops, hop_index) {
         if (!hop_index) hop_index = 1;
 
@@ -152,12 +166,17 @@ angular
     }
 
     function parse_spec(node_spec) {
+        var select_at = false;
         var select_children = false;
         var select_parents = false;
         var index_start = 0;
         var index_end = node_spec.length;
 
-        if (node_spec.startsWith(SELECTOR_PARENTS)) {
+        // @+ is not a valid selector - one or the other is required
+        if (node_spec.startsWith(SELECTOR_AT)) {
+            select_at = true;
+            index_start = 1;
+        } else if (node_spec.startsWith(SELECTOR_PARENTS)) {
             select_parents = true;
             index_start = 1;
         }
@@ -183,6 +202,7 @@ angular
         }
 
         return {
+            select_at: select_at,
             select_parents: select_parents,
             select_children: select_children,
             selector_type: selector_type,
@@ -312,6 +332,10 @@ angular
 
             var upstream = [];
             var downstream = [];
+            var both = []
+            if (selector.select_at) {
+                both = _.union(select_at(dag, selected_node));
+            }
 
             if (selector.select_parents) {
                 upstream = ancestors(dag, selected_node, hops);
@@ -321,7 +345,7 @@ angular
                 downstream = descendents(dag, selected_node, hops)
             }
 
-            selected_nodes = _.union([selected_node], selected_nodes, downstream, upstream);
+            selected_nodes = _.union([selected_node], selected_nodes, downstream, upstream, both);
         });
 
         return {
