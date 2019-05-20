@@ -54,6 +54,10 @@ angular
         $('#search').blur();
     }
 
+    $scope.$on('clearSearch', function() {
+        $scope.clearSearch();
+    });
+
     $scope.onSearchKeypress = function(e) {
         console.log(e);
         if (e.key == 'Escape') {
