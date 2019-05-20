@@ -40,6 +40,7 @@ function wrapLinkFn($state) {
         }
 
         scope.activate = function(item) {
+            scope.$emit('clearSearch');
             item.active = true;
         }
 
