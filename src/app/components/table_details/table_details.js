@@ -133,6 +133,10 @@ angular
 
                 scope.show_extended = _.where(scope.extended, {include: true}).length > 0;
             });
+
+            scope.queryTag = function(tag) {
+                scope.$emit('query', tag);
+            }
         }
     }
 }]);
