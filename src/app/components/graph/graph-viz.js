@@ -206,6 +206,20 @@ angular
                     },
                     show: true,
                 },
+                {
+                    id: 'export-png',
+                    content: 'Export PNG',
+                    selector: 'node',
+                    onClickFunction: function(event) {
+                        var options = {
+                            bg: '#005e7a'
+                        };
+                        var png64 = cy.png(options);
+                        var url = png64.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+                        window.open(url);
+                    },
+                    show: true,
+                },
             ],
             menuItemClasses: ['graph-node-context-menu-item'],
             contextMenuClasses: ['graph-node-context-menu']
