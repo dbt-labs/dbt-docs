@@ -206,6 +206,23 @@ angular
                     },
                     show: true,
                 },
+                {
+                    id: 'export-png',
+                    content: 'Export PNG',
+                    selector: 'node',
+                    coreAsWell: true,
+                    onClickFunction: function(event) {
+                        var options = {
+                            bg: '#005e7a'
+                        };
+                        var png64 = cy.png(options);
+                        var link = document.createElement('a');
+                        link.download = 'dbt-dag.png';  // sets the filename for the download
+                        link.href = png64;
+                        link.click();
+                    },
+                    show: true,
+                },
             ],
             menuItemClasses: ['graph-node-context-menu-item'],
             contextMenuClasses: ['graph-node-context-menu']
