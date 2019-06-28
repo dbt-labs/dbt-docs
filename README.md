@@ -26,21 +26,42 @@ Everyone interacting in the dbt project's codebases, issue trackers, chat rooms,
 
 ### Development
 
-First, install yarn and webpack.
+After cloning this repository, run:
+
+```bash
+git submodule update --init --recursive
+```
+
+Then, install yarn and webpack.
 
 ```bash
 npm install -g yarn webpack webpack-cli
 ```
 
+You'll also need to install jekyll if you don't already have it:
+```bash
+gem install bundler jekyll
+```
+
 ### Build / Run
+
+To build the css files required for webpack:
+
+```bash
+cd styles
+jekyll build
+cd -
+```
+
 
 To build an index.html file:
 
-```
+```bash
+yarn install
 webpack
 ```
 
-To run the dev server, first copy your `manifest.json`, `catalog.json`, and `run_results.json` files to 
+To run the dev server, first copy your `manifest.json`, `catalog.json`, and `run_results.json` files to
 the `src/` directory. Then run:
 
 ```bash
