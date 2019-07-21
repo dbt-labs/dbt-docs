@@ -235,21 +235,18 @@ angular
 
             var ret;
             if (selector_part == SELECTOR_GLOB) {
-                ret = true;
+                return true;
             } else if (is_last && selector_part == _.last(real_node)) {
-                ret = true;
+                return true;
             } else if (real_node.length <= i) {
-                ret = false;
+                return false;
             } else if (real_node[i] == selector_part) {
                 // pass
             } else {
-                ret = false;
-            }
-
-            if (ret !== undefined) {
-                return ret;
+                return false;
             }
         };
+        return true;
     }
 
     function get_nodes_by_qualified_name(elements, qualified_name) {
