@@ -195,7 +195,7 @@ angular
                     style: {
                         'background-color': '#919599',
                     }
-                }
+                },
             ],
             ready: function(e) {
                 console.log("graph ready");
