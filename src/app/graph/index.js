@@ -16,24 +16,6 @@ angular
             graph.setGraphReady(graph_element);
         }
 
-        projectService.ready(function(project) {
-            var styles = $scope.styles;
-
-            _.each(projectService.project.nodes, function(node, node_id) {
-                if (node.docs) {
-                    var style = {
-                        selector: 'node[id="' + node_id + '"]',
-                        style: {
-                            'background-color': node.docs.color
-                        }
-                    }
-                    styles.push(style);
-                }
-            });
-
-            graph.graph_element.setStyle(styles);
-        });
-
         $scope.$watch(function() {
             return $state.params.unique_id;
         }, function(nv, ov) {
