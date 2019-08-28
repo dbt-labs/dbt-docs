@@ -283,15 +283,15 @@ angular
         ]
 
         for (var node_id in service.manifest.nodes) {
-          var node = service.manifest.nodes[node_id]
+          var node_config = service.manifest.nodes[node_id].config
           // console.log(node.docs)
-          if (node.hasOwnProperty('docs')) {
+          if (node_config.hasOwnProperty('docs')) {
             // console.log('Found doc portion!', node.docs)
-            if (node.docs.hasOwnProperty('color')) {
+            if (node_config.docs.hasOwnProperty('color')) {
               // console.log('Found color portion!', node.docs.color)
               var custom_style_rule = {
                 selector: 'node[id="' + node_id + '"]',
-                style: { 'background-color': node.docs.color, }
+                style: { 'background-color': node_config.docs.color, }
               }
               // console.log('Custom style rule', custom_style_rule)
               all_styles.push(custom_style_rule)
