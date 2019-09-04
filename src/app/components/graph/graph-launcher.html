@@ -100,7 +100,9 @@
                                   ng-class="{visible: filters_visible}"
                                   ng-submit="onUpdateSelector()">
                                 <label class="field">
-                                    <div class="dropup" data-form-type="packages">
+                                    <div class="dropdown dropup"
+                                         ng-class="{'open': isVisible('packages')}"
+                                         data-form-type="packages">
                                         <select
                                             data-toggle="dropdown"
                                             class='field-input form-control input-dark'
@@ -112,8 +114,7 @@
                                         </select>
                                         <ul
                                             class="dropdown-menu"
-                                            ng-show="isVisible('packages')"
-                                            style="display: block">
+                                            ng-show="isVisible('packages')">
                                             <li
                                                 class='text-dark'
                                                 ng-repeat="item in selectorService.options.packages"
@@ -128,7 +129,9 @@
                                     </div>
                                 </label>
                                 <label class="field">
-                                    <div class="dropup" data-form-type="tags">
+                                    <div class="dropdown dropup"
+                                         ng-class="{'open': isVisible('tags')}"
+                                         data-form-type="tags">
                                         <select
                                             data-toggle="dropdown"
                                             class='field-input form-control input-dark'
@@ -140,8 +143,7 @@
                                         </select>
                                         <ul
                                             class="dropdown-menu"
-                                            ng-show="isVisible('tags')"
-                                            style="display: block">
+                                            ng-show="isVisible('tags')">
                                             <li
                                                 class='text-dark'
                                                 ng-repeat="item in selectorService.options.tags"
