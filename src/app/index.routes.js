@@ -5,9 +5,13 @@ const templates = {
     main: require('./main/main.html'),
     overview: require('./overview/overview.html'),
     graph: require('./graph/graph.html'),
-    model: require('./docs/model.html'),
+
     source: require('./docs/source.html'),
     source_list: require('./sources/source_list.html'),
+
+    model: require('./docs/model.html'),
+    snapshot: require('./docs/snapshot.html'),
+    source: require('./docs/source.html'),
 }
 
 angular
@@ -38,6 +42,22 @@ angular
             url: 'model/:unique_id?section&' + graph_params,
             controller: 'ModelCtrl',
             templateUrl: templates.model,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.seed', {
+            url: 'seed/:unique_id?section&' + graph_params,
+            controller: 'SeedCtrl',
+            templateUrl: templates.seed,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.snapshot', {
+            url: 'snapshot/:unique_id?section&' + graph_params,
+            controller: 'SnapshotCtrl',
+            templateUrl: templates.snapshot,
             params: {
                 unique_id: {type: 'string'}
             },

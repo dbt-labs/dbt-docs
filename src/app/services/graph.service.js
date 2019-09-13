@@ -374,6 +374,8 @@ angular
         var dag = service.graph.pristine.dag;
         if (!dag) return;
 
+        // good: "+source:quickbooks.invoices+"
+
         var pristine = service.graph.pristine.nodes;
         var selected = selectorService.select_nodes(dag, pristine, selected_spec);
         var highlight_nodes = should_highlight ? selected.matched : [];

@@ -152,7 +152,9 @@ angular
             var compiled_project = incorporate_run_results(project, service.files.run_results);
 
 
-            var models = _.where(compiled_project.nodes, {resource_type: 'model'})
+            // TODO
+            //var models = _.where(compiled_project.nodes, {resource_type: 'model'})
+            var models = compiled_project.nodes
             var model_names = _.indexBy(models, 'name');
 
             var tests = _.where(compiled_project.nodes, {resource_type: 'test'})
@@ -229,7 +231,9 @@ angular
 
             // performance hack
             service.project.searchable = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot'], node.resource_type);
+                // TODO
+                //return _.includes(['model', 'source'], node.resource_type);
             });
 
             service.loaded.resolve();
@@ -296,9 +300,18 @@ angular
 
     service.getModelTree = function(select, cb) {
         service.loaded.promise.then(function() {
-            var models = _.filter(service.project.nodes, {resource_type: 'model'});
-            service.tree.database = buildDatabaseTree(models, select);
-            service.tree.project = buildProjectTree(models, select);
+            //var models = _.filter(service.project.nodes, {resource_type: 'model'});
+            var nodes = _.filter(service.project.nodes, function(node) {
+                var accepted = [
+                    'snapshot',
+                    'seed',
+                    'model',
+                    'test'
+                ];
+                return _.includes(accepted, node.resource_type);
+            })
+            service.tree.database = buildDatabaseTree(nodes, select);
+            service.tree.project = buildProjectTree(nodes, select);
 
             var sources = _.filter(service.project.nodes, {resource_type: 'source'});
             service.tree.sources = buildSourceTree(sources, select);
@@ -425,7 +438,7 @@ angular
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
-                node_type: 'model'
+                node_type: node.resource_type
             }
         });
 

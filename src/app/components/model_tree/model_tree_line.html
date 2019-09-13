@@ -3,7 +3,7 @@
     <a ng-if="!item.unique_id"
        class='unselectable'
        ng-class="getClass(item)"
-       ng-click="toggle(item)">
+       ng-click="onFolderClick(item)">
         <span class="filename">
             <span class="filename-normal">
                 <svg class="icn menu-icon-on"><use xlink:href="{{ getIcon(item.type, 'on') }}"></use></svg>
@@ -18,8 +18,7 @@
        class='unselectable'
        ng-class="getClass(item)"
        ng-click="activate(item)"
-       data-nav-unique-id="{{ item.unique_id }}"
-       ui-sref='dbt.model({unique_id: item.unique_id})'>
+       data-nav-unique-id="{{ item.unique_id }}">
         <span class="filename">
             <span class="filename-normal">
                 <svg class="icn menu-icon-on"><use xlink:href="{{ getIcon(item.type, 'on') }}"></use></svg>
@@ -31,6 +30,10 @@
     </a>
 
     <ul ng-if="item.items">
-        <model-tree-line item="subitem" depth="depth + 1" ng-repeat="subitem in item.items" />
+        <model-tree-line
+                resource-type="{{ resourceType }}"
+                item="subitem"
+                depth="depth + 1"
+                ng-repeat="subitem in item.items" />
     </ul>
 </li>

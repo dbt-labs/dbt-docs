@@ -40,17 +40,19 @@
                 <div ng-show="tree.sources.length > 0">
                     <strong>Sources</strong>
                     <ul style="display: block">
-                        <source-tree-line
+                        <model-tree-line
                             item="item"
+                            resource-type="source"
                             ng-repeat="item in tree.sources"></source-tree-line>
                     </ul>
                     <br />
                 </div>
 
-                <strong>Models</strong>
+                <strong>Projects</strong>
                 <ul>
                     <model-tree-line
                         item="item"
+                        resource-type="model"
                         ng-repeat="item in tree.project"></model-tree-line>
                 </ul>
             </div>
@@ -62,6 +64,7 @@
                 <ul>
                     <model-tree-line
                         item="item"
+                        resource-type="model"
                         ng-repeat="item in tree.database"></model-tree-line>
                 </ul>
             </div>
