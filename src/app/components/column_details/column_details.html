@@ -37,6 +37,8 @@
                                 <span data-toggle="tooltip" title="Unique" ng-if="has_test(column, 'U')">U</span>
                                 <span data-toggle="tooltip" title="Not Null" ng-if="has_test(column, 'N')">N</span>
                                 <span data-toggle="tooltip" title="Foreign Key" ng-if="has_test(column, 'F')">F</span>
+                                <span data-toggle="tooltip" title="Accepted Values" ng-if="has_test(column, 'A')">A</span>
+                                <span data-toggle="tooltip" title="Custom Test" ng-if="has_test(column, '+')">+</span>
                             </span>
                         </td>
                         <td class='text-center'>
@@ -63,14 +65,18 @@
                                     <ul class="list-unstyled" style="margin-top: 2px">
                                         <li ng-repeat="test in column.tests" ng-switch on="test.short" class='text-light'>
                                             <span ng-switch-when="F">
-                                                Foreign key to
-                                                <a ui-sref="dbt.model({unique_id: test.fk_model.unique_id})">
-                                                    {{ test.fk_model.name }}
-                                                </a> on <code>{{ test.fk_field }}</code>
+                                                Foreign Key
+                                                <span ng-if="test.fk_model.unique_id">
+                                                    <a data-ui-state="getState(test.fk_model)"
+                                                        data-ui-state-params="{unique_id: test.fk_model.unique_id}">
+                                                        to {{ test.fk_model.name }}
+                                                    </a> on <code>{{ test.fk_field }}</code>
+                                                </span>
                                             </span>
                                             <span ng-switch-when="P">Primary Key</span>
                                             <span ng-switch-when="U">Unique</span>
                                             <span ng-switch-when="N">Not Null</span>
+                                            <span ng-switch-default>{{ test.label }}</span>
                                         </li>
                                     </ul>
                                 </div>

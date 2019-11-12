@@ -32,6 +32,10 @@ angular
                 }
             }
 
+            scope.getState = function(node) {
+                return 'dbt.' + node.resource_type;
+            }
+
             scope.get_columns = function(model) {
                 var columns = _.chain(model.columns)
                         .values()
@@ -40,7 +44,6 @@ angular
 
                 // re-number columns because index comes from the catalog, and index may not always be present
                 // this prevents errors with the view's `track by column.index`
-
                 _.each(columns, function(col, i) {
                     col.index = i;
                 });
