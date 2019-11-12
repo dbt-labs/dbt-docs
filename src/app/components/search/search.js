@@ -24,6 +24,10 @@ angular
                 return (index < scope.max_results || scope.show_all);
             }
 
+            scope.getState = function(node) {
+                return 'dbt.' + node.resource_type;
+            }
+
             scope.getModelName = function(model) {
                 if (model.resource_type == 'source') {
                     return model.source_name + "." + model.name;

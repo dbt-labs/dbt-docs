@@ -6,6 +6,7 @@ const $ = require('jquery');
 
 const logo = require('./../../assets/images/logo.svg');
 
+require('../services/code_service.js');
 require('../services/project_service.js');
 require('../services/graph.service.js');
 require('../services/node_selection_service.js');

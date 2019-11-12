@@ -232,8 +232,6 @@ angular
             // performance hack
             service.project.searchable = _.filter(service.project.nodes, function(node) {
                 return _.includes(['model', 'source', 'seed', 'snapshot'], node.resource_type);
-                // TODO
-                //return _.includes(['model', 'source'], node.resource_type);
             });
 
             service.loaded.resolve();
@@ -302,12 +300,12 @@ angular
         service.loaded.promise.then(function() {
             //var models = _.filter(service.project.nodes, {resource_type: 'model'});
             var nodes = _.filter(service.project.nodes, function(node) {
-                var accepted = [
-                    'snapshot',
-                    'seed',
-                    'model',
-                    'test'
-                ];
+                // only grab custom data tests
+                if (node.resource_type == 'test' && !_.includes(node.tags, 'schema')) {
+                    return true;
+                }
+
+                var accepted = ['snapshot', 'source', 'seed', 'model'];
                 return _.includes(accepted, node.resource_type);
             })
             service.tree.database = buildDatabaseTree(nodes, select);
@@ -406,6 +404,11 @@ angular
         var tree = {};
 
         _.each(nodes, function(node) {
+            if (node.resource_type == 'source') {
+                // no sources in the model tree, sorry
+                return;
+            }
+
             if (node.original_file_path.indexOf("\\") != -1) {
                 var path_parts = node.original_file_path.split("\\");
             } else {
@@ -452,11 +455,18 @@ angular
         _.each(nodes, function(node) {
             var schema = node.schema;
             var name = node.name;
-            var materialized = node.config.materialized;
+
             var is_active = node.unique_id == select;
 
-            if (materialized == 'ephemeral') {
+            var name;
+            if (node.resource_type == 'source') {
+                // allow sources in the db tree
+                name = node.identifier;
+            } else if (node.config && node.config.materialized == 'ephemeral') {
+                // these don't show up
                 return;
+            } else {
+                name = node.alias;
             }
 
             if (!schemas[schema]) {
@@ -472,7 +482,7 @@ angular
 
             schemas[schema].items.push({
                 type: 'table',
-                name: node.alias,
+                name: name,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,

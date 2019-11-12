@@ -149,11 +149,7 @@ angular
                     onClickFunction: function(event) {
                         var target = event.target || event.cyTarget
                         var unique_id = target.id();
-                        if (target.data('resource_type') == 'source') {
-                            $state.go('dbt.source', {unique_id: unique_id});
-                        } else {
-                            $state.go('dbt.model', {unique_id: unique_id});
-                        }
+                        $state.go('dbt.' + target.data('resource_type'), {unique_id: unique_id});
                     },
                     show: true,
                 },
@@ -165,11 +161,7 @@ angular
                     onClickFunction: function(event) {
                         var target = event.target || event.cyTarget
                         var unique_id = target.id();
-                        if (target.data('resource_type') == 'source') {
-                            $state.go('dbt.source', {unique_id: unique_id});
-                        } else {
-                            $state.go('dbt.model', {unique_id: unique_id});
-                        }
+                        $state.go('dbt.' + target.data('resource_type'), {unique_id: unique_id});
                         graph.hideGraph();
                     },
                     show: true,

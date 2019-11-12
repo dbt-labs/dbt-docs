@@ -20,17 +20,16 @@
         <div class="app-title">
             <div class="app-frame app-pad app-flush-bottom">
                 <h1>
-                    <span class="break">{{ model.source_name }}.{{ model.name }}</span>
-                    <small>source table</small>
+                    <span class="break">{{ model.name }}</span>
+                    <small>{{ model.config.materialized }}</small>
                 </h1>
             </div>
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
-                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'details'})">Details</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'columns'})">Columns</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'sql'})">SQL</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.seed({'#': 'details'})">Details</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.seed({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.seed({'#': 'columns'})">Columns</a></li>
             </ul>
         </div>
     </div>
@@ -38,7 +37,7 @@
         <div class="app-frame app-pad">
             <section class="section">
                 <div class="section-target" id="details"></div>
-                <table-details model="model" extras="extra_table_fields"/>
+                <table-details model="model" />
             </section>
 
             <section class="section">
@@ -60,6 +59,7 @@
                     <column-details model="model" />
                 </div>
             </section>
+
             <section class="section">
                 <div class="section-target" id="sql"></div>
                 <div class="section-content">

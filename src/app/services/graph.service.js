@@ -310,7 +310,7 @@ angular
 
 
         _.each(_.filter(service.manifest.nodes, function(node) {
-                return _.includes(['model', 'seed', 'source'], node.resource_type);
+                return _.includes(['model', 'seed', 'source', 'snapshot'], node.resource_type);
         }), function(node) {
             var node_obj = {
                 group: "nodes",
@@ -329,7 +329,9 @@ angular
                 var parent_node = service.manifest.nodes[parent];
                 var child_node = service.manifest.nodes[child];
 
-                if (!_.includes(['model', 'source'], parent_node.resource_type) || child_node.resource_type != 'model') {
+                if (!_.includes(['model', 'source', 'seed', 'snapshot'], parent_node.resource_type)) {
+                    return;
+                } else if (child_node.resource_type != 'model' && child_node.resource_type != 'snapshot') {
                     return;
                 };
 
