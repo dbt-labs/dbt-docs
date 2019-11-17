@@ -63,6 +63,10 @@ angular
                         on: 'icn-down',
                         off: 'icn-right'
                     },
+                    database: {
+                        on: 'icn-db-on',
+                        off: 'icn-db'
+                    },
                     schema: {
                         on: 'icn-tree-on',
                         off: 'icn-tree'

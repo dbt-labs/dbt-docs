@@ -438,55 +438,62 @@ angular
     }
 
     function buildDatabaseTree(nodes, select) {
-        var schemas = {}
 
-        _.each(nodes, function(node) {
-            var schema = node.schema;
-            var name = node.name;
-
-            var is_active = node.unique_id == select;
-
-            var name;
+        var databases = {};
+        var tree_nodes = _.select(nodes, function(node) {
             if (node.resource_type == 'source') {
-                // allow sources in the db tree
-                name = node.identifier;
-            } else if (node.config && node.config.materialized == 'ephemeral') {
-                // these don't show up
-                return;
-            } else {
-                name = node.alias;
+                return true;
+            } else if (node.resource_type == 'seed') {
+                return true;
+            } else if (node.resource_type == 'model') {
+                return node.config.materialized != 'ephemeral';
             }
+        });
 
-            if (!schemas[schema]) {
-                schemas[schema] = {
+        var tree_nodes_sorted = _.sortBy(tree_nodes, function(node) {
+            return node.database + '.' + node.schema +  '.' + (node.identifier || node.alias || node.name);
+        });
+
+        var by_database = _.groupBy(tree_nodes_sorted, 'database');
+        _.each(by_database, function(db_nodes, db) {
+            var database = {
+                type: "database",
+                name: db,
+                active: false,
+                items: []
+            };
+            databases[db] = database;
+
+            var by_schema = _.groupBy(db_nodes, 'schema');
+            _.each(by_schema, function(schema_nodes, schema) {
+                var schema = {
                     type: "schema",
                     name: schema,
-                    active: is_active,
+                    active: false,
                     items: []
                 };
-            } else if (is_active) {
-                schemas[schema].active = true;
-            }
 
-            schemas[schema].items.push({
-                type: 'table',
-                name: name,
-                node: node,
-                active: is_active,
-                unique_id: node.unique_id,
-                node_type: 'model'
-            })
+                database.items.push(schema);
+
+                _.each(schema_nodes, function(node) {
+                    var is_active = node.unique_id == select;
+                    if (is_active) {
+                        database.active = true;
+                        schema.active = true;
+                    }
+                    schema.items.push({
+                        type: 'table',
+                        name: node.identifier || node.alias || node.name,
+                        node: node,
+                        active: is_active,
+                        unique_id: node.unique_id,
+                        node_type: 'model'
+                    });
+                });
+            });
         });
 
-        // sort schemas
-        var schemas = _.sortBy(_.values(schemas), 'name');
-
-        // sort tables in the schema
-        _.each(schemas, function(schema) {
-            schema.items = _.sortBy(schema.items, 'name');
-        });
-
-        return schemas
+        return databases;
     }
 
     service.init = function() {
