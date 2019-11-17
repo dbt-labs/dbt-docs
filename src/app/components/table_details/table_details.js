@@ -28,7 +28,9 @@ angular
             }
 
             function asBytes(bytes, precision) {
-                if (bytes < 1) {
+                if (bytes == 0) {
+                    return '0 bytes';
+                } else if (bytes < 1) {
                     // errantly reported in MBs
                     bytes = bytes * 1000000;
                 }
@@ -108,19 +110,21 @@ angular
                 }
 
                 var sorted_stats = _.sortBy(_.values(stats), 'label');
-                _.each(sorted_stats, function(stat) {
+                var mapped = _.map(sorted_stats, function(stat) {
+                    var copy = _.clone(stat);
                     var transform = format[stat.id];
                     if (transform) {
-                        stat.value = transform(stat.value);
-                        stat.label = stat.label.replace("Approximate", "~");
-                        stat.label = stat.label.replace("Utilization", "Used");
+                        copy.value = transform(stat.value);
+                        copy.label = stat.label.replace("Approximate", "~");
+                        copy.label = stat.label.replace("Utilization", "Used");
                     }
+                    return copy;
                 })
 
-                return sorted_stats;
+                return mapped;
             }
 
-            scope.$watch("model", function(nv) {
+            scope.$watch("model", function(nv, ov) {
                 var get_type = _.property(['metadata', 'type'])
                 var rel_type = get_type(nv);
 

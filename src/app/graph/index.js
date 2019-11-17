@@ -15,15 +15,27 @@ angular
             graph.setGraphReady(graph_element);
         }
 
+
+        function getNodeSelector(node) {
+            if (node && node.resource_type == 'source') {
+                return 'source:' + node.source_name + "." + node.name;
+            } else if (node.name)  {
+                return node.name;
+            } else {
+                debugger
+                return '*'
+            }
+        }
+
         $scope.$watch(function() {
             return $state.params.unique_id;
         }, function(nv, ov) {
             if (nv && nv != ov) {
                 projectService.find_by_id(nv, function(node) {
                     if (graph.orientation == 'sidebar') {
-                        graph.showVerticalGraph(node.name, false);
+                        graph.showVerticalGraph(getNodeSelector(node), false);
                     } else {
-                        graph.showFullGraph(node.name);
+                        graph.showFullGraph(getNodeSelector(node));
                     }
                 });
             }

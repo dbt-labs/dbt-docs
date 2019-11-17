@@ -50,7 +50,7 @@ angular
 
     service.resetSelection = function(node) {
         var include_selection;
-        if (node && node.resource_type == 'model') {
+        if (node && _.includes(['model', 'seed', 'snapshot'], node.resource_type)) {
             include_selection = '+' + node.name + '+';
         } else if (node && node.resource_type == 'source') {
             include_selection = '+source:' + node.source_name + "." + node.name + '+';

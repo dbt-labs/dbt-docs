@@ -152,84 +152,74 @@ angular
             var compiled_project = incorporate_run_results(project, service.files.run_results);
 
 
-            var models = _.where(compiled_project.nodes, {resource_type: 'model'})
+            var models = compiled_project.nodes
             var model_names = _.indexBy(models, 'name');
 
             var tests = _.where(compiled_project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
-                if (test.tags.indexOf('schema') == -1 || !test.column_name) {
+
+                if (test.tags.indexOf('schema') == -1) {
                     return;
+                }
+
+                var test_name;
+                if (test.test_metadata.namespace) {
+                    test_name = test.test_metadata.namespace + "." + test.test_metadata.name;
+                } else {
+                    test_name = test.test_metadata.name;
                 }
 
                 var test_info = {
-                    column: test.column_name,
-                };
-
-                // TODO : All of this is unacceptably bad
-                var test_name = test.name;
-                if (test_name.startsWith("source_")) {
-                    test_name = test_name.replace(/^source_/, "")
+                    test_name: test_name
                 }
-
-                if (test_name.startsWith("not_null")) {
-                    test_info.label = "Not Null";
-                    test_info.short = "N";
-                } else if (test_name.startsWith("unique")) {
-                    test_info.label = "Unique";
-                    test_info.short = "U";
-                } else if (test_name.startsWith("relationships")) {
-                    test_info.label = "Foreign Key";
-                    test_info.short = "F";
-
-                    // hacks
-                    // TODO : Make this work for sources?
-                    if (test.refs.length != 2) {
-                        return;
-                    } else {
-                        var rel_model_name = test.refs[1];
-                        var rel_model = model_names[rel_model_name];
-                        if (!rel_model) {
-                            return;
-                        }
-
-                        var field_match = test.raw_sql.match(/field='([a-zA-Z0-9_]*)'/);
-                        if (field_match) {
-                            test_info.fk_field = field_match[1];
-                            test_info.fk_model = rel_model;
-                        } else {
-                            return
-                        }
+                if (test.test_metadata.name == 'not_null') {
+                    test_info.short = 'N';
+                    test_info.label = 'Not Null';
+                } else if (test.test_metadata.name == 'unique') {
+                    test_info.short = 'U';
+                    test_info.label = 'Unique';
+                } else if (test.test_metadata.name == 'relationships') {
+                    var rel_model_name = test.refs[1];
+                    var rel_model = model_names[rel_model_name];
+                    if (rel_model && test.test_metadata.kwargs.field) {
+                        // FKs get extra fields
+                        test_info.fk_field = test.test_metadata.kwargs.field;
+                        test_info.fk_model = rel_model;
                     }
-                //} else if (test_name.startsWith("accepted_values")) {
-                //    test_info.label = "Values";
-                //    test_info.short = "A";
+
+                    test_info.short = 'F';
+                    test_info.label = 'Foreign Key';
+                } else if (test.test_metadata.name == 'accepted_values') {
+                    var values = test.test_metadata.kwargs.values.join(", ")
+                    test_info.short = 'A';
+                    test_info.label = 'Accepted Values: ' + values;
                 } else {
-                    return;
+                    var kwargs = _.omit(test.test_metadata.kwargs, 'column_name');
+                    test_info.short = '+';
+                    test_info.label = test_name + '(' + JSON.stringify(kwargs) + ')';
                 }
 
                 var depends_on = test.depends_on.nodes;
-                if (depends_on.length) {
+                var test_column = test.column_name || test.test_metadata.kwargs.column_name || test.test_metadata.kwargs.arg;
+                if (depends_on.length && test_column) {
                     var model = depends_on[0];
                     var node = project.nodes[model];
                     var column = _.find(node.columns, function(col, col_name) {
-                        return col_name.toLowerCase() == test.column_name.toLowerCase();
+                        return col_name.toLowerCase() == test_column.toLowerCase();
                     });
 
-                    if (!column) {
-                        return;
+                    if (column) {
+                        column.tests = column.tests || [];
+                        column.tests.push(test_info);
                     }
-
-                    column.tests = column.tests || [];
-                    column.tests.push(test_info);
                 }
-
             });
 
             service.project = compiled_project;
 
             // performance hack
             service.project.searchable = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot'], node.resource_type);
             });
 
             service.loaded.resolve();
@@ -296,9 +286,18 @@ angular
 
     service.getModelTree = function(select, cb) {
         service.loaded.promise.then(function() {
-            var models = _.filter(service.project.nodes, {resource_type: 'model'});
-            service.tree.database = buildDatabaseTree(models, select);
-            service.tree.project = buildProjectTree(models, select);
+            //var models = _.filter(service.project.nodes, {resource_type: 'model'});
+            var nodes = _.filter(service.project.nodes, function(node) {
+                // only grab custom data tests
+                if (node.resource_type == 'test' && !_.includes(node.tags, 'schema')) {
+                    return true;
+                }
+
+                var accepted = ['snapshot', 'source', 'seed', 'model'];
+                return _.includes(accepted, node.resource_type);
+            })
+            service.tree.database = buildDatabaseTree(nodes, select);
+            service.tree.project = buildProjectTree(nodes, select);
 
             var sources = _.filter(service.project.nodes, {resource_type: 'source'});
             service.tree.sources = buildSourceTree(sources, select);
@@ -393,6 +392,11 @@ angular
         var tree = {};
 
         _.each(nodes, function(node) {
+            if (node.resource_type == 'source') {
+                // no sources in the model tree, sorry
+                return;
+            }
+
             if (node.original_file_path.indexOf("\\") != -1) {
                 var path_parts = node.original_file_path.split("\\");
             } else {
@@ -425,7 +429,7 @@ angular
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
-                node_type: 'model'
+                node_type: node.resource_type
             }
         });
 
@@ -434,48 +438,60 @@ angular
     }
 
     function buildDatabaseTree(nodes, select) {
-        var schemas = {}
 
-        _.each(nodes, function(node) {
-            var schema = node.schema;
-            var name = node.name;
-            var materialized = node.config.materialized;
-            var is_active = node.unique_id == select;
-
-            if (materialized == 'ephemeral') {
-                return;
+        var databases = {};
+        var tree_nodes = _.select(nodes, function(node) {
+            if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
+                return true;
+            } else if (node.resource_type == 'model') {
+                return node.config.materialized != 'ephemeral';
             }
+        });
 
-            if (!schemas[schema]) {
-                schemas[schema] = {
+        var tree_nodes_sorted = _.sortBy(tree_nodes, function(node) {
+            return node.database + '.' + node.schema +  '.' + (node.identifier || node.alias || node.name);
+        });
+
+        var by_database = _.groupBy(tree_nodes_sorted, 'database');
+        _.each(by_database, function(db_nodes, db) {
+            var database = {
+                type: "database",
+                name: db,
+                active: false,
+                items: []
+            };
+            databases[db] = database;
+
+            var by_schema = _.groupBy(db_nodes, 'schema');
+            _.each(by_schema, function(schema_nodes, schema) {
+                var schema = {
                     type: "schema",
                     name: schema,
-                    active: is_active,
+                    active: false,
                     items: []
                 };
-            } else if (is_active) {
-                schemas[schema].active = true;
-            }
 
-            schemas[schema].items.push({
-                type: 'table',
-                name: node.alias,
-                node: node,
-                active: is_active,
-                unique_id: node.unique_id,
-                node_type: 'model'
-            })
+                database.items.push(schema);
+
+                _.each(schema_nodes, function(node) {
+                    var is_active = node.unique_id == select;
+                    if (is_active) {
+                        database.active = true;
+                        schema.active = true;
+                    }
+                    schema.items.push({
+                        type: 'table',
+                        name: node.identifier || node.alias || node.name,
+                        node: node,
+                        active: is_active,
+                        unique_id: node.unique_id,
+                        node_type: 'model'
+                    });
+                });
+            });
         });
 
-        // sort schemas
-        var schemas = _.sortBy(_.values(schemas), 'name');
-
-        // sort tables in the schema
-        _.each(schemas, function(schema) {
-            schema.items = _.sortBy(schema.items, 'name');
-        });
-
-        return schemas
+        return databases;
     }
 
     service.init = function() {

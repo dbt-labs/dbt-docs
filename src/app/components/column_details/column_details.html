@@ -1,0 +1,90 @@
+<div class="panel">
+    <div class="panel-body">
+        <div ng-if="_.isEmpty(model.columns)">
+            Column information is not available for this seed
+        </div>
+        <div class="table-responsive" style="max-height: 800px; overflow-y: scroll;" ng-if="!_.isEmpty(model.columns)">
+            <table class="table table-borderless table-hover">
+                <thead>
+                    <tr>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Column</th>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Type</th>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
+                        <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Tests</th>
+                        <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>More?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        ng-repeat-start="column in get_columns(model) track by column.index"
+                        ng-click="toggle_column_expanded(column)"
+                        class="column-row"
+                        ng-class="{'column-row-selected': column.expanded}"
+                        ng-style="{cursor: has_more_info(column) ? 'pointer' : 'auto'}">
+                        <td>
+                            <div>
+                                <span class='text-dark'>{{ column.name }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class='text-dark'>{{ column.type }}</p>
+                        </td>
+                        <td style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap; max-width: 1px;">
+                            <span ng-show="!column.expanded">{{ column.description }}</span>
+                        </td>
+                        <td>
+                            <span class="text-light" ng-show="!column.expanded">
+                                <span data-toggle="tooltip" title="Unique" ng-if="has_test(column, 'U')">U</span>
+                                <span data-toggle="tooltip" title="Not Null" ng-if="has_test(column, 'N')">N</span>
+                                <span data-toggle="tooltip" title="Foreign Key" ng-if="has_test(column, 'F')">F</span>
+                                <span data-toggle="tooltip" title="Accepted Values" ng-if="has_test(column, 'A')">A</span>
+                                <span data-toggle="tooltip" title="Custom Test" ng-if="has_test(column, '+')">+</span>
+                            </span>
+                        </td>
+                        <td class='text-center'>
+                            <span class='text-light' ng-show="has_more_info(column)">
+                                <span ng-if="column.expanded">
+                                    <svg class="icn"><use xlink:href="#icn-up"></use></svg>
+                                </span>
+                                <span ng-if="!column.expanded">
+                                    <svg class="icn"><use xlink:href="#icn-right"></use></svg>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr ng-repeat-end ng-show="column.expanded" style="background-color: white; padding: 10px">
+                        <td colspan="5" class="column-expanded">
+                            <div style="padding: 5px 20px">
+                                <div style="margin-bottom: 15px">
+                                    <h5>Description</h5>
+                                    <span marked="column.description"></span>
+                                </div>
+
+                                <div ng-show="column.tests && column.tests.length" style="margin-bottom: 15px">
+                                    <h5>Schema Tests</h5>
+                                    <ul class="list-unstyled" style="margin-top: 2px">
+                                        <li ng-repeat="test in column.tests" ng-switch on="test.short" class='text-light'>
+                                            <span ng-switch-when="F">
+                                                Foreign Key
+                                                <span ng-if="test.fk_model.unique_id">
+                                                    <a data-ui-state="getState(test.fk_model)"
+                                                        data-ui-state-params="{unique_id: test.fk_model.unique_id}">
+                                                        to {{ test.fk_model.name }}
+                                                    </a> on <code>{{ test.fk_field }}</code>
+                                                </span>
+                                            </span>
+                                            <span ng-switch-when="P">Primary Key</span>
+                                            <span ng-switch-when="U">Unique</span>
+                                            <span ng-switch-when="N">Not Null</span>
+                                            <span ng-switch-default>{{ test.label }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
