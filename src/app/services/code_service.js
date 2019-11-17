@@ -50,7 +50,7 @@ angular
             query.push(line);
         });
 
-        var rel = [model.database, model.schema, model.identifier].join(".");
+        var rel = [model.database, model.schema, model.identifier || model.alias || model.name].join(".");
         query.push("from " + rel)
         return query.join("\n");
     }
