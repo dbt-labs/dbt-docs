@@ -441,9 +441,7 @@ angular
 
         var databases = {};
         var tree_nodes = _.select(nodes, function(node) {
-            if (node.resource_type == 'source') {
-                return true;
-            } else if (node.resource_type == 'seed') {
+            if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
                 return true;
             } else if (node.resource_type == 'model') {
                 return node.config.materialized != 'ephemeral';
