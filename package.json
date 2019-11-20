@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "angular": "^1.5.0",
+    "angular": "^1.7.9",
     "angular-highlightjs": "^0.7.1",
     "angular-loader": "~1.5.0",
     "angular-marked": "^1.2.2",
