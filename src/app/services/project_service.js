@@ -190,7 +190,11 @@ angular
                     test_info.short = 'F';
                     test_info.label = 'Foreign Key';
                 } else if (test.test_metadata.name == 'accepted_values') {
-                    var values = test.test_metadata.kwargs.values.join(", ")
+                    if (Array.isArray(test.test_metadata.kwargs.values)) {
+                        var values = test.test_metadata.kwargs.values.join(", ")
+                    } else {
+                        var values = JSON.stringify(test.test_metadata.kwargs.values);
+                    }
                     test_info.short = 'A';
                     test_info.label = 'Accepted Values: ' + values;
                 } else {
