@@ -195,7 +195,14 @@ angular
                     style: {
                         'background-color': '#919599',
                     }
-                }
+                },
+                {
+                    selector: 'node[hidden=1]',
+                    style: {
+                        'background-color': '#919599',
+                        'background-opacity': 0.5,
+                    }
+                },
             ],
             ready: function(e) {
                 console.log("graph ready");
@@ -269,6 +276,7 @@ angular
         _.each(service.graph.elements, function(el) {
             el.data['display'] = 'none';
             el.data['selected'] = 0;
+            el.data['hidden'] = 0;
             el.classes = classes;
         });
 
@@ -278,6 +286,10 @@ angular
 
             if (highlight && _.includes(highlight, el.data.unique_id)) {
                 el.data['selected'] = 1;
+            }
+
+            if (el.data.docs && el.data.docs.show === false) {
+                el.data['hidden'] = 1;
             }
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
