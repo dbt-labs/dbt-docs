@@ -57,7 +57,21 @@
                     <tr ng-repeat-end ng-show="column.expanded" style="background-color: white; padding: 10px">
                         <td colspan="5" class="column-expanded">
                             <div style="padding: 5px 20px">
-                                <div style="margin-bottom: 15px">
+                                <div ng-show="column.meta">
+                                    <h5>Details</h5>
+                                    <div class="detail-group" style="padding-bottom: 0">
+                                        <div class="detail-body" style="padding-left: 0">
+                                            <dl class="detail"
+                                                ng-style="{'padding-left': $index == 0 ? 0 : 'auto'}"
+                                                ng-repeat="(k, v) in column.meta">
+                                                <dt class="detail-label">{{ k }}</dt>
+                                                <dd class="detail-value">{{ v }}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 15px" ng-if="column.description.length">
                                     <h5>Description</h5>
                                     <span marked="column.description"></span>
                                 </div>

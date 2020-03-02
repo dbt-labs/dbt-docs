@@ -22,8 +22,9 @@ angular
             scope.has_more_info = function(column) {
                 var tests = (column.tests || []);
                 var description = (column.description || "");
+                var meta = (column.meta || {});
 
-                return tests.length || description.length;
+                return tests.length || description.length || !_.isEmpty(meta);
             }
 
             scope.toggle_column_expanded = function(column) {

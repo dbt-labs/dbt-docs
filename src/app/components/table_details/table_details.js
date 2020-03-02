@@ -18,6 +18,7 @@ angular
 
             scope.details = [];
             scope.extended = [];
+            scope.meta = null;
             scope._show_expanded = false;
 
             scope.show_expanded = function(v) {
@@ -25,6 +26,16 @@ angular
                     scope._show_expanded = v;
                 }
                 return scope._show_expanded;
+            }
+
+            scope.hasData = function(data) {
+                if (!data || _.isEmpty(data)) {
+                    return false;
+                } else if (data.length == 1 && data[0].include == false) {
+                    return false;
+                }
+
+                return true;
             }
 
             function asBytes(bytes, precision) {
@@ -127,6 +138,8 @@ angular
             scope.$watch("model", function(nv, ov) {
                 var get_type = _.property(['metadata', 'type'])
                 var rel_type = get_type(nv);
+
+                scope.meta = nv.meta || null;
 
                 scope.details = getBaseStats(nv);
                 scope.extended = getExtendedStats(nv.stats);
