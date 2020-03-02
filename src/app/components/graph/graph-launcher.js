@@ -27,6 +27,9 @@ angular
                 },
                 packages: {
                     visible: false,
+                },
+                resource_types: {
+                    visible: false,
                 }
             };
 
@@ -96,6 +99,14 @@ angular
                     // blur it
                 } else if (scope.isVisible(form)) {
                     $($event.target).focus();
+                }
+            }
+
+            scope.resourceTypeTitle = function(item) {
+                if (item == 'analysis') {
+                    return 'Analyses';
+                } else {
+                    return item[0].toUpperCase() + item.slice(1) + 's'
                 }
             }
 

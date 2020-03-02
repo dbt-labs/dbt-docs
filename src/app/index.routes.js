@@ -13,6 +13,7 @@ const templates = {
     source: require('./docs/source.html'),
     snapshot: require('./docs/snapshot.html'),
     seed: require('./docs/seed.html'),
+    test: require('./docs/test.html'),
 }
 
 angular
@@ -59,6 +60,14 @@ angular
             url: 'snapshot/:unique_id?section&' + graph_params,
             controller: 'SnapshotCtrl',
             templateUrl: templates.snapshot,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.test', {
+            url: 'test/:unique_id?section&' + graph_params,
+            controller: 'TestCtrl',
+            templateUrl: templates.test,
             params: {
                 unique_id: {type: 'string'}
             },
