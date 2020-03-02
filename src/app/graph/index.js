@@ -32,7 +32,9 @@ angular
         }, function(nv, ov) {
             if (nv && nv != ov) {
                 projectService.find_by_id(nv, function(node) {
-                    if (graph.orientation == 'sidebar') {
+                    if (!node) {
+                        // pass - it's a macro or some other non-project resource
+                    } else if (graph.orientation == 'sidebar') {
                         graph.showVerticalGraph(getNodeSelector(node), false);
                     } else {
                         graph.showFullGraph(getNodeSelector(node));
