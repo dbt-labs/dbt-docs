@@ -38,7 +38,7 @@
     "underscore": "^1.9.0",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.1.5",
+    "webpack-dev-server": "^3.1.11",
     "webpack-inline-svg-plugin": "^1.1.4"
   },
   "scripts": {
