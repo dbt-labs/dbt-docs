@@ -1,7 +1,6 @@
 
 const angular = require('angular');
 const $ = require('jquery');
-const _ = require('underscore');
 
 import merge from 'deepmerge';
 
@@ -476,8 +475,11 @@ angular
         var macros = macros || [];
 
         _.each(nodes.concat(macros), function(node) {
+            var show = _.get(node, ['docs', 'show'], true);
             if (node.resource_type == 'source') {
                 // no sources in the model tree, sorry
+                return;
+            } else if (!show) {
                 return;
             }
 
@@ -530,7 +532,10 @@ angular
 
         var databases = {};
         var tree_nodes = _.select(nodes, function(node) {
-            if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
+            var show = _.get(node, ['docs', 'show'], true);
+            if (!show) { 
+                return false;
+            } else if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
                 return true;
             } else if (node.resource_type == 'model') {
                 return node.config.materialized != 'ephemeral';
