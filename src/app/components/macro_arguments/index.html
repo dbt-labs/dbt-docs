@@ -1,0 +1,73 @@
+<style>
+.arg-header {
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+</style>
+
+<div class="panel">
+    <div class="panel-body">
+        <div ng-if="macro.arguments.length == 0">
+            Details are not available for this macro
+        </div>
+        <div
+            ng-if="macro.arguments.length > 0"
+            class="table-responsive"
+            style="max-height: 800px; overflow-y: scroll;">
+            <table class="table table-borderless table-hover">
+                <thead>
+                    <tr>
+                        <th class="arg-header">Argument</th>
+                        <th class="arg-header">Type</th>
+                        <th class="arg-header">Description</th>
+                        <th style="width: 1px;" class='text-center'>More?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="arg in macro.arguments"
+                        ng-click="arg.expanded = !arg.expanded"
+                        ng-class="{'column-row-selected': arg.expanded}"
+                        ng-style="{cursor: arg.description ? 'pointer' : 'auto'}"
+                        class="column-row">
+                        <td>
+                            <div>
+                                <span class='text-dark'>{{ arg.name }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class='text-dark'>{{ arg.type }}</p>
+                        </td>
+                        <td style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap; max-width: 1px;">
+                            <span ng-show="!arg.expanded">{{ arg.description }}</span>
+                        </td>
+                        <td class='text-center'>
+                            <span class='text-light' ng-show="arg.description">
+                                <span ng-if="arg.expanded">
+                                    <svg class="icn"><use xlink:href="#icn-up"></use></svg>
+                                </span>
+                                <span ng-if="!arg.expanded">
+                                    <svg class="icn"><use xlink:href="#icn-right"></use></svg>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr ng-repeat-end
+                        ng-show="arg.expanded"
+                        style="background-color: white; padding: 10px">
+                        <td colspan="4" class="column-expanded">
+                            <div style="padding: 5px 20px">
+                                <div style="margin-bottom: 15px">
+                                    <h5>Description</h5>
+                                    <span marked="arg.description"></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

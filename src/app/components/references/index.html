@@ -1,0 +1,23 @@
+<div class="panel">
+    <div class="panel-body" ng-if="!has_references">
+        No resources reference this macro
+    </div>
+    <div class="panel-body" ng-if="has_references">
+        <ul class="nav nav-tabs">
+            <li
+                ng-repeat="(resource_type, nodes) in references"
+                ng-class="{active: resource_type == selected_type}">
+                <a ng-click="setType(resource_type)">
+                    {{ mapResourceType(resource_type) }}
+                </a>
+            </li>
+        </ul>
+        <div style="margin-top: 15px">
+            <ul class='list-unstyled'>
+                <li ng-repeat="node in nodes">
+                    <a ng-href="{{ getNodeUrl(node) }}">{{ node.name }}</a>
+                </li>
+            </ul>
+        <div>
+    </div>
+</div>
