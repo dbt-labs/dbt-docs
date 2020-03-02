@@ -6,7 +6,7 @@ const _ = require('underscore');
 
 angular
 .module('dbt')
-.directive('columnDetails', [function() {
+.directive('columnDetails', ['project', function(projectService) {
     return {
         scope: {
             model: '=',
@@ -34,6 +34,10 @@ angular
 
             scope.getState = function(node) {
                 return 'dbt.' + node.resource_type;
+            }
+
+            scope.get_col_name = function(col_name) {
+                return projectService.caseColumn(col_name);
             }
 
             scope.get_columns = function(model) {

@@ -22,8 +22,7 @@ angular
             catalog: {},
             run_results: {},
         },
-
-        loaded: $q.defer()
+        loaded: $q.defer(),
     }
 
     service.find_by_id = function(uid, cb) {
@@ -586,6 +585,14 @@ angular
         });
 
         return databases;
+    }
+
+    service.caseColumn = function(col) {
+        if (service.project.metadata.adapter_type == 'snowflake' && col.toUpperCase() == col) {
+            return col.toLowerCase();
+        } else {
+            return col;
+        }
     }
 
     service.init = function() {
