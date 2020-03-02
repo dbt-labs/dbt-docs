@@ -1,0 +1,22 @@
+<h6>Code</h6>
+<div class="panel">
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <li
+                ng-repeat="(version_name, version) in versions"
+                ng-class="{active: version_name == selected_version}">
+                <a ng-click="setSelected(version_name)">{{ titleCase(version_name) }}</a>
+            </li>
+            <li class='nav-pull-right'></li>
+            <li>
+                <a class='unselectable'
+                   ng-click="copy_to_clipboard()">{{ copied ? 'copied' : 'copy to clipboard' }}</a>
+            </li>
+        </ul>
+        <div style="margin-top: 1px">
+            <pre
+                class="source-code highlight sql"
+                ng-bind-html="source"></pre>
+        </div>
+    </div>
+</div>

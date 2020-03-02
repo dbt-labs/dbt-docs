@@ -13,6 +13,7 @@ const templates = {
     source: require('./docs/source.html'),
     snapshot: require('./docs/snapshot.html'),
     seed: require('./docs/seed.html'),
+    macro: require('./docs/macro.html'),
 }
 
 angular
@@ -79,5 +80,12 @@ angular
                 source: {type: 'string'}
             },
         })
-
+        .state('dbt.macro', {
+            url: 'macro/:unique_id?section',
+            controller: 'MacroCtrl',
+            templateUrl: templates.macro,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
 }])

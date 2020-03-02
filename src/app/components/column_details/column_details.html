@@ -3,7 +3,9 @@
         <div ng-if="_.isEmpty(model.columns)">
             Column information is not available for this seed
         </div>
-        <div class="table-responsive" style="max-height: 800px; overflow-y: scroll;" ng-if="!_.isEmpty(model.columns)">
+        <div class="table-responsive"
+             style="max-height: 800px; overflow-y: scroll;"
+             ng-if="!_.isEmpty(model.columns)">
             <table class="table table-borderless table-hover">
                 <thead>
                     <tr>
