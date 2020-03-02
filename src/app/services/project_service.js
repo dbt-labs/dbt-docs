@@ -148,6 +148,10 @@ angular
                 }
             });
 
+            var adapter = service.files.manifest.metadata.adapter_type;
+            var macros = clean_project_macros(service.files.manifest.macros, adapter);
+            service.files.manifest.macros = macros;
+
             var project = incorporate_catalog(service.files.manifest, service.files.catalog);
             var compiled_project = incorporate_run_results(project, service.files.run_results);
 
@@ -222,10 +226,15 @@ angular
             service.project = compiled_project;
 
             // performance hack
-            service.project.searchable = _.filter(service.project.nodes, function(node) {
+            var search_macros = _.filter(service.project.macros, function(macro) {
+                return !macro.is_adapter_macro_impl;
+            });
+
+            var search_nodes = _.filter(service.project.nodes, function(node) {
                 return _.includes(['model', 'source', 'seed', 'snapshot'], node.resource_type);
             });
 
+            service.project.searchable = search_nodes.concat(search_macros);
             service.loaded.resolve();
         });
     }
@@ -238,10 +247,15 @@ angular
 
     function fuzzySearchObj(val, obj) {
         var objects = [];
-        var search_keys = {'name':'string', 'description':'string', 'columns':'object', 'tags': 'array'};
-        
+        var search_keys = {
+            'name':'string',
+            'description':'string',
+            'columns':'object',
+            'tags': 'array',
+            'arguments': 'array',
+        };
         var search = new RegExp(val, "i")
-        
+
         for (var i in search_keys) {
             if (!obj[i]) {
                continue;
@@ -255,7 +269,7 @@ angular
                 }
             } else if (search_keys[i] === 'array') {
                 for (var tag of obj[i]) {
-                    if (tag.toLowerCase().indexOf(val.toLowerCase()) != -1) {
+                    if (JSON.stringify(tag).toLowerCase().indexOf(val.toLowerCase()) != -1) {
                         objects.push({key: i, value: val});
                     }
                 }
@@ -288,9 +302,33 @@ angular
         return res;
     }
 
+    function clean_project_macros(macros, adapter) {
+        var all_macros = macros || [];
+
+        var package_macros = {};
+        _.each(all_macros, function(macro) {
+            if (!package_macros[macro.package_name]) {
+                package_macros[macro.package_name] = {}
+            }
+
+            package_macros[macro.package_name][macro.name] = macro
+        });
+
+        var macros = [];
+        _.each(package_macros, function(package_macros, package_name) {
+            if (package_name == 'dbt' || package_name == 'dbt_' + adapter) {
+                return
+            }
+            var pkg_macros = consolidateAdapterMacros(package_macros, adapter);
+            macros = macros.concat(pkg_macros);
+        });
+
+        return _.indexBy(macros, 'unique_id');
+    }
+
     service.getModelTree = function(select, cb) {
         service.loaded.promise.then(function() {
-            //var models = _.filter(service.project.nodes, {resource_type: 'model'});
+            var macros = _.values(service.project.macros);
             var nodes = _.filter(service.project.nodes, function(node) {
                 // only grab custom data tests
                 if (node.resource_type == 'test' && !_.includes(node.tags, 'schema')) {
@@ -300,8 +338,9 @@ angular
                 var accepted = ['snapshot', 'source', 'seed', 'model'];
                 return _.includes(accepted, node.resource_type);
             })
+
             service.tree.database = buildDatabaseTree(nodes, select);
-            service.tree.project = buildProjectTree(nodes, select);
+            service.tree.project = buildProjectTree(nodes, macros, select);
 
             var sources = _.filter(service.project.nodes, {resource_type: 'source'});
             service.tree.sources = buildSourceTree(sources, select);
@@ -392,10 +431,51 @@ angular
         return sources
     }
 
-    function buildProjectTree(nodes, select) {
+    function consolidateAdapterMacros(macros, adapter) {
+        var adapter_macros = {};
+        _.each(macros, function(macro) {
+            if (macro.macro_sql.match(/{{\s*adapter_macro\([^)]+\)\s+}}/)) {
+                macro.impls = {"Adapter Macro": macro.macro_sql};
+                macro.is_adapter_macro = true;
+                adapter_macros[macro.name] = macro;
+            }
+        });
+
+        // ideally we would not need to do this!
+        var databases = [
+            'postgres',
+            'redshift',
+            'bigquery',
+            'snowflake',
+            'spark',
+            'presto',
+            'default',
+        ];
+
+        var to_return = _.values(adapter_macros);
+        var extras = _.filter(macros, function(macro) {
+            var parts = macro.name.split("__");
+            var head = parts.shift();
+
+            var macro_name = parts.join("__");
+            if (databases.indexOf(head) >= 0 && adapter_macros[macro_name]) {
+                adapter_macros[macro_name].impls[head] = macro.macro_sql;
+                macro.is_adapter_macro_impl = true;
+                return false;
+            }
+            return true;
+        });
+
+        return to_return.concat(extras);
+    }
+
+    function buildProjectTree(nodes, macros, select) {
         var tree = {};
 
-        _.each(nodes, function(node) {
+        var nodes = nodes || [];
+        var macros = macros || [];
+
+        _.each(nodes.concat(macros), function(node) {
             if (node.resource_type == 'source') {
                 // no sources in the model tree, sorry
                 return;
@@ -411,7 +491,12 @@ angular
             var is_active = node.unique_id == select;
 
             var dirpath = _.initial(path);
-            var fname = _.last(path);
+
+            if (node.resource_type == 'macro') {
+                var fname = node.name;
+            } else {
+                var fname = _.last(path);
+            }
 
             var cur_dir = tree;
             _.each(dirpath, function(dir) {
@@ -500,13 +585,6 @@ angular
 
     service.init = function() {
         service.loadProject()
-
-        var models = _.filter(service.project.nodes, {resource_type: 'model'});
-        service.tree.database = buildDatabaseTree(models);
-        service.tree.project = buildProjectTree(models);
-
-        var sources = _.filter(service.project.nodes, {resource_type: 'source'});
-        service.tree.sources = buildSourceTree(sources);
     }
 
     return service;

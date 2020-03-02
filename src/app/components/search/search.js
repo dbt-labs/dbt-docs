@@ -31,6 +31,8 @@ angular
             scope.getModelName = function(model) {
                 if (model.resource_type == 'source') {
                     return model.source_name + "." + model.name;
+                } else if (model.resource_type == 'macro') {
+                    return model.package_name + "." + model.name;
                 } else {
                     return model.name;
                 }
