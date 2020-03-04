@@ -14,6 +14,7 @@ const templates = {
     snapshot: require('./docs/snapshot.html'),
     seed: require('./docs/seed.html'),
     test: require('./docs/test.html'),
+    analysis: require('./docs/analysis.html'),
     macro: require('./docs/macro.html'),
 }
 
@@ -69,6 +70,14 @@ angular
             url: 'test/:unique_id?section&' + graph_params,
             controller: 'TestCtrl',
             templateUrl: templates.test,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.analysis', {
+            url: 'analysis/:unique_id?section',
+            controller: 'AnalysisCtrl',
+            templateUrl: templates.analysis,
             params: {
                 unique_id: {type: 'string'}
             },

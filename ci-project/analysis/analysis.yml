@@ -1,0 +1,6 @@
+
+version: 2
+
+analyses:
+    - name: my_analysis
+      description: "Here are the docs for my really cool analysis"

@@ -229,7 +229,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis'], node.resource_type);
             });
 
             service.project.searchable = search_nodes.concat(search_macros);
@@ -333,7 +333,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis'];
                 return _.includes(accepted, node.resource_type);
             })
 
