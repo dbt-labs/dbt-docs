@@ -5,3 +5,4 @@ require('./seed');
 require('./snapshot');
 require('./test');
 require('./macro');
+require('./analysis');

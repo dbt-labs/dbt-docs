@@ -25,7 +25,9 @@ angular
             'model',
             'seed',
             'snapshot',
-            'source'
+            'source',
+            'test',
+            'analysis',
         ],
         depth: 1,
     };
@@ -41,7 +43,7 @@ angular
         options: {
             packages: [],
             tags: [null],
-            resource_types: ['model', 'seed', 'snapshot', 'source', 'test'],
+            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis'],
         }
     };
 
@@ -61,6 +63,8 @@ angular
             include_selection = '+' + node.name + '+';
         } else if (node && node.resource_type == 'source') {
             include_selection = '+source:' + node.source_name + "." + node.name + '+';
+        } else if (node && _.includes(['analysis', 'test'], node.resource_type)) {
+            include_selection = '+' + node.name;
         } else {
             include_selection = "";
         }
@@ -145,6 +149,11 @@ angular
         if (!hop_index) hop_index = 1;
 
         var up = dag.predecessors(node);
+        // node is not in the dag
+        if (!up) {
+            return [];
+        }
+
         return up.concat(up.reduce(function(sum, u) {
             if (hop_index >= max_hops && max_hops !== undefined) {
                 return sum
@@ -157,6 +166,10 @@ angular
         if (!hop_index) hop_index = 1;
 
         var down = dag.successors(node);
+        if (!down) {
+            return [];
+        }
+
         return down.concat(down.reduce(function(sum, u) {
             if (hop_index >= max_hops && max_hops !== undefined) {
                 return sum
@@ -403,7 +416,12 @@ angular
 
             var matched_package = _.includes(selected_spec.packages, node.data.package_name);
             var matched_tags = _.intersection(selected_spec.tags, node.data.tags).length > 0;
-            var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 0);
+            // TODO : This is a special case for data tests :/
+            if (node.data.resource_type == 'test') {
+                var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 1);
+            } else {
+                var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 0);
+            }
             var matched_types = _.includes(selected_spec.resource_types, node.data.resource_type);
 
             if (!matched_package || (!matched_tags && !matched_untagged) || !matched_types) {

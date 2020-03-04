@@ -1,0 +1,14 @@
+
+version: 2
+
+macros:
+    - name: example_macro
+      description: "A macro that does a thing"
+      arguments:
+        - name: arg_1
+          description: "The first argument"
+          type: str
+
+        - name: arg_2
+          description: "The second argument"
+          type: int

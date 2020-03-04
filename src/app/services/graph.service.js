@@ -322,7 +322,7 @@ angular
 
 
         _.each(_.filter(service.manifest.nodes, function(node) {
-            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot'], node.resource_type);
+            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis'], node.resource_type);
             var is_data_test = node.resource_type == 'test' && _.includes(node.tags, 'data');
             return is_graph_type || is_data_test;
         }), function(node) {
@@ -348,6 +348,7 @@ angular
                 } else if (child_node.resource_type == 'test' && _.includes(child_node.tags, 'schema')) {
                     return;
                 }
+
 
                 var unique_id = parent_node.unique_id + "|" + child_node.unique_id;
 
