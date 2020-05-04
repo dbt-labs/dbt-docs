@@ -15,18 +15,6 @@ require('angular-route');
 
 require('angular-marked');
 
-const hljs = require('highlight.js');
-const sql = require('highlight.js/lib/languages/sql');
-hljs.initHighlightingOnLoad();
-hljs.registerLanguage('sql', sql);
-
-// hack to make line numbers work
-window.hljs = hljs;
-const hljs_lines = require('highlightjs-line-numbers.js');
-hljs.initLineNumbersOnLoad();
-
-require('highlight.js/styles/github.css');
-
 
 angular
 .module('dbt', [

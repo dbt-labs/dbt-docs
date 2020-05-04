@@ -1,11 +1,9 @@
 'use strict';
 
 const angular = require('angular');
-const $ = require("jquery");
+const _ = require('underscore');
 
 require("./styles.css");
-
-const _ = require('underscore');
 
 angular
 .module('dbt')

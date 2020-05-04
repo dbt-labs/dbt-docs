@@ -30,7 +30,7 @@
                 <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'details'})">Details</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'description'})">Description</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'columns'})">Columns</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'sql'})">SQL</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'code'})">SQL</a></li>
             </ul>
         </div>
     </div>
@@ -60,28 +60,11 @@
                     <column-details model="model" />
                 </div>
             </section>
+
             <section class="section">
-                <div class="section-target" id="sql"></div>
+                <div class="section-target" id="code"></div>
                 <div class="section-content">
-                    <h6>SQL</h6>
-                    <div class="panel">
-                        <div class="panel-body">
-                            <div class='row'>
-                                <div class='col-md-6'>
-                                    <h4>Example SQL</h4>
-                                </div>
-                                <div class='col-md-6 text-right'>
-                                    <a class='unselectable'
-                                       ng-click="copy_to_clipboard(sample_sql)">{{ copied ? 'copied' : 'copy to clipboard' }}</a>
-                                </div>
-                            </div>
-                            <div style="margin-top: 1px">
-                                <pre
-                                    class="source-code highlight sql"
-                                    ng-bind-html="highlighted.source"></pre>
-                            </div>
-                        </div>
-                    </div>
+                    <code-block versions="versions" default="default_version"></code-block>
                 </div>
             </section>
         </div>

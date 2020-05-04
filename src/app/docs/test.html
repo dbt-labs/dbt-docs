@@ -28,7 +28,7 @@
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'sql'})">SQL</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'code'})">SQL</a></li>
             </ul>
         </div>
     </div>
@@ -48,32 +48,9 @@
             </section>
 
             <section class="section">
-                <div class="section-target" id="sql"></div>
+                <div class="section-target" id="code"></div>
                 <div class="section-content">
-                    <h6>SQL</h6>
-                    <div class="panel">
-                        <div class="panel-body">
-                            <ul class="nav nav-tabs">
-                                <li ng-class="{active: !view_compiled_sql}"><a ng-click="view_compiled_sql=false">Source</a></li>
-                                <li ng-class="{active: view_compiled_sql}"><a ng-click="view_compiled_sql=true">Compiled</a></li>
-                                <li class='nav-pull-right'></li>
-                                <li>
-                                    <a class='unselectable'
-                                       ng-click="copy_to_clipboard(view_compiled_sql ? model.injected_sql : model.raw_sql)">{{ copied ? 'copied' : 'copy to clipboard' }}</a>
-                                </li>
-                            </ul>
-                            <div style="margin-top: 1px" ng-show="!view_compiled_sql">
-                                <pre
-                                    class="source-code highlight sql"
-                                    ng-bind-html="highlighted.source"></pre>
-                            </div>
-                            <div style="margin-top: 1px" ng-show="view_compiled_sql">
-                                <pre
-                                    class="source-code highlight sql"
-                                    ng-bind-html="highlighted.compiled"></pre>
-                            </div>
-                        </div>
-                    </div>
+                    <code-block versions="versions" default="default_version"></code-block>
                 </div>
             </section>
         </div>
