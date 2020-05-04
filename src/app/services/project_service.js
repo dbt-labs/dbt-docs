@@ -1,6 +1,7 @@
 
 const angular = require('angular');
 const $ = require('jquery');
+const _ = require('lodash');
 
 import merge from 'deepmerge';
 
@@ -138,12 +139,15 @@ angular
                 }
             });
 
+            // Set node labels
             _.each(service.files.manifest.nodes, function(node) {
-                if (node.resource_type == 'source') {
-                    node.label = "" + node.source_name + "." + node.name;
-                } else {
-                    node.label = node.name;
-                }
+                node.label = node.name;
+            });
+
+            // Add sources back into nodes to make site logic work
+            _.each(service.files.manifest.sources, function(node) {
+                node.label = "" + node.source_name + "." + node.name;
+                service.files.manifest.nodes[node.unique_id] = node;
             });
 
             var adapter = service.files.manifest.metadata.adapter_type;
@@ -155,9 +159,9 @@ angular
 
 
             var models = compiled_project.nodes
-            var model_names = _.indexBy(models, 'name');
+            var model_names = _.keyBy(models, 'name');
 
-            var tests = _.where(compiled_project.nodes, {resource_type: 'test'})
+            var tests = _.filter(compiled_project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
 
                 if (test.tags.indexOf('schema') == -1) {
@@ -321,7 +325,7 @@ angular
             macros = macros.concat(pkg_macros);
         });
 
-        return _.indexBy(macros, 'unique_id');
+        return _.keyBy(macros, 'unique_id');
     }
 
     service.getModelTree = function(select, cb) {
@@ -340,7 +344,7 @@ angular
             service.tree.database = buildDatabaseTree(nodes, select);
             service.tree.project = buildProjectTree(nodes, macros, select);
 
-            var sources = _.filter(service.project.nodes, {resource_type: 'source'});
+            var sources = _.values(service.project.sources);
             service.tree.sources = buildSourceTree(sources, select);
             cb(service.tree);
         });
@@ -530,7 +534,7 @@ angular
     function buildDatabaseTree(nodes, select) {
 
         var databases = {};
-        var tree_nodes = _.select(nodes, function(node) {
+        var tree_nodes = _.filter(nodes, function(node) {
             var show = _.get(node, ['docs', 'show'], true);
             if (!show) { 
                 return false;

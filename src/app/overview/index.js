@@ -1,6 +1,7 @@
 'use strict';
 
 const angular = require('angular');
+const _ = require('lodash');
 
 angular
 .module('dbt')
@@ -14,7 +15,7 @@ angular
             // default;
             var selected_overview = project.docs["dbt.__overview__"];
 
-            var overviews = _.where(project.docs, {name: '__overview__'});
+            var overviews = _.filter(project.docs, {name: '__overview__'});
             _.each(overviews, function(overview) {
                 if (overview.package_name != 'dbt') {
                     selected_overview = overview;

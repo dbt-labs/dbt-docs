@@ -1,11 +1,7 @@
 'use strict';
 
 const angular = require('angular');
-const hljs = require('highlight.js/lib/highlight.js');
 const $ = require("jquery");
-
-hljs.initHighlightingOnLoad();
-hljs.initLineNumbersOnLoad();
 
 require("./styles.css");
 
@@ -39,6 +35,10 @@ angular
     $scope.model = {};
     projectService.ready(function(project) {
         $scope.model = project.nodes[$scope.model_uid];
+
+        $(".source-code").each(function(i, el) {
+            hljs.lineNumbersBlock(el);
+        });
 
         $scope.highlighted.source = codeService.highlightSql($scope.model.raw_sql);
         $scope.highlighted.compiled = codeService.highlightSql($scope.model.injected_sql || default_compiled);

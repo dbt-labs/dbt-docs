@@ -1,5 +1,5 @@
 const angular = require('angular');
-const hljs = require('highlight.js/lib/highlight.js');
+const hljs = require('highlight.js');
 hljs.initHighlightingOnLoad();
 hljs.initLineNumbersOnLoad();
 

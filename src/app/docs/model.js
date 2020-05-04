@@ -2,9 +2,6 @@
 
 const angular = require('angular');
 const $ = require("jquery");
-const hljs = require('highlight.js/lib/highlight.js');
-hljs.initHighlightingOnLoad();
-hljs.initLineNumbersOnLoad();
 
 require("./styles.css");
 

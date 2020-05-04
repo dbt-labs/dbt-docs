@@ -1,11 +1,8 @@
 'use strict';
 
 const angular = require('angular');
-const hljs = require('highlight.js/lib/highlight.js');
+const hljs = require('highlight.js');
 const $ = require("jquery");
-
-hljs.initHighlightingOnLoad();
-hljs.initLineNumbersOnLoad();
 
 require("./styles.css");
 
