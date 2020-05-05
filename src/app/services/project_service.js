@@ -59,6 +59,11 @@ angular
     }
 
     function incorporate_catalog(manifest, catalog) {
+        // Re-combine sources and nodes
+        _.each(catalog.sources, function(source, source_id) {
+            catalog.nodes[source_id] = source;
+        })
+
         // later elements are preferred in the merge, but it
         // shouldn't matter, as these two don't clobber each other
         _.each(manifest.nodes, function(node, node_id) {
