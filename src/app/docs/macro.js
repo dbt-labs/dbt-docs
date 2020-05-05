@@ -1,15 +1,9 @@
 'use strict';
 
 const angular = require('angular');
-const hljs = require('highlight.js/lib/highlight.js');
-const $ = require("jquery");
-
-hljs.initHighlightingOnLoad();
-hljs.initLineNumbersOnLoad();
+const _ = require('underscore');
 
 require("./styles.css");
-
-const _ = require('underscore');
 
 angular
 .module('dbt')

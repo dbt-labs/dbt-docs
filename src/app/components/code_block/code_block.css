@@ -1,0 +1,19 @@
+pre, code {
+    background-color: transparent !important;
+}
+
+pre.code {
+    border: none !important;
+    overflow-y: visible !important;
+    overflow-x: scroll !important;
+    padding-bottom: 10px;
+}
+
+pre.code code {
+    font-family: Monaco, monospace !important;
+    font-weight: 400 !important;
+}
+
+.line-numbers-rows {
+    border: none !important;
+}

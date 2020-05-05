@@ -1,7 +1,14 @@
 const angular = require('angular');
-const hljs = require('highlight.js/lib/highlight.js');
-hljs.initHighlightingOnLoad();
-hljs.initLineNumbersOnLoad();
+const $ = require("jquery");
+const _ = require('underscore');
+
+import Prism from 'prismjs';
+window.Prism = Prism;
+
+import 'prismjs/components/prism-sql';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
+import 'prism-themes/themes/prism-ghcolors.css';
 
 angular
 .module('dbt')
@@ -12,17 +19,9 @@ angular
     // big hack
     service.copied = false;
 
-    service.highlightSql = function(sql) {
-        if (!sql) {
-            return $sce.trustAsHtml('')
-        }
-        var res = hljs.highlight('sql', sql, true)
-
-        // dumb fix for bug in highlighter line-no plugin:
-        // https://github.com/wcoder/highlightjs-line-numbers.js/issues/42
-        var fixed = res.value.replace(/^$/gm, '<span></span>');
-        var trusted = $sce.trustAsHtml(fixed)
-        return trusted
+    service.highlight = function(sql) {
+        var highlighted = Prism.highlight(sql, Prism.languages.sql, 'sql')
+        return $sce.trustAsHtml(highlighted);
     }
 
     service.copy_to_clipboard = function(text) {

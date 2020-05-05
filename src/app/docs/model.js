@@ -1,14 +1,7 @@
 'use strict';
 
 const angular = require('angular');
-const $ = require("jquery");
-const hljs = require('highlight.js/lib/highlight.js');
-hljs.initHighlightingOnLoad();
-hljs.initLineNumbersOnLoad();
-
 require("./styles.css");
-
-const _ = require('underscore');
 
 angular
 .module('dbt')
@@ -20,10 +13,7 @@ angular
     $scope.project = projectService;
     $scope.codeService = codeService;
 
-    $scope.highlighted = {
-        source: '',
-        compiled: ''
-    }
+    $scope.versions = {}
 
     $scope.copied = false;
     $scope.copy_to_clipboard = function(sql) {
@@ -41,12 +31,10 @@ angular
         $scope.model = project.nodes[$scope.model_uid];
 
         var default_compiled = '\n-- compiled SQL not found for this model\n';
-        $scope.highlighted.source = codeService.highlightSql($scope.model.raw_sql);
-        $scope.highlighted.compiled = codeService.highlightSql($scope.model.injected_sql || default_compiled);
-
-        $(".source-code").each(function(i, el) {
-            hljs.lineNumbersBlock(el);
-        });
+        $scope.versions = {
+            'Source': $scope.model.raw_sql,
+            'Compiled': $scope.model.injected_sql || default_compiled
+        }
 
         setTimeout(function() {
             $anchorScroll();
