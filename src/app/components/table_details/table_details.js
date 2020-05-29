@@ -76,13 +76,20 @@ angular
                 var is_ephemeral = !model.metadata;
                 var metadata = model.metadata || {};
 
+                var database;
+                if (model.database == null) { 
+                    database = '' 
+                } else {
+                    database = model.database + '.'
+                }
+
                 var relation;
                 if (is_ephemeral) {
                     relation = undefined;
                 } else if (model.resource_type == 'source') {
-                    relation = model.database + "." + model.schema + "." + model.identifier;
+                    relation = database + model.schema + "." + model.identifier;
                 } else {
-                    relation = model.database + "." + model.schema + "." + model.alias;
+                    relation = database + model.schema + "." + model.alias;
                 }
 
                 var stats = [
