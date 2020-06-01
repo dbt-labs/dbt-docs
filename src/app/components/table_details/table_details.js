@@ -77,7 +77,7 @@ angular
                 var metadata = model.metadata || {};
 
                 var database;
-                if (model.database == null) { 
+                if (!model.database) { 
                     database = '' 
                 } else {
                     database = model.database + '.'
