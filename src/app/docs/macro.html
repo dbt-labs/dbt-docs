@@ -31,6 +31,7 @@
                 <li ui-sref-active='active'><a ui-sref="dbt.macro({'#': 'description'})">Description</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.macro({'#': 'arguments'})">Arguments</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.macro({'#': 'referenced_by'})">Referenced By</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.macro({'#': 'depends_on'})">Depends On</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.macro({'#': 'code'})">Code</a></li>
             </ul>
         </div>
@@ -51,7 +52,7 @@
             </section>
 
             <section class="section">
-                <div class="section-target" id="columns"></div>
+                <div class="section-target" id="arguments"></div>
                 <div class="section-content">
                     <h6>Arguments</h6>
                     <macro-arguments macro="macro"></macro-arguments>
@@ -63,6 +64,14 @@
                 <div class="section-content">
                     <h6>Referenced By</h6>
                     <reference-list references="references" />
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-target" id="depends_on"></div>
+                <div class="section-content">
+                    <h6>Depends On</h6>
+                    <reference-list references="parents" />
                 </div>
             </section>
 
