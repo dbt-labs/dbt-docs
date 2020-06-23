@@ -34,7 +34,6 @@ angular
             return false;
         });
 
-        // TODO : include macros?
         return _.groupBy(references.concat(macroReferences), 'resource_type');
     }
     

@@ -1,7 +1,6 @@
 'use strict';
 
 const angular = require('angular');
-const _ = require('underscore');
 const utils = require('./utils')
 require("./styles.css");
 

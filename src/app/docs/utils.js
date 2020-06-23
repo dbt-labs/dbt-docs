@@ -9,7 +9,6 @@ export function getReferences(project, model) {
         return false;
     });
 
-    // TODO : include macros?
     return _.groupBy(references, 'resource_type');
 }
 
