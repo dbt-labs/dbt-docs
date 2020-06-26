@@ -22,7 +22,7 @@
     <div class="app-details">
         <div class="app-frame app-pad">
             <div class="results">
-                <div ng-repeat="result in results | filter:limit_search | orderBy:'-model.name':true track by result.model.unique_id"
+                <div ng-repeat="result in results | filter: limit_search | orderBy:'-model.name':true track by result.model.unique_id"
                      data-ui-state="getState(result.model)" data-ui-state-params="{unique_id: result.model.unique_id}"
                      ng-click="onSelect()"
                      class="result search-result a">
