@@ -15,7 +15,7 @@ angular
         templateUrl: template,
 
         link: function(scope) {
-            scope.max_results = 20;
+            scope.max_results = 20;                                             //# of results on the page at once
             scope.show_all = false;
             scope.max_results_columns = 3;
             scope.limit_columns = {};

@@ -62,6 +62,22 @@
             </section>
 
             <section class="section">
+                <div class="section-target" id="referenced_by"></div>
+                <div class="section-content">
+                    <h6>Referenced By</h6>
+                    <reference-list references="references" />
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-target" id="depends_on"></div>
+                <div class="section-content">
+                    <h6>Depends On</h6>
+                    <reference-list references="parents" />
+                </div>
+            </section>
+
+            <section class="section">
                 <div class="section-target" id="code"></div>
                 <div class="section-content">
                     <code-block versions="versions" default="default_version"></code-block>

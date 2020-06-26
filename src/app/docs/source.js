@@ -1,6 +1,7 @@
 'use strict';
 
 const angular = require('angular');
+const utils = require('./utils')
 require("./styles.css");
 
 angular
@@ -17,7 +18,10 @@ angular
 
     $scope.model = {};
     projectService.ready(function(project) {
-        $scope.model = project.nodes[$scope.model_uid];
+        let mod = project.nodes[$scope.model_uid];
+        $scope.model = mod;
+        $scope.references = utils.getReferences(project, mod);
+        $scope.parents = utils.getParents(project, mod);
 
         $scope.versions = {
             'Sample SQL': codeService.generateSourceSQL($scope.model)
