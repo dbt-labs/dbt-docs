@@ -33,7 +33,6 @@
         <div class="app-content app-column">
             <div class="app-header app-navbar app-shadow">
                 <div class="app-frame app-pad app-row app-middle">
-                    <div class="app-body">
                         <input
                             id="search"
                             ng-model="search.query"
@@ -42,6 +41,15 @@
                             type="text"
                             class="form-control"
                             placeholder="Search for models..." />
+                        <input type="checkbox" id="name" ng-model="checkboxStatus.show_names" ng-click="filterResults(results, checkboxStatus)" style = "margin-left:10px;margin-right:5px">
+                        <label for="name" style="margin-right:25px">Name</label> 
+                        <input type="checkbox" id="desc" ng-model="checkboxStatus.show_descriptions" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+                        <label for="desc" style="margin-right:25px;">Description</label> 
+                        <input type="checkbox" id="column" ng-model="checkboxStatus.show_columns" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+                        <label for="column" style="margin-right:25px;">Column</label> 
+                        <input type="checkbox" id="code" ng-model="checkboxStatus.show_code" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+                        <label for="code" style="margin-right:15px;">SQL</label>
+                    <div class="app-body">
                     </div>
                     <div class="app-footer app-icn" ng-show="search.is_focused" ng-click="clearSearch()">
                         <svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>

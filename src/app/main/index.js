@@ -35,6 +35,13 @@ angular
     $scope.model_uid = null;
     $scope.project = {};
 
+    $scope.checkboxStatus = {
+        show_names : false,
+        show_descriptions: false,
+        show_columns: false,
+        show_code: false
+    };
+
     $('body').bind('keydown', function(e) {
         if (event.key == 't' && event.target.tagName != 'INPUT') {
             console.log("Opening search");
@@ -142,10 +149,33 @@ angular
         }
     });
 
-    $scope.$watch('search.query', function(q) {
-        $scope.search.results = projectService.search(q);
-    });
+    function filterResults(results, checkboxStatus){
+        if(!_.some(_.values(checkboxStatus))){
+            return results;
+        }
 
+        let finalResults = [];
+        let fileIDs = [];
+        
+        const {show_names, show_descriptions, show_columns, show_code} = checkboxStatus;
+        _.each(results, function(result){
+            _.each(result.matches, function(match){
+               if(!fileIDs.includes(result.model['unique_id'])){
+                   if((show_names && match.key === "name") || (show_descriptions && match.key === "description") || (show_columns && match.key === "columns") || (show_code && match.key === "raw_sql")){
+                    fileIDs.push(result.model['unique_id']);
+                    finalResults.push(result);
+                   }
+               }
+            });
+       });
+       return finalResults;
+    }
+
+    var watchExpressions = ['search.query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_code'];
+    $scope.$watchGroup(watchExpressions, function() {
+        let filteredResults = filterResults(projectService.search($scope.search.query), $scope.checkboxStatus);
+        $scope.search.results = filteredResults;
+    });
 
     /*
     INITIALIZE THE APPLICATION:
