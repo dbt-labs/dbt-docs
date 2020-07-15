@@ -34,7 +34,7 @@
                                     <span ng-bind-html="highlight(getModelName(result.model))"></span>
                                     <small>{{result.model.resource_type}}</small>
                                 </h4>
-                                <p ng-bind-html="highlight(result.model.description)"></p>
+                                <p ng-bind-html="highlight(shorten(result.model.description))"></p>
                             </div>
                         </div>
                     <div class="sub-results" ng-show="query.length > 0">
@@ -49,7 +49,7 @@
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
                         <span>
-                            <span ng-bind-html = "highlight(result.model['raw_sql'])"></span>
+                            <span ng-bind-html = "highlight(shorten(result.model['raw_sql']))"></span>
                         </span>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
