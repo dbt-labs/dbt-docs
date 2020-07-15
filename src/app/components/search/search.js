@@ -45,7 +45,6 @@ angular
                     let startIndex = (indexOfInstance - 75) < 0? 0: indexOfInstance - 75;
                     let endIndex = (indexOfInstance + 75) > modified.length? modified.length: indexOfInstance + 75;
                     let shortened = "..." + modified.substring(startIndex, endIndex) + "...";
-                    console.log(shortened)
                     return shortened;
                  }
                 return text;
