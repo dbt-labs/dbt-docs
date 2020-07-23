@@ -142,8 +142,52 @@ angular
         }
     });
 
+    function assignSearchRelevance(results){
+        let criteriaArr = {
+            "name": 10,
+            "description": 3,
+            "raw_sql": 2,
+            "columns": 1
+        };
+        _.each(results, function(result){
+            result.overallWeight = 0;
+            _.each(Object.keys(criteriaArr), function(criteria){
+                if(result.model[criteria] != undefined){
+                    let count = 0;
+                    let body = result.model[criteria];
+                    let query = ($scope.search.query).toLowerCase();
+                    if(typeof(body) === "object"){
+                        _.each(body, function(column){
+                            let columnName = column.name.toLowerCase();
+                            let index = 0;
+                            while(index != -1){
+                                index = columnName.indexOf(query, index);
+                                if (index != -1) {
+                                    count++; index++;
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        body = body.toLowerCase();
+                        let index = 0;
+                        while(index != -1){
+                            index = body.indexOf(query, index);
+                            if(index != -1){
+                                count++; index++;
+                            }
+                        }
+                    }
+                    
+                    result.overallWeight += (count * criteriaArr[criteria]);
+                }
+            });
+        }); 
+        return results;
+    }
+
     $scope.$watch('search.query', function(q) {
-        $scope.search.results = projectService.search(q);
+        $scope.search.results = assignSearchRelevance(projectService.search(q));
     });
 
 
