@@ -142,6 +142,11 @@ angular
         }
     });
 
+
+    $scope.$watch('search.query', function(q) {
+        $scope.search.results = assignSearchRelevance(projectService.search(q));
+    });
+
     function assignSearchRelevance(results){
         let criteriaArr = {
             "name": 10,
@@ -185,10 +190,6 @@ angular
         }); 
         return results;
     }
-
-    $scope.$watch('search.query', function(q) {
-        $scope.search.results = assignSearchRelevance(projectService.search(q));
-    });
 
 
     /*
