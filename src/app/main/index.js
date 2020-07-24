@@ -150,6 +150,7 @@ angular
     function assignSearchRelevance(results){
         let criteriaArr = {
             "name": 10,
+            "tags": 5,
             "description": 3,
             "raw_sql": 2,
             "columns": 1
@@ -161,12 +162,24 @@ angular
                     let count = 0;
                     let body = result.model[criteria];
                     let query = ($scope.search.query).toLowerCase();
-                    if(typeof(body) === "object"){
+                    if(criteria === "columns"){
                         _.each(body, function(column){
                             let columnName = column.name.toLowerCase();
                             let index = 0;
                             while(index != -1){
                                 index = columnName.indexOf(query, index);
+                                if (index != -1) {
+                                    count++; index++;
+                                }
+                            }
+                        });
+                    }
+                    else if(criteria === "tags"){
+                        _.each(body, function(tag){
+                            let tagName = tag.toLowerCase();
+                            let index = 0;
+                            while(index != -1){
+                                index = tagName.indexOf(query, index);
                                 if (index != -1) {
                                     count++; index++;
                                 }
@@ -183,7 +196,6 @@ angular
                             }
                         }
                     }
-                    
                     result.overallWeight += (count * criteriaArr[criteria]);
                 }
             });
