@@ -201,6 +201,14 @@
                                            placeholder="..." />
                                     <div class="field-label">--exclude</div>
                                 </label>
+                                <label class="field" style="flex: 4 0 80px">
+                                    <input type="submit"
+                                           class="field-input form-control input-dark"
+                                           value="{{toggleButtonTextHorizontal}}"
+                                           ng-click = "togglePackageNamesHorizontal()" 
+                                           style = "text-align:center;"/>
+                                    <div class="field-label text-center" style="width: 100%"></div>
+                                </label>
                                 <label class="field" style="flex: 0 0 80px">
                                     <input type="submit"
                                            id="submit-graph-selection"
@@ -221,12 +229,23 @@
                     </div>
                     <!--<div class="launcher-spacer"></div>-->
                     <div class="launcher-actions" ng-show="graphService.orientation == 'sidebar'">
-                        <button type="button"
-                            ng-click="closeGraph()"
-                            class="btn btn-text btn-lg btn-icon btn-shadow"
-                            data-toggle="tooltip"
-                            title="Close Graph"><svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
-                        </button>
+                        <div style = "text-align:center;">
+                            <label class="field" style="flex: 4 0 80px; float:left">
+                                <input type="submit"
+                                       class="field-input form-control input-dark"
+                                       value="{{toggleButtonTextVertical}}"
+                                       ng-click = "togglePackageNamesVertical(); onUpdateSelectorVertical()" 
+                                       style = "text-align:center;"/>
+                                <div class="field-label text-center" style="width: 100%"></div>
+                            </label>
+                            <button type="button"
+                                ng-click="closeGraph()"
+                                class="btn btn-text btn-lg btn-icon btn-shadow"
+                                data-toggle="tooltip"
+                                title="Close Graph"
+                                style="float: right"><svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

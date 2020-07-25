@@ -65,6 +65,8 @@ angular
         loading: true,
         loaded: $q.defer(),
 
+        toggle_package_name_horizontal: false,
+        toggle_package_name_vertical: false,
         graph_element: null,
         orientation: 'sidebar',
         expanded: false,
@@ -141,7 +143,7 @@ angular
                         'width': '5px',
                         'height': '5px',
                         'padding': '5px',
-                        'content': 'data(label)',
+                        'content': 'data(package_and_label_vertical)',
                         'font-weight': 300,
                         'text-valign': 'center',
                         'text-halign': 'right',
@@ -157,7 +159,7 @@ angular
                         'width': 'label',
                         'height': 'label',
                         'padding': '12px',
-                        'content': 'data(label)',
+                        'content': 'data(package_and_label_horizontal)',
                         'font-weight': 300,
                         'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
                         'text-valign': 'center',
@@ -450,6 +452,27 @@ angular
     service.updateGraph = function(selected_spec) {
         service.orientation = 'fullscreen'
         service.expanded = true;
+        if(service.toggle_package_name_horizontal){
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_horizontal = node.data.package_name + "." + node.data.label;
+            });
+        }
+        else{
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_horizontal = node.data.label;
+            });
+        }
+
+        if(service.toggle_package_name_vertical){
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_vertical = node.data.package_name + "." + node.data.label;
+            });
+        }
+        else{
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_vertical = node.data.label;
+            });
+        }
 
         var nodes = updateGraphWithSelector(selected_spec, 'horizontal', false);
         service.graph.layout = layouts.left_right;
@@ -458,6 +481,40 @@ angular
         // update url with selection
         locationService.setState(selected_spec);
 
+        return nodes;
+    }
+
+    service.updateGraphVertical = function(selected_spec) {
+        service.orientation = 'sidebar';
+        service.expanded = false;
+        if(service.toggle_package_name_horizontal){
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_horizontal = node.data.package_name + "." + node.data.label;
+            });
+        }
+        else{
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_horizontal = node.data.label;
+            });
+        }
+
+        if(service.toggle_package_name_vertical){
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_vertical = node.data.package_name + "." + node.data.label;
+            });
+        }
+        else{
+            _.each(service.graph.pristine.nodes, function (node){
+                node.data.package_and_label_vertical = node.data.label;
+            });
+        }
+
+        var nodes = updateGraphWithSelector(selected_spec, 'vertical', false);
+        service.graph.layout = layouts.left_right;
+        service.graph.options = graph_options.vertical;
+
+        // update url with selection
+        locationService.setState(selected_spec);
         return nodes;
     }
 

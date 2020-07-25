@@ -33,6 +33,18 @@ angular
                 }
             };
 
+            scope.toggleButtonTextHorizontal = "Show Package Name";
+            scope.toggleButtonTextVertical = "Show Package Name";
+
+            scope.togglePackageNamesHorizontal = function(){
+                scope.graphService.toggle_package_name_horizontal = !scope.graphService.toggle_package_name_horizontal;
+                scope.toggleButtonTextHorizontal = (scope.toggleButtonTextHorizontal === "Show Package Name") ? "Hide Package Name": "Show Package Name";
+            }
+            scope.togglePackageNamesVertical = function(){
+                scope.graphService.toggle_package_name_vertical = !scope.graphService.toggle_package_name_vertical;
+                scope.toggleButtonTextVertical = (scope.toggleButtonTextVertical === "Show Package Name") ? "Hide Package Name": "Show Package Name";
+            }
+
             scope.onWindowClick = function(e) {
                 var target = $(e.target);
 
@@ -128,6 +140,13 @@ angular
             scope.onUpdateSelector = function() {
                 var selector = selectorService.updateSelection();
                 var nodes = graph.updateGraph(selector)
+
+                trackingService.track_graph_interaction('update-graph', nodes.length);
+            }
+
+            scope.onUpdateSelectorVertical = function() {
+                var selector = selectorService.updateSelection();
+                var nodes = graph.updateGraphVertical(selector)
 
                 trackingService.track_graph_interaction('update-graph', nodes.length);
             }
