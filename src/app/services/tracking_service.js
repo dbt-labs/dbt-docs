@@ -14,8 +14,7 @@ angular
     var service = {
         initialized: false,
         snowplow: null,
-
-        previous_url: null
+        project_id: null,
     };
 
     service.init = function(opts) {
@@ -24,107 +23,107 @@ angular
         }
 
         service.initialized = true;
+        service.project_id = opts.project_id;
 
         // If tracking is enabled, then include Snowplow lib and initialize tracker
         if (opts.track === true) {
-            service.turn_on_tracking(opts.project_id, opts.user_id);
+            service.turn_on_tracking();
         }
     }
 
-    service.turn_on_tracking = function(project_id, user_id) {
+    service.isHosted = function() {
+        return window.location.hostname.indexOf('.getdbt.com') > -1;
+    }
+
+    service.turn_on_tracking = function() {
         ;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[];
         p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments)
         };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1;
         n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","//d1fc8wv8zag5ca.cloudfront.net/2.9.0/sp.js","snowplow"));
 
-        service.snowplow = window.snowplow;
-        service.snowplow('newTracker', 'sp', 'fishtownanalytics.sinter-collect.com', {
+        var trackerParams = {
             appId: 'dbt-docs',
-            discoverRootDomain: true,
             forceSecureTracker: true,
             respectDoNotTrack: true,
             userFingerprint: false,
             contexts: {
                 webPage: true
-            },
-        });
-
-        if (user_id) {
-            service.snowplow('setUserId', user_id);
+            }
         }
+
+        if (service.isHosted()) {
+            trackerParams.cookieDomain = '.getdbt.com';
+        }
+
+        service.snowplow = window.snowplow;
+        service.snowplow(
+            'newTracker',
+            'sp',
+            'fishtownanalytics.sinter-collect.com',
+            trackerParams
+        );
 
         service.snowplow('enableActivityTracking', 30, 30);
         service.track_pageview();
-
-        // track special identify event
-        service.track_project_identify(project_id);
     }
 
-    service.__fuzz_url = function(url, remove_search) {
-        var fuzzed_url = url;
-
-        var matches = url.match(/[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+/g);
-        if (matches) {
-            _.each(matches, function(match) {
-                var hashed_name = md5(match);
-                fuzzed_url = fuzzed_url.replace(match, hashed_name);
-            });
+    service.fuzzUrls = function() {
+        if (service.isHosted()) {
+            return;
         }
 
-        if (remove_search) {
-            fuzzed_url = fuzzed_url.replace(/\?.*$/, '') + "?fuzzed=1";
-        }
-
-        return fuzzed_url;
+        service.snowplow('setCustomUrl', 'https://fuzzed.getdbt.com/');
+        service.snowplow('setReferrerUrl', 'https://fuzzed.getdbt.com/');
     }
 
-    function fuzzUrls() {
-        var url = $location.absUrl();
-
-        var remove_search = true;
-        var fuzzed_url = service.__fuzz_url(url, remove_search);
-
-        // fuzz query parameters -- these can contain model names
-        _.each($location.search(), function(q_value, q_name) {
-            fuzzed_url += "&" + q_name + "=" + 1;
-        });
-
-        if (service.previous_url) {
-            var referrer = service.previous_url;
-        } else {
-            // we probably don't want to capture external referrers, right?
-            var referrer = '';
-        }
-
-        service.snowplow('setCustomUrl', fuzzed_url);
-        service.snowplow('setReferrerUrl', referrer);
-
-        return fuzzed_url;
+    service.getContext = function() {
+        return [{
+            schema: 'iglu:com.dbt/dbt_docs/jsonschema/1-0-0',
+            data: {
+              "is_cloud_hosted": service.isHosted(),
+              "core_project_id": service.project_id,
+            }
+        }]
     }
 
-    service.track_pageview = function(project_id) {
-        if (service.snowplow) {
-            service.previous_url = fuzzUrls();
-            // Fuzz page title - just use first part of path
-            var path_parts = $location.path().split("/");
-            var page_title = path_parts.length > 1 ? path_parts[1] : "";
-
-            service.snowplow('trackPageView', page_title);
+    service.track_pageview = function() {
+        if (!service.snowplow) {
+            return;
         }
+
+        service.fuzzUrls();
+
+        var customTitle = null;
+        service.snowplow(
+            'trackPageView',
+            customTitle,
+            service.getContext()
+        );
     }
 
     service.track_event = function(action, label, property, value) {
-        if (service.snowplow) {
-            fuzzUrls();
-            service.snowplow('trackStructEvent', 'dbt-docs', action, label, property, value);
+        if (!service.snowplow) {
+            return
         }
-    }
 
-    service.track_project_identify = function(project_id) {
-        service.track_event('identify', 'project_id', project_id);
+        service.fuzzUrls();
+        service.snowplow(
+            'trackStructEvent',
+            'dbt-docs',
+            action,
+            label,
+            property,
+            value,
+            service.getContext(),
+        );
     }
 
     service.track_graph_interaction = function(interaction_type, num_nodes) {
+        if (!service.snowplow) {
+            return
+        }
+
+        service.fuzzUrls();
         service.track_event('graph', 'interact', interaction_type, num_nodes);
     }
 

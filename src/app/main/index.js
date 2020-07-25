@@ -242,8 +242,7 @@ angular
         var meta = (project.metadata || {})
         trackingService.init({
             track: meta.send_anonymous_usage_stats,
-            project_id: meta.project_id,
-            user_id: meta.user_id,
+            project_id: meta.project_id
         });
 
     });
