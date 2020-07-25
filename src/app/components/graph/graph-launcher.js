@@ -33,8 +33,28 @@ angular
                 }
             };
 
+            scope.toggleButtonPackageTagHorizontal = "Show Color By Tags";
+
+            scope.togglePackageTagColorsHorizontal = function(){
+                scope.graphService.toggle_tag_package_color_horizontal = (scope.graphService.toggle_tag_package_color_horizontal+1) % 3;
+                if(scope.graphService.toggle_tag_package_color_horizontal == 0)
+                    scope.toggleButtonPackageTagHorizontal = "Show Color By Tags";
+                else if(scope.graphService.toggle_tag_package_color_horizontal == 1)
+                    scope.toggleButtonPackageTagHorizontal = "Show Color By Packages";
+                else if(scope.graphService.toggle_tag_package_color_horizontal == 2)
+                    scope.toggleButtonPackageTagHorizontal = "Show Color By Resources";
+            }
+
+
             scope.onWindowClick = function(e) {
                 var target = $(e.target);
+                
+                if(scope.graphService.toggle_tag_package_color_horizontal == 0)
+                    scope.graphService.graph.style = scope.graphService.stylesWithoutAddedSelectors;
+                else if(scope.graphService.toggle_tag_package_color_horizontal == 1)
+                    scope.graphService.graph.style = scope.graphService.stylesWithTagSelectors;   
+                else if(scope.graphService.toggle_tag_package_color_horizontal == 2)
+                    scope.graphService.graph.style = scope.graphService.stylesWithPackageSelectors;
 
                 var closest_dropup = $(e.target).closest(".dropup");
                 if (!closest_dropup.length) {

@@ -65,6 +65,13 @@ angular
         loading: true,
         loaded: $q.defer(),
 
+        colorList: ["#C0392B", "#9B59B6", "#2980B9", "#1ABC9C", "#27AE60", "#F1C40F", "#E67E22", "#ECF0F1", "#95A5A6", "#34495E", "#00FF00", "#00FFFF","#000080", "#FF00FF", "#FF4500", "#B8860B"],
+        uniqueTags: [],
+        uniquePackages: [],
+        stylesWithPackageSelectors: [],
+        stylesWithTagSelectors: [],
+        stylesWithoutAddedSelectors: [],
+        toggle_tag_package_color_horizontal: 0,
         graph_element: null,
         orientation: 'sidebar',
         expanded: false,
@@ -384,6 +391,69 @@ angular
 
         service.graph.pristine.dag = dag;
         service.graph.elements = _.flatten(_.values(service.graph.pristine.nodes).concat(_.values(service.graph.pristine.edges)));
+        _.each(service.graph.pristine.nodes, function (node){
+            if(!service.uniqueTags.includes(node.data.tags[0]) && node.data.tags[0] != null){
+                service.uniqueTags.push(node.data.tags[0]);
+                node.data.firstTag = node.data.tags[0];
+            }
+            else if(node.data.tags[0] != null)
+                node.data.firstTag = node.data.tags[0];
+            else
+                node.data.firstTag = undefined;
+
+            if(!service.uniquePackages.includes(node.data.package_name) && node.data.package_name != null){
+                service.uniquePackages.push(node.data.package_name);
+            }
+        });
+        service.stylesWithoutAddedSelectors = service.graph.style;
+        _.each(service.graph.style, function(style){
+            service.stylesWithTagSelectors.push(style);
+            service.stylesWithPackageSelectors.push(style);
+        });
+        let i;
+        for(i = 0; i < service.uniqueTags.length; i++){
+            let selectorString = 'node[firstTag=' + '\"' + service.uniqueTags[i] + '\"' + ']';
+            service.stylesWithTagSelectors.push(
+                {
+                    selector: selectorString,
+                    style: {
+                        'background-color': service.colorList[i % service.colorList.length],
+                        'background-opacity': 0.5,
+                    }
+                }
+            )
+        }
+        service.stylesWithTagSelectors.push(
+            {
+                selector: 'node[^firstTag]',
+                style: {
+                    'background-color': '#FFFFFF',
+                    'background-opacity': 0.5,
+                }
+            }
+        )
+        let j;
+        for(j = 0; j < service.uniquePackages.length; j++){
+            let selectorString = 'node[package_name=' + '\"' + service.uniquePackages[j] + '\"' + ']';
+            service.stylesWithPackageSelectors.push(
+                {
+                    selector: selectorString,
+                    style: {
+                        'background-color': service.colorList[j % service.colorList.length],
+                        'background-opacity': 0.5,
+                    }
+                }
+            )
+        }
+        service.stylesWithPackageSelectors.push(
+            {
+                selector: 'node[^package_name]',
+                style: {
+                    'background-color': '#FFFFFF',
+                    'background-opacity': 0.5,
+                }
+            }
+        )
         setNodes(dag.nodes())
     });
 
