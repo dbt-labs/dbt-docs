@@ -9,6 +9,12 @@ const elements = [
             fqn: ['my_package', 'dir', 'model'],
             tags: ['daily'],
             resource_type: 'model',
+            original_file_path: 'models/dir/model.sql',
+            package_name: 'my_package',
+            config: {
+                materialized: 'incremental',
+                incremental_strategy: 'delete+insert',
+            },
         }
     },
     {
@@ -17,6 +23,11 @@ const elements = [
             fqn: ['my_package', 'dir', 'other_model'],
             tags: ['daily'],
             resource_type: 'model',
+            original_file_path: 'models/dir/other_model.sql',
+            package_name: 'my_package',
+            config: {
+                materialized: 'table'
+            },
         }
     },
     {
@@ -25,6 +36,11 @@ const elements = [
             fqn: ['other_package', 'dir', 'other_model_2'],
             tags: ['daily', 'nightly'],
             resource_type: 'model',
+            original_file_path: 'models/dir/other_model_2.sql',
+            package_name: 'other_package',
+            config: {
+                materialized: 'incremental'
+            },
         }
     },
     {
@@ -34,6 +50,8 @@ const elements = [
             tags: [],
             source_name: 'events',
             name: 'my_event',
+            original_file_path: 'models/sources/my_source.yml',
+            package_name: 'my_package',
         }
     },
     {
@@ -43,6 +61,8 @@ const elements = [
             tags: [],
             source_name: 'events',
             name: 'my_event_2',
+            original_file_path: 'models/sources/my_source.yml',
+            package_name: 'my_package',
         }
     },
     {
@@ -52,6 +72,24 @@ const elements = [
             tags: [],
             source_name: 'other_events',
             name: 'pageviews',
+            original_file_path: 'models/sources/my_source.yml',
+            package_name: 'my_package',
+        }
+    },
+    {
+        data: {
+            id: 7,
+            resource_type: 'test',
+            tags: ['data'],
+            name: 'test_unique_page_views_id',
+            original_file_path: 'tests/test_unique.yml',
+            package_name: 'my_package',
+            config: {
+                severity: "error"
+            },
+            test_metadata: {
+                name: 'unique'
+            }
         }
     }
 ];
@@ -237,3 +275,167 @@ test("Test getting nodes by Source", () => {
     )
 })
 
+test("Test getting nodes by path", () => {
+    function matchByPath(selector) {
+        var nodes = matcher.getNodesByPath(elements, selector)
+        return _.map(nodes, (node) => node.id);
+    }
+
+    expect(
+        matchByPath('models/dir/model.sql')
+    ).toStrictEqual(
+        [1]
+    )
+
+    expect(
+        matchByPath('models')
+    ).toStrictEqual(
+        [1,2,3,4,5,6]
+    )
+
+    expect(
+        matchByPath('models/')
+    ).toStrictEqual(
+        [1,2,3,4,5,6]
+    )
+
+    expect(
+        matchByPath('models/dir')
+    ).toStrictEqual(
+        [1,2,3]
+    )
+
+    expect(
+        matchByPath('models/dir/')
+    ).toStrictEqual(
+        [1,2,3]
+    )
+
+    expect(
+        matchByPath('mod')
+    ).toStrictEqual(
+        []
+    )
+
+    expect(
+        matchByPath('badpath/')
+    ).toStrictEqual(
+        []
+    )
+})
+
+
+test("Test getting nodes by package", () => {
+    function matchByPackage(selector) {
+        var nodes = matcher.getNodesByPackage(elements, selector)
+        return _.map(nodes, (node) => node.id);
+    }
+
+    expect(
+        matchByPackage('my_package')
+    ).toStrictEqual(
+        [1,2,4,5,6,7]
+    )
+
+    expect(
+        matchByPackage('other_package')
+    ).toStrictEqual(
+        [3]
+    )
+
+    expect(
+        matchByPackage('')
+    ).toStrictEqual(
+        []
+    )
+
+    expect(
+        matchByPackage('badpackagename')
+    ).toStrictEqual(
+        []
+    )
+})
+
+
+test("Test getting nodes by config", () => {
+    function matchByConfig(selector) {
+        var nodes = matcher.getNodesByConfig(elements, selector)
+        return _.map(nodes, (node) => node.id);
+    }
+
+    expect(
+        matchByConfig({config: 'materialized', value: 'table'})
+    ).toStrictEqual(
+        [2]
+    )
+
+    expect(
+        matchByConfig({config: 'materialized', value: 'incremental'})
+    ).toStrictEqual(
+        [1, 3]
+    )
+
+    expect(
+        matchByConfig({config: 'incremental_strategy', value: 'delete+insert'})
+    ).toStrictEqual(
+        [1]
+    )
+
+    expect(
+        matchByConfig({config: 'madeup', value: 'notreal'})
+    ).toStrictEqual(
+        []
+    )
+
+    expect(
+        matchByConfig({config: 'severity', value: 'error'})
+    ).toStrictEqual(
+        [7]
+    )
+})
+
+
+test("Test getting nodes by test name", () => {
+    function matchByTestName(selector) {
+        var nodes = matcher.getNodesByTestName(elements, selector)
+        return _.map(nodes, (node) => node.id);
+    }
+
+    expect(
+        matchByTestName('unique')
+    ).toStrictEqual(
+        [7]
+    )
+
+    expect(
+        matchByTestName('bad')
+    ).toStrictEqual(
+        []
+    )
+
+})
+
+test("Test getting nodes by test type", () => {
+    function matchByTestType(selector) {
+        var nodes = matcher.getNodesByTestType(elements, selector)
+        return _.map(nodes, (node) => node.id);
+    }
+
+    expect(
+        matchByTestType('data')
+    ).toStrictEqual(
+        [7]
+    )
+
+    expect(
+        matchByTestType('schema')
+    ).toStrictEqual(
+        []
+    )
+
+    expect(
+        matchByTestType('invalid')
+    ).toStrictEqual(
+        []
+    )
+})

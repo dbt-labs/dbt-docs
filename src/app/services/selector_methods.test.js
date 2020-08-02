@@ -58,16 +58,16 @@ test("Test parsing specs (fqn)", () => {
 
 test("Test parsing specs (fqn with parents and children)", () => {
     expect(
-        selectors.parseSpec('+a+')
+        selectors.parseSpec('+a+5')
     ).toStrictEqual({
         select_at: false,
         select_children: true,
         select_parents: true,
         parents_depth: null,
-        children_depth: null,
+        children_depth: 5,
         selector_type: 'implicit',
         selector_value: 'a',
-        raw: '+a+',
+        raw: '+a+5',
     });
 })
 
@@ -118,16 +118,16 @@ test("Test parsing specs (explicit tag)", () => {
 
 test("Test parsing specs (explicit source)", () => {
     expect(
-        selectors.parseSpec('source:a+')
+        selectors.parseSpec('source:a+1')
     ).toStrictEqual({
         select_at: false,
         select_children: true,
         select_parents: false,
         parents_depth: null,
-        children_depth: null,
+        children_depth: 1,
         selector_type: 'source',
         selector_value: 'a',
-        raw: 'source:a+',
+        raw: 'source:a+1',
     });
 })
 
@@ -210,20 +210,20 @@ test("Test set based selectors", () => {
 
 test("Test set based selectors (complicated)", () => {
     expect(
-        selectors.parseSpecs('tag:a,source:b.c mypackage fqn:a.b.c,tag:mytag+')
+        selectors.parseSpecs('2+tag:a,source:b.c mypackage fqn:a.b.c,tag:mytag+')
     ).toStrictEqual([
         {
             method: 'intersect',
             selectors: [
                 {
                     select_at: false,
-                    select_parents: false,
-                    parents_depth: null,
+                    select_parents: true,
+                    parents_depth: 2,
                     children_depth: null,
                     select_children: false,
                     selector_type: 'tag',
                     selector_value: 'a',
-                    raw: 'tag:a'
+                    raw: '2+tag:a'
                 },
                 {
                     select_at: false,

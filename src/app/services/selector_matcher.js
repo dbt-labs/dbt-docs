@@ -137,21 +137,13 @@ function getNodesByPackage(elements, package_name) {
     return nodes;
 }
 
-/*
- * Test cases:
- *  - config.incremental_strategy:delete+insert
- *  - config.unique_key:abc
- *  - config.severity:error
- *  - config.schema:analytics_utils
- *  - config.materialized:incremental
- *  - config.alias:some_alias
- */
 function getNodesByConfig(elements, config) {
     var nodes = [];
     _.each(elements, function(node_obj) {
         var node = node_obj.data;
-
-        if (node.config[config.config] == config.value) {
+        if (!node.config) {
+            return;
+        } else if (node.config[config.config] == config.value) {
             nodes.push(node);
         }
     });
@@ -270,6 +262,11 @@ module.exports = {
     getNodesByFQN,
     getNodesByTag,
     getNodesBySource,
+    getNodesByPath,
+    getNodesByPackage,
+    getNodesByConfig,
+    getNodesByTestName,
+    getNodesByTestType,
 
     getNodesFromSpec,
 }

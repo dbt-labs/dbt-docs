@@ -182,6 +182,30 @@ test("Test getting nodes by tag", () => {
     })
 })
 
+test("Test getting nodes by tag and depth", () => {
+    var matched = matcher.getNodesFromSpec(
+        dag,
+        pristine_nodes,
+        undefined,
+        {
+            select_at: false,
+            select_parents: true,
+            parents_depth: 1,
+            children_depth: null,
+            select_children: false,
+            selector_type: 'tag',
+            selector_value: 'daily',
+            raw: '+tag:daily'
+        }
+    )
+    matched.selected = matched.selected.sort()
+
+    expect(matched).toStrictEqual({
+        matched: ['d'],
+        selected: ['b', 'c', 'd'],
+    })
+})
+
 test("Test getting nodes by source", () => {
     var matched = matcher.getNodesFromSpec(
         dag,
@@ -203,6 +227,30 @@ test("Test getting nodes by source", () => {
     expect(matched).toStrictEqual({
         matched: ['a'],
         selected: ['a'],
+    })
+})
+
+test("Test getting nodes by source with depth", () => {
+    var matched = matcher.getNodesFromSpec(
+        dag,
+        pristine_nodes,
+        undefined,
+        {
+            select_at: false,
+            select_parents: true,
+            parents_depth: null,
+            children_depth: 1,
+            select_children: true,
+            selector_type: 'source',
+            selector_value: 'event',
+            raw: 'source:event+1'
+        }
+    )
+    matched.selected = matched.selected.sort()
+
+    expect(matched).toStrictEqual({
+        matched: ['a'],
+        selected: ['a', 'b', 'c'],
     })
 })
 
