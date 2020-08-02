@@ -4,10 +4,28 @@ const selectorGraph = require('./selector_graph');
 
 var SELECTOR_GLOB = '*'
 var SELECTOR_TYPE = {
+    IMPLICIT: 'implicit',
     FQN: 'fqn',
     TAG: 'tag',
-    SOURCE: 'source'
+    SOURCE: 'source',
+    PATH: 'path',
+    PACKAGE: 'package',
+    CONFIG: 'config',
+    TEST_NAME: 'test_name',
+    TEST_TYPE: 'test_type',
 }
+
+var NODE_MATCHERS = {}
+NODE_MATCHERS[SELECTOR_TYPE.IMPLICIT] = getNodesByImplicitSelection;
+NODE_MATCHERS[SELECTOR_TYPE.FQN] = getNodesByFQN;
+NODE_MATCHERS[SELECTOR_TYPE.TAG] = getNodesByTag;
+NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
+NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
+NODE_MATCHERS[SELECTOR_TYPE.PACKAGE] = getNodesByPackage;
+NODE_MATCHERS[SELECTOR_TYPE.CONFIG] = getNodesByConfig;
+NODE_MATCHERS[SELECTOR_TYPE.TEST_NAME] = getNodesByTestName;
+NODE_MATCHERS[SELECTOR_TYPE.TEST_TYPE] = getNodesByTestType;
+
 
 function isFQNMatch(node_fqn, node_selector) {
     for (var i=0; i<node_selector.length; i++) {
@@ -62,6 +80,42 @@ function getNodesByFQN(elements, qualified_name) {
     return _.uniq(nodes);
 }
 
+function getNodesByPath(elements, path) {
+    var nodes = [];
+
+    var path_parts = path.split("/");
+    _.each(elements, function(node) {
+        var node_path = (node.data.original_file_path || '').split("/");
+        var matched = true;
+        _.each(path_parts, function(path_part, i) {
+            if (path_part == SELECTOR_GLOB || path_part == '') {
+                // pass
+            } else if (path_part != node_path[i]) {
+                matched = false;
+            }
+        });
+
+        if (matched) {
+            nodes.push(node.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesByImplicitSelection(elements, selector) {
+    var fqn_matched = getNodesByFQN(elements, selector);
+    var path_matched = getNodesByPath(elements, selector);
+
+    var node_ids = _.uniq(
+        _.map(fqn_matched, 'unique_id')
+        .concat(
+            _.map(path_matched, 'unique_id')
+        )
+    )
+
+    return _.map(node_ids, (id) => elements[id].data);
+}
+
 function getNodesByTag(elements, tag) {
     var nodes = [];
     _.each(elements, function(node_obj) {
@@ -70,6 +124,65 @@ function getNodesByTag(elements, tag) {
             nodes.push(node_obj.data);
         }
     })
+    return nodes;
+}
+
+function getNodesByPackage(elements, package_name) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        if (node_obj.data.package_name == package_name) {
+            nodes.push(node_obj.data);
+        }
+    });
+    return nodes;
+}
+
+/*
+ * Test cases:
+ *  - config.incremental_strategy:delete+insert
+ *  - config.unique_key:abc
+ *  - config.severity:error
+ *  - config.schema:analytics_utils
+ *  - config.materialized:incremental
+ *  - config.alias:some_alias
+ */
+function getNodesByConfig(elements, config) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.config[config.config] == config.value) {
+            nodes.push(node);
+        }
+    });
+    return nodes;
+}
+
+function getNodesByTestName(elements, test_name) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.test_metadata && node.test_metadata.name == test_name) {
+            nodes.push(node);
+        }
+    });
+    return nodes;
+}
+
+function getNodesByTestType(elements, test_type) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'test') {
+            return false;
+        } else if (_.includes(node.tags, 'schema') && test_type == 'schema') {
+            nodes.push(node);
+        } else if (_.includes(node.tags, 'data') && test_type == 'data') {
+            nodes.push(node);
+        }
+    });
     return nodes;
 }
 
@@ -107,13 +220,8 @@ function getNodesBySource(elements, source) {
     return nodes;
 }
 
-function getNodesFromSpec(dag, pristine_nodes, hops, selector) {
-    var matchers = {}
-    matchers[SELECTOR_TYPE.FQN] = getNodesByFQN;
-    matchers[SELECTOR_TYPE.TAG] = getNodesByTag;
-    matchers[SELECTOR_TYPE.SOURCE] = getNodesBySource;
-
-    const matcher = matchers[selector.selector_type];
+function getNodesFromSpec(dag, pristine_nodes, maxHops, selector) {
+    const matcher = NODE_MATCHERS[selector.selector_type];
     if (!matcher) {
         console.log("Node matcher for selector", selector.selector_type, "is invalid");
         return {
@@ -139,10 +247,12 @@ function getNodesFromSpec(dag, pristine_nodes, hops, selector) {
         }
 
         if (selector.select_parents) {
+            var hops = maxHops || selector.parents_depth;
             upstream = selectorGraph.ancestorNodes(dag, selected_node, hops);
         }
 
         if (selector.select_children) {
+            var hops = maxHops || selector.children_depth;
             downstream = selectorGraph.descendentNodes(dag, selected_node, hops)
         }
 

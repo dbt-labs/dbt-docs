@@ -1,5 +1,9 @@
 const _ = require('underscore');
 
+function _isDefined(value) {
+    return !_.isNull(value) && !_.isUndefined(value);
+}
+
 // Returns all parents of all children of the node
 function selectAt(dag, node) {
     var selected = [node];
@@ -18,12 +22,12 @@ function ancestorNodes(dag, node, max_hops, hop_index) {
 
     var up = dag.predecessors(node);
     // node is not in the dag
-    if (!up) {
+    if (!up || max_hops == 0) {
         return [];
     }
 
     var ancestors = up.concat(up.reduce(function(sum, u) {
-        if (hop_index >= max_hops && max_hops !== undefined) {
+        if (hop_index >= max_hops && _isDefined(max_hops)) {
             return sum
         }
         return sum.concat(ancestorNodes(dag, u, max_hops, hop_index + 1));
@@ -36,12 +40,12 @@ function descendentNodes(dag, node, max_hops, hop_index) {
     if (!hop_index) hop_index = 1;
 
     var down = dag.successors(node);
-    if (!down) {
+    if (!down || max_hops == 0) {
         return [];
     }
 
     var descendents = down.concat(down.reduce(function(sum, u) {
-        if (hop_index >= max_hops && max_hops !== undefined) {
+        if (hop_index >= max_hops && _isDefined(max_hops)) {
             return sum
         }
         return sum.concat(descendentNodes(dag, u, max_hops, hop_index + 1));

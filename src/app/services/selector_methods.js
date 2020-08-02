@@ -21,51 +21,68 @@ function splitSpecs(node_spec, delim) {
 }
 
 function parseSpec(node_spec) {
-    var select_at = false;
-    var select_children = false;
-    var select_parents = false;
-    var index_start = 0;
-    var index_end = node_spec.length;
-
-    // @+ is not a valid selector - one or the other is required
-    if (node_spec.startsWith(SELECTOR_AT)) {
-        select_at = true;
-        index_start = 1;
-    } else if (node_spec.startsWith(SELECTOR_PARENTS)) {
-        select_parents = true;
-        index_start = 1;
+    var spec = {
+        raw: node_spec,
+        select_at: false,
+        select_children: false,
+        children_depth: null,
+        select_parents: false,
+        parents_depth: null,
     }
 
-    if (node_spec.endsWith(SELECTOR_CHILDREN)) {
-        select_children = true;
-        index_end -= 1;
+    var selector_regex = new RegExp(''
+        + /^/.source
+        + /(?<childs_parents>(\@))?/.source
+        + /(?<parents>((?<parents_depth>(\d*))\+))?/.source
+        + /((?<method>([\w.]+)):)?/.source
+        + /(?<value>(.*?))/.source
+        + /(?<children>(\+(?<children_depth>(\d*))))?/.source
+        + /$/.source
+    );
+
+    const parsed = selector_regex.exec(node_spec).groups;
+
+    spec.select_at = parsed.childs_parents == '@';
+    spec.select_parents = !!parsed.parents;
+    spec.select_children = !!parsed.children;
+
+    if (parsed.parents_depth) {
+        spec.parents_depth = parseInt(parsed.parents_depth);
     }
 
-    // TODO : we're going to need to catch this one
-    if (select_children && select_at) {
-        throw new Error('Selector is invalid');
+    if (parsed.children_depth) {
+        spec.children_depth = parseInt(parsed.children_depth);
     }
 
-    var node_selector = node_spec.substring(index_start, index_end)
+    var selector_method = parsed.method;
+    var selector_value = parsed.value;
 
-    var selector_type;
-    var selector_val;
+    // TODO : We should probably make select_at and select_parents/select_children
+    // mutually exclusive. It would be nice if this could raise and show an error
+    // message in the UI if a user inputs an invalid selector definition....
 
-    if (node_selector.indexOf(':') != -1) {
-        [selector_type, selector_val] = node_selector.split(':', 2);
-    } else {
-        selector_type = 'fqn';
-        selector_val = node_selector;
+    if (!selector_method) {
+        // Support unspecified selector type, eg: --models my_model
+        // The implicit selector matches FQN + Path on the CLI
+        selector_method = 'implicit';
+    } else if (selector_method.indexOf('.') != -1) {
+        // Support config.materialized:table ==> {
+        //  selector_type: config
+        //  selector_value: {
+        //    config: materialized,
+        //    value: table
+        //  }
+        [selector_method, selector_modifier] = selector_method.split('.', 2);
+        selector_value = {
+            config: selector_modifier,
+            value: selector_value
+        }
     }
 
-    return {
-        select_at: select_at,
-        select_parents: select_parents,
-        select_children: select_children,
-        selector_type: selector_type,
-        selector_value: selector_val,
-        raw: node_spec
-    }
+    spec.selector_type = selector_method;
+    spec.selector_value = selector_value;
+
+    return spec
 }
 
 

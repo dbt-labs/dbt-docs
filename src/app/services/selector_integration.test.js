@@ -96,6 +96,8 @@ test("Test getting nodes from a spec (no nodes)", () => {
             {
                 select_at: false,
                 select_parents: false,
+                parents_depth: null,
+                children_depth: null,
                 select_children: false,
                 selector_type: 'fqn',
                 selector_value: 'badselector',
@@ -116,6 +118,8 @@ test("Test getting nodes from a spec", () => {
         {
             select_at: false,
             select_parents: true,
+            parents_depth: null,
+            children_depth: null,
             select_children: true,
             selector_type: 'fqn',
             selector_value: 'c',
@@ -138,6 +142,8 @@ test("Test getting nodes from a spec at-selector", () => {
         {
             select_at: true,
             select_parents: false,
+            parents_depth: null,
+            children_depth: null,
             select_children: false,
             selector_type: 'fqn',
             selector_value: 'c',
@@ -160,6 +166,8 @@ test("Test getting nodes by tag", () => {
         {
             select_at: false,
             select_parents: true,
+            parents_depth: null,
+            children_depth: null,
             select_children: false,
             selector_type: 'tag',
             selector_value: 'daily',
@@ -182,6 +190,8 @@ test("Test getting nodes by source", () => {
         {
             select_at: false,
             select_parents: true,
+            parents_depth: null,
+            children_depth: null,
             select_children: false,
             selector_type: 'source',
             selector_value: 'event',
@@ -204,6 +214,8 @@ test("Test getting nodes by source with children", () => {
         {
             select_at: false,
             select_parents: true,
+            parents_depth: null,
+            children_depth: null,
             select_children: true,
             selector_type: 'source',
             selector_value: 'event',
@@ -226,6 +238,8 @@ test("Test getting nodes by source with table name", () => {
         {
             select_at: false,
             select_parents: true,
+            parents_depth: null,
+            children_depth: null,
             select_children: true,
             selector_type: 'source',
             selector_value: 'event.a',
@@ -248,6 +262,8 @@ test("Test getting nodes by tag with no edges", () => {
         {
             select_at: false,
             select_parents: true,
+            parents_depth: null,
+            children_depth: null,
             select_children: true,
             selector_type: 'tag',
             selector_value: 'imported',

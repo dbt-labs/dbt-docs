@@ -48,7 +48,9 @@ test("Test parsing specs (fqn)", () => {
         select_at: false,
         select_children: false,
         select_parents: false,
-        selector_type: 'fqn',
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'implicit',
         selector_value: 'a',
         raw: 'a',
     });
@@ -61,7 +63,9 @@ test("Test parsing specs (fqn with parents and children)", () => {
         select_at: false,
         select_children: true,
         select_parents: true,
-        selector_type: 'fqn',
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'implicit',
         selector_value: 'a',
         raw: '+a+',
     });
@@ -74,7 +78,9 @@ test("Test parsing specs (at-syntax)", () => {
         select_at: true,
         select_children: false,
         select_parents: false,
-        selector_type: 'fqn',
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'implicit',
         selector_value: 'a',
         raw: '@a',
     });
@@ -87,6 +93,8 @@ test("Test parsing specs (explicit fqn)", () => {
         select_at: true,
         select_children: false,
         select_parents: false,
+        parents_depth: null,
+        children_depth: null,
         selector_type: 'fqn',
         selector_value: 'a',
         raw: '@fqn:a',
@@ -100,6 +108,8 @@ test("Test parsing specs (explicit tag)", () => {
         select_at: true,
         select_children: false,
         select_parents: false,
+        parents_depth: null,
+        children_depth: null,
         selector_type: 'tag',
         selector_value: 'a',
         raw: '@tag:a',
@@ -113,6 +123,8 @@ test("Test parsing specs (explicit source)", () => {
         select_at: false,
         select_children: true,
         select_parents: false,
+        parents_depth: null,
+        children_depth: null,
         selector_type: 'source',
         selector_value: 'a',
         raw: 'source:a+',
@@ -126,6 +138,8 @@ test("Test parsing specs (explicit source.table)", () => {
         select_at: false,
         select_children: true,
         select_parents: false,
+        parents_depth: null,
+        children_depth: null,
         selector_type: 'source',
         selector_value: 'a.b',
         raw: 'source:a.b+',
@@ -139,7 +153,9 @@ test("Test parsing specs (scoped fqn)", () => {
         select_at: false,
         select_children: true,
         select_parents: false,
-        selector_type: 'fqn',
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'implicit',
         selector_value: 'a.b.c',
         raw: 'a.b.c+',
     });
@@ -156,7 +172,9 @@ test("Test set based selectors", () => {
                     select_at: false,
                     select_children: false,
                     select_parents: false,
-                    selector_type: 'fqn',
+                    parents_depth: null,
+                    children_depth: null,
+                    selector_type: 'implicit',
                     selector_value: 'a',
                     raw: 'a',
                 },
@@ -164,7 +182,9 @@ test("Test set based selectors", () => {
                     select_at: false,
                     select_children: false,
                     select_parents: false,
-                    selector_type: 'fqn',
+                    parents_depth: null,
+                    children_depth: null,
+                    selector_type: 'implicit',
                     selector_value: 'b',
                     raw: 'b',
                 }
@@ -177,7 +197,9 @@ test("Test set based selectors", () => {
                     select_at: false,
                     select_children: false,
                     select_parents: false,
-                    selector_type: 'fqn',
+                    parents_depth: null,
+                    children_depth: null,
+                    selector_type: 'implicit',
                     selector_value: 'c',
                     raw: 'c',
                 }
@@ -196,6 +218,8 @@ test("Test set based selectors (complicated)", () => {
                 {
                     select_at: false,
                     select_parents: false,
+                    parents_depth: null,
+                    children_depth: null,
                     select_children: false,
                     selector_type: 'tag',
                     selector_value: 'a',
@@ -204,6 +228,8 @@ test("Test set based selectors (complicated)", () => {
                 {
                     select_at: false,
                     select_parents: false,
+                    parents_depth: null,
+                    children_depth: null,
                     select_children: false,
                     selector_type: 'source',
                     selector_value: 'b.c',
@@ -217,8 +243,10 @@ test("Test set based selectors (complicated)", () => {
                 {
                     select_at: false,
                     select_parents: false,
+                    parents_depth: null,
+                    children_depth: null,
                     select_children: false,
-                    selector_type: 'fqn',
+                    selector_type: 'implicit',
                     selector_value: 'mypackage',
                     raw: 'mypackage'
                 },
@@ -230,6 +258,8 @@ test("Test set based selectors (complicated)", () => {
                 {
                     select_at: false,
                     select_parents: false,
+                    parents_depth: null,
+                    children_depth: null,
                     select_children: false,
                     selector_type: 'fqn',
                     selector_value: 'a.b.c',
@@ -238,6 +268,8 @@ test("Test set based selectors (complicated)", () => {
                 {
                     select_at: false,
                     select_parents: false,
+                    parents_depth: null,
+                    children_depth: null,
                     select_children: true,
                     selector_type: 'tag',
                     selector_value: 'mytag',
@@ -249,9 +281,18 @@ test("Test set based selectors (complicated)", () => {
 })
 
 test("Test parsing invalid spec", () => {
-    expect(() => {
+    expect(
         selectors.parseSpec('@a+')
-    }).toThrow();
+    ).toStrictEqual({
+        children_depth: null,
+        parents_depth: null,
+        raw: "@a+",
+        select_at: true,
+        select_children: true,
+        select_parents: false,
+        selector_type: 'implicit',
+        selector_value: 'a'
+    })
 })
 
 
@@ -300,14 +341,18 @@ test("Test parsing specs", () => {
                     {
                         select_at: false,
                         select_parents: false,
+                        parents_depth: null,
+                        children_depth: null,
                         select_children: false,
-                        selector_type: 'fqn',
+                        selector_type: 'implicit',
                         selector_value: 'a',
                         raw: 'a'
                     },
                     {
                         select_at: false,
                         select_parents: false,
+                        parents_depth: null,
+                        children_depth: null,
                         select_children: true,
                         selector_type: 'tag',
                         selector_value: 'b',
@@ -321,8 +366,10 @@ test("Test parsing specs", () => {
                     {
                         select_at: false,
                         select_parents: false,
+                        parents_depth: null,
+                        children_depth: null,
                         select_children: false,
-                        selector_type: 'fqn',
+                        selector_type: 'implicit',
                         selector_value: 'c',
                         raw: 'c'
                     },
@@ -336,8 +383,10 @@ test("Test parsing specs", () => {
                     {
                         select_at: false,
                         select_parents: false,
+                        parents_depth: null,
+                        children_depth: null,
                         select_children: false,
-                        selector_type: 'fqn',
+                        selector_type: 'implicit',
                         selector_value: 'd',
                         raw: 'd'
                     },
