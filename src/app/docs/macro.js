@@ -2,7 +2,7 @@
 
 const angular = require('angular');
 const _ = require('underscore');
-const utils = require('./dag_utils')
+const dag_utils = require('./dag_utils')
 
 require("./styles.css");
 
@@ -19,8 +19,8 @@ angular
     projectService.ready(function(project) {
         let macro = project.macros[$scope.model_uid];
         $scope.macro = macro;
-        $scope.references = utils.getMacroReferences(project, macro);
-        $scope.parents = utils.getMacroParents(project, macro);
+        $scope.references = dag_utils.getMacroReferences(project, macro);
+        $scope.parents = dag_utils.getMacroParents(project, macro);
 
         // adapter macros
         if ($scope.macro.is_adapter_macro) {
