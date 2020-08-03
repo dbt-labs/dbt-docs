@@ -28,8 +28,8 @@
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'referenced_by'})">Referenced By</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'depends_on'})">Depends On</a></li>
+                <li ui-sref-active='active' ng-show = "references.model != undefined"><a ui-sref="dbt.test({'#': 'referenced_by'})">Referenced By</a></li>
+                <li ui-sref-active='active' ng-show = "parents.model != undefined"><a ui-sref="dbt.test({'#': 'depends_on'})">Depends On</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'code'})">SQL</a></li>
             </ul>
         </div>
@@ -49,7 +49,7 @@
                 </div>
             </section>
 
-            <section class="section">
+            <section class="section" ng-show = "references.model != undefined">
                 <div class="section-target" id="referenced_by"></div>
                 <div class="section-content">
                     <h6>Referenced By</h6>
@@ -57,7 +57,7 @@
                 </div>
             </section>
 
-            <section class="section">
+            <section class="section" ng-show = "parents.model != undefined">
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
                     <h6>Depends On</h6>
