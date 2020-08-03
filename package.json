@@ -5,7 +5,7 @@
     "start": "webpack-dev-server --disable-host-check"
   },
   "devDependencies": {
-    "angular": "^1.7.9",
+    "angular": "^1.8.0",
     "angular-loader": "~1.5.0",
     "angular-marked": "^1.2.2",
     "angular-route": "^1.5.0",
