@@ -2,6 +2,7 @@
 
 const angular = require('angular');
 const _ = require('underscore');
+const utils = require('./dag_utils')
 
 require("./styles.css");
 
@@ -14,48 +15,12 @@ angular
     $scope.tab = $state.params.tab;
     $scope.project = projectService;
     $scope.codeService = codeService;
-
-    function getReferences(project, self) {
-        let references = _.filter(project.nodes, function(node) {
-            if (node.depends_on && node.depends_on.macros && node.depends_on.macros.length) {
-                if (_.contains(node.depends_on.macros, self.unique_id)) {
-                    return true;
-                }
-            }
-            return false;
-        });
-
-        let macroReferences = _.filter(project.macros, function(macro) {
-            if (macro.depends_on && macro.depends_on.macros && macro.depends_on.macros.length) {
-                if (_.contains(macro.depends_on.macros, self.unique_id)) {
-                    return true;
-                }
-            }
-            return false;
-        });
-
-        return _.groupBy(references.concat(macroReferences), 'resource_type');
-    }
-    
-    function getMacroParents (project, self) {
-        let macroParents = _.filter(project.macros, function(macro) {
-            if (self.depends_on && self.depends_on.macros && self.depends_on.macros.length) {
-                if (_.contains(self.depends_on.macros, macro.unique_id)) {
-                    return true;
-                }
-            }
-            return false;
-        });
-
-        return _.groupBy(macroParents, 'resource_type');
-    }
-
     $scope.macro = {};
     projectService.ready(function(project) {
         let macro = project.macros[$scope.model_uid];
         $scope.macro = macro;
-        $scope.references = getReferences(project, macro);
-        $scope.parents = getMacroParents(project, macro);
+        $scope.references = utils.getMacroReferences(project, macro);
+        $scope.parents = utils.getMacroParents(project, macro);
 
         // adapter macros
         if ($scope.macro.is_adapter_macro) {

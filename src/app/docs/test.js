@@ -1,7 +1,7 @@
 'use strict';
 
 const angular = require('angular');
-const utils = require('./utils')
+const utils = require('./dag_utils')
 require("./styles.css");
 
 angular

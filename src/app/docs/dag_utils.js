@@ -31,6 +31,40 @@ export function getParents (project, model) {
         return false;
     });
     
-
     return _.groupBy(parents.concat(macroParents), 'resource_type');
+}
+
+export function getMacroReferences(project, self) {
+    let references = _.filter(project.nodes, function(node) {
+        if (node.depends_on && node.depends_on.macros && node.depends_on.macros.length) {
+            if (_.contains(node.depends_on.macros, self.unique_id)) {
+                return true;
+            }
+        }
+        return false;
+    });
+
+    let macroReferences = _.filter(project.macros, function(macro) {
+        if (macro.depends_on && macro.depends_on.macros && macro.depends_on.macros.length) {
+            if (_.contains(macro.depends_on.macros, self.unique_id)) {
+                return true;
+            }
+        }
+        return false;
+    });
+
+    return _.groupBy(references.concat(macroReferences), 'resource_type');
+}
+
+export function getMacroParents (project, self) {
+    let macroParents = _.filter(project.macros, function(macro) {
+        if (self.depends_on && self.depends_on.macros && self.depends_on.macros.length) {
+            if (_.contains(self.depends_on.macros, macro.unique_id)) {
+                return true;
+            }
+        }
+        return false;
+    });
+
+    return _.groupBy(macroParents, 'resource_type');
 }
