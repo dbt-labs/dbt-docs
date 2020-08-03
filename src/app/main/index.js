@@ -148,6 +148,8 @@ angular
     });
 
     function assignSearchRelevance(results){
+        if($scope.search.query === "")
+            return results;
         let criteriaArr = {
             "name": 10,
             "tags": 5,
