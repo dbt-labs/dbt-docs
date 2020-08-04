@@ -16,6 +16,16 @@
                 <span class="break">{{ query }}</span>
                 <small><span>{{ results.length }}</span> search results</small>
             </h1>
+            <input type="checkbox" id="name" ng-model="checkboxStatus.show_names" ng-click="filterResults(results, checkboxStatus)" style = "margin-left:10px;margin-right:5px">
+            <label for="name" style="margin-right:25px">Name</label> 
+            <input type="checkbox" id="desc" ng-model="checkboxStatus.show_descriptions" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+            <label for="desc" style="margin-right:25px;">Description</label> 
+            <input type="checkbox" id="column" ng-model="checkboxStatus.show_columns" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+            <label for="column" style="margin-right:25px;">Column</label> 
+            <input type="checkbox" id="code" ng-model="checkboxStatus.show_code" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+            <label for="code" style="margin-right:15px;">SQL</label>
+            <input type="checkbox" id="code" ng-model="checkboxStatus.show_tags" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+            <label for="code" style="margin-right:15px;">Tags</label>
         </div>
     </div>
     <div class="app-details">

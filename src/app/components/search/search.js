@@ -1,10 +1,14 @@
 'use strict';
 
+const angular = require('angular');
 const template = require('./search.html');
+const $ = require('jquery');
+
+require('./../../services/project_service.js');
 
 angular
 .module('dbt')
-.directive('docsSearch', ["$sce", function($sce) {
+.directive('docsSearch', ["$sce", 'project', function($sce, projectService) {
     return {
         scope: {
             query: '=',
@@ -19,6 +23,14 @@ angular
             scope.show_all = false;
             scope.max_results_columns = 3;
             scope.limit_columns = {};
+
+            scope.checkboxStatus = {
+                show_names : false,
+                show_descriptions: false,
+                show_columns: false,
+                show_code: false,
+                show_tags: false
+            };
 
             scope.limit_search = function(res, index, results) {
                 return (index < scope.max_results || scope.show_all);
@@ -37,6 +49,33 @@ angular
                     return model.name;
                 }
             }
+
+            function filterResults(results, checkboxStatus){
+                if(!_.some(_.values(checkboxStatus))){
+                    return results;
+                }
+                
+                let finalResults = [];
+                let fileIDs = [];
+                
+                const {show_names, show_descriptions, show_columns, show_code, show_tags} = checkboxStatus;
+                _.each(results, function(result){
+                    _.each(result.matches, function(match){
+                       if(!fileIDs.includes(result.model['unique_id'])){
+                           if((show_names && match.key === "name") || (show_descriptions && match.key === "description") || (show_columns && match.key === "columns") || (show_code && match.key === "raw_sql") || (show_tags && match.key === "tags")){
+                            fileIDs.push(result.model['unique_id']);
+                            finalResults.push(result);
+                           }
+                       }
+                    });
+               });
+               return finalResults;
+            }
+
+            var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
+            scope.$watchGroup(watchExpressions, function() {
+                scope.results = filterResults(projectService.search(scope.query), scope.checkboxStatus);
+            });
 
             scope.shorten = function(text) {
                 if(text != null && text.length > 0){  
