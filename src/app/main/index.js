@@ -35,6 +35,7 @@ angular
     $scope.model_uid = null;
     $scope.project = {};
 
+
     $('body').bind('keydown', function(e) {
         if (event.key == 't' && event.target.tagName != 'INPUT') {
             console.log("Opening search");
@@ -142,7 +143,6 @@ angular
         }
     });
 
-
     $scope.$watch('search.query', function(q) {
         $scope.search.results = assignSearchRelevance(projectService.search(q));
     });
@@ -204,7 +204,6 @@ angular
         }); 
         return results;
     }
-
 
     /*
     INITIALIZE THE APPLICATION:
