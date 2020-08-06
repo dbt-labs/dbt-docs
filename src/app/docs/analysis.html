@@ -34,8 +34,8 @@
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.analysis({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active' ng-show = "references.model != undefined"><a ui-sref="dbt.analysis({'#': 'referenced_by'})">Referenced By</a></li>
-                <li ui-sref-active='active' ng-show = "parents.model != undefined"><a ui-sref="dbt.analysis({'#': 'depends_on'})">Depends On</a></li>
+                <li ui-sref-active='active' ng-show = "referencesLength != 0"><a ui-sref="dbt.analysis({'#': 'referenced_by'})">Referenced By</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.analysis({'#': 'depends_on'})">Depends On</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.analysis({'#': 'sql'})">SQL</a></li>
             </ul>
         </div>
@@ -56,7 +56,7 @@
                 </div>
             </section>
 
-            <section class="section" ng-show = "references.model != undefined">
+            <section class="section" ng-show = "referencesLength != 0">
                 <div class="section-target" id="referenced_by"></div>
                 <div class="section-content">
                     <h6>Referenced By</h6>
@@ -64,7 +64,7 @@
                 </div>
             </section>
 
-            <section class="section" ng-show = "parents.model != undefined">
+            <section class="section" ng-show = "parentsLength != 0">
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
                     <h6>Depends On</h6>

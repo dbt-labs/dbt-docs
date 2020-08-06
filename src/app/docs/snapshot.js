@@ -21,7 +21,9 @@ angular
         let mod = project.nodes[$scope.model_uid];
         $scope.model = mod;
         $scope.references = dag_utils.getReferences(project, mod);
+        $scope.referencesLength = Object.keys($scope.references).length;
         $scope.parents = dag_utils.getParents(project, mod);
+        $scope.parentsLength = Object.keys($scope.parents).length;
 
         var default_compiled = "Compiled SQL is not available for this snapshot";
         $scope.versions = {

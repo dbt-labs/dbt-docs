@@ -20,7 +20,9 @@ angular
         let macro = project.macros[$scope.model_uid];
         $scope.macro = macro;
         $scope.references = dag_utils.getMacroReferences(project, macro);
+        $scope.referencesLength = Object.keys($scope.references).length;
         $scope.parents = dag_utils.getMacroParents(project, macro);
+        $scope.parentsLength = Object.keys($scope.parents).length;
 
         // adapter macros
         if ($scope.macro.is_adapter_macro) {
