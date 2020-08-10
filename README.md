@@ -38,9 +38,10 @@ Then, install yarn and webpack.
 npm install -g yarn webpack webpack-cli
 ```
 
-You'll also need to install jekyll if you don't already have it:
+You'll also need to install bundler if you don't already have it:
 ```bash
-gem install bundler jekyll
+gem install bundler
+bundle install
 ```
 
 ### Build / Run
@@ -49,7 +50,7 @@ To build the css files required for webpack:
 
 ```bash
 cd styles
-jekyll build
+bundle exec jekyll build
 cd -
 ```
 
