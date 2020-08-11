@@ -2,6 +2,7 @@
 
 const angular = require('angular');
 const _ = require('underscore');
+const dag_utils = require('./dag_utils')
 
 require("./styles.css");
 
@@ -14,26 +15,14 @@ angular
     $scope.tab = $state.params.tab;
     $scope.project = projectService;
     $scope.codeService = codeService;
-
-    function getReferences(project, macro) {
-        var references = _.filter(project.nodes, function(node) {
-            if (node.depends_on && node.depends_on.macros && node.depends_on.macros.length) {
-                if (_.contains(node.depends_on.macros, macro.unique_id)) {
-                    return true;
-                }
-            }
-            return false;
-        });
-
-        // TODO : include macros?
-        return _.groupBy(references, 'resource_type');
-    }
-
     $scope.macro = {};
     projectService.ready(function(project) {
-        var macro = project.macros[$scope.model_uid];
+        let macro = project.macros[$scope.model_uid];
         $scope.macro = macro;
-        $scope.references = getReferences(project, macro);
+        $scope.references = dag_utils.getMacroReferences(project, macro);
+        $scope.referencesLength = Object.keys($scope.references).length;
+        $scope.parents = dag_utils.getMacroParents(project, macro);
+        $scope.parentsLength = Object.keys($scope.parents).length;
 
         // adapter macros
         if ($scope.macro.is_adapter_macro) {

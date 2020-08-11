@@ -47,7 +47,7 @@
                                 <p ng-bind-html="highlight(shorten(result.model.description))"></p>
                             </div>
                         </div>
-                    <div class="sub-results" ng-show="query.length > 0">
+                        <div class="sub-results" ng-show="query.length > 0">
                         <span ng-repeat="column in columnFilter(result.model.columns) | limitTo:limitColumns(result.model.unique_id)">
                             <span ng-show="$first === true">columns:</span>
                             <span ng-bind-html="highlight(column + ',')" ng-show="$last === false"></span>
@@ -68,7 +68,7 @@
                             <span ng-bind-html="highlight(tag + ',')" ng-show="$last === false"></span>
                             <span ng-bind-html="highlight(tag)" ng-show="$last === true"></span>
                         </span>
-                    </div>
+                        </div>
                 </div>
                 <a
                     ng-show="results.length >= max_results && !show_all"
