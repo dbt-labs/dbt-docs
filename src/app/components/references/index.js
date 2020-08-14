@@ -36,6 +36,8 @@ angular
                     return 'Snapshots'
                 } else if (type == 'analysis') {
                     return 'Analyses';
+                } else if (type == 'macro') {
+                      return 'Macros';
                 } else {
                     return 'Nodes';
                 }

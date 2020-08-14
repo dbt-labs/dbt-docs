@@ -19,7 +19,7 @@
                 <div class="app-row app-middle">
                     <div class="app-body">
                         <div class="logo">
-                            <img class="logo" ng-src="{{ logo }}" />
+                            <img style="width: 100px; height: 40px" class="logo" ng-src="{{ logo }}" />
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,6 @@
         <div class="app-content app-column">
             <div class="app-header app-navbar app-shadow">
                 <div class="app-frame app-pad app-row app-middle">
-                    <div class="app-body">
                         <input
                             id="search"
                             ng-model="search.query"
@@ -42,6 +41,7 @@
                             type="text"
                             class="form-control"
                             placeholder="Search for models..." />
+                    <div class="app-body">
                     </div>
                     <div class="app-footer app-icn" ng-show="search.is_focused" ng-click="clearSearch()">
                         <svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>

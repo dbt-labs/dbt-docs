@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "test": "jest src/app/services",
+    "watch": "jest --watch src/app/services",
+    "start": "webpack-dev-server --disable-host-check"
+  },
   "devDependencies": {
     "angular": "^1.7.9",
     "angular-loader": "~1.5.0",
@@ -13,7 +18,7 @@
     "bootstrap": "3",
     "css-loader": "^1.0.0",
     "cytoscape": "https://github.com/fishtown-analytics/cytoscape.js.git#feature/cubic-bezier-edges",
-    "cytoscape-context-menus": "^3.0.5",
+    "cytoscape-context-menus": "3.0.5",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-expand-collapse": "^3.1.1",
     "dagre": "^0.7.4",
@@ -25,6 +30,7 @@
     "html-webpack-plugin": "^3.2.0",
     "html5-boilerplate": "^5.3.0",
     "inline-source": "^6.1.5",
+    "jest": "^26.2.2",
     "jquery": "~3.4.0",
     "md5": "^2.2.1",
     "ngtemplate-loader": "^2.0.1",
@@ -39,10 +45,6 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.11",
     "webpack-inline-svg-plugin": "^1.1.4"
-  },
-  "scripts": {
-    "test": "echo 'Error: no test specified' && exit 1",
-    "start": "webpack-dev-server"
   },
   "dependencies": {
     "prismjs": "^1.20.0"
