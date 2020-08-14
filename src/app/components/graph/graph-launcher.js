@@ -214,10 +214,10 @@ angular
                 var clean_selector = selectorService.selection.clean;
                 var dirty_selector = selectorService.selection.dirty;
 
-                var clean_nodes = selectorService.select_nodes(dag, all_nodes, clean_selector)
-                var dirty_nodes = selectorService.select_nodes(dag, all_nodes, dirty_selector)
+                var clean_nodes = selectorService.selectNodes(dag, all_nodes, clean_selector)
+                var dirty_nodes = selectorService.selectNodes(dag, all_nodes, dirty_selector)
 
-                var nodes_to_remove = _.difference(clean_nodes.nodes, dirty_nodes.nodes);
+                var nodes_to_remove = _.difference(clean_nodes.selected, dirty_nodes.selected);
 
                 graph.markDirty(nodes_to_remove)
 

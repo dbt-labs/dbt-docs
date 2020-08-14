@@ -1,6 +1,7 @@
 'use strict';
 
 const angular = require('angular');
+const dag_utils = require('./dag_utils')
 require("./styles.css");
 
 angular
@@ -17,7 +18,12 @@ angular
 
     $scope.model = {};
     projectService.ready(function(project) {
-        $scope.model = project.nodes[$scope.model_uid];
+        let mod = project.nodes[$scope.model_uid];
+        $scope.model = mod;
+        $scope.references = dag_utils.getReferences(project, mod);
+        $scope.referencesLength = Object.keys($scope.references).length;
+        $scope.parents = dag_utils.getParents(project, mod);
+        $scope.parentsLength = Object.keys($scope.parents).length;
 
         var default_compiled = '\n-- compiled SQL not found for this model\n';
         $scope.versions = {

@@ -3,6 +3,7 @@ const $ = require('jquery');
 const _ = require('underscore');
 
 const graphlib = require('graphlib');
+const selectorGraph = require('./selector_graph');
 
 angular
 .module('dbt')
@@ -44,8 +45,8 @@ angular
                 }
 
                 var dag = service.graph.pristine.dag;
-                var parents = _.sortBy(selectorService.ancestors(dag, primary_node_id, 1));
-                var children = _.sortBy(selectorService.descendents(dag, primary_node_id, 1));
+                var parents = _.sortBy(selectorGraph.ancestorNodes(dag, primary_node_id, 1));
+                var children = _.sortBy(selectorGraph.descendentNodes(dag, primary_node_id, 1));
 
                 var is_parent = _.partial(_.includes, parents);
                 var is_child = _.partial(_.includes, children);
@@ -396,10 +397,10 @@ angular
         // good: "+source:quickbooks.invoices+"
 
         var pristine = service.graph.pristine.nodes;
-        var selected = selectorService.select_nodes(dag, pristine, selected_spec);
+        var selected = selectorService.selectNodes(dag, pristine, selected_spec);
         var highlight_nodes = should_highlight ? selected.matched : [];
 
-        return setNodes(selected.nodes, highlight_nodes, classes);
+        return setNodes(selected.selected, highlight_nodes, classes);
     }
 
     service.hideGraph = function() {
@@ -536,8 +537,8 @@ angular
 
         // get all edges that pass through this node
         var dag = service.graph.pristine.dag;
-        var parents = _.indexBy(selectorService.ancestors(dag, node_id));
-        var children = _.indexBy(selectorService.descendents(dag, node_id));
+        var parents = _.indexBy(selectorGraph.ancestorNodes(dag, node_id));
+        var children = _.indexBy(selectorGraph.descendentNodes(dag, node_id));
 
         parents[node_id] = node_id;
         children[node_id] = node_id;
