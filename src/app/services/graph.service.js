@@ -384,7 +384,10 @@ angular
                 dag.setEdge(edge.data.source, edge.data.target);
             });
         });
-
+        _.each(service.graph.pristine.nodes, function (node){
+            node.data.package_and_label_horizontal = node.data.label;
+            node.data.package_and_label_vertical = node.data.label;
+        });
         service.graph.pristine.dag = dag;
         service.graph.elements = _.flatten(_.values(service.graph.pristine.nodes).concat(_.values(service.graph.pristine.edges)));
         setNodes(dag.nodes())
