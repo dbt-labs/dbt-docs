@@ -24,7 +24,7 @@ angular
                 }
             });
             if (project_name !== null) {
-                let project_key = `${project_name}.${project_name}_overview`;
+                let project_key = `${project_name}.__${project_name}__`;
                 let project_overview = project.docs[project_key];
                 if (project_overview !== undefined) {
                     selected_overview = project_overview;

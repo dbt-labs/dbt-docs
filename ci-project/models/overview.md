@@ -10,11 +10,11 @@ The source code can be found [here](https://github.com/clrcrl/jaffle_shop).
 
 {% enddocs %}
 
-{% docs jaffle_shop_overview %}
+{% docs __jaffle_shop__ %}
 ## Jaffle_shop Project level overview example
 This [dbt](https://www.getdbt.com/) project may have only one project (`jaffle_shop`) currently.
 However there may be other projects included in your own projects.
 
 You can assign a unique overview for each project by adding a docs block in an .md file of your project
-and giving it a name with the following convention <project_name>_overview.
+and giving it a name with the following convention __<project_name>__.
 {% enddocs %}
