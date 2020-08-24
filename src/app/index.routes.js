@@ -35,7 +35,15 @@ angular
         .state('dbt.overview', {
             url: 'overview?' + graph_params,
             controller: 'OverviewCtrl',
-            templateUrl: templates.overview
+            templateUrl: templates.overview,
+        })
+        .state('dbt.project_overview', {
+            url: 'overview/:project_name?' + graph_params,
+            controller: 'OverviewCtrl',
+            templateUrl: templates.overview,
+            params: {
+                project_name: {type: 'string'}
+            }
         })
         .state('dbt.graph', {
             url: 'graph',
