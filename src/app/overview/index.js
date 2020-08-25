@@ -7,10 +7,9 @@ angular
 .module('dbt')
 .controller('OverviewCtrl', ['$scope', '$state', 'project',
     function($scope, $state, projectService) {
-
         $scope.overview_md = '(loading)'
-
-        projectService.ready(function(project) {
+        
+        projectService.ready(function (project) {
             let project_name = $state.params.project_name
                 ? $state.params.project_name
                 : null;
@@ -23,12 +22,15 @@ angular
                     selected_overview = overview;
                 }
             });
+            // Select project-level overviews
             if (project_name !== null) {
-                let project_key = `${project_name}.__${project_name}__`;
-                let project_overview = project.docs[project_key];
-                if (project_overview !== undefined) {
-                    selected_overview = project_overview;
-                }
+                selected_overview = project.docs[`${project_name}.__${project_name}__`] || selected_overview
+                let overviews = _.filter(project.docs, { name: `__${project_name}__` })
+                _.each(overviews, (overview) => {
+                    if (overview.package_name !== project_name) {
+                        selected_overview = overview
+                    }
+                })
             }
             $scope.overview_md = selected_overview.block_contents;
         });
