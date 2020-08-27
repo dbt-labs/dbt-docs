@@ -47,6 +47,9 @@ angular
                     var source_name = item.name;
                     $state.go('dbt.source_list', {source: source_name});
                 }
+                else if (scope.depth === 0 && item.type !== 'database') {
+                    $state.go('dbt.project_overview', { project_name: item.name });
+                }
             }
 
             scope.activate = function(item) {
