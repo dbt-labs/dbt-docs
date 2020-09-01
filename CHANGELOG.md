@@ -1,4 +1,6 @@
-## dbt 0.18.0 (Release TBD)
+## dbt 0.19.0 (Release TBD)
+
+## dbt 0.18.0 (September 2, 2020)
 - Add project level overviews ([docs#127](https://github.com/fishtown-analytics/dbt-docs/issues/127))
 
 Contributors:
