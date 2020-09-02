@@ -1,21 +1,19 @@
-
 .nav-tabs li.nav-pull-right {
-    flex: 1 0 auto;
-    text-align: right;
+  flex: 1 0 auto;
+  text-align: right;
 }
 
 tr.column-row-selected {
-
 }
 
-td.column-expanded{
-    padding: 0px !important;
+td.column-expanded {
+  padding: 0px !important;
 }
 
 td.column-expanded > div {
-    padding: 5px 10px;
-    margin-left: 20px;
-    height: 100%;
+  padding: 5px 10px;
+  margin-left: 20px;
+  height: 100%;
 
-    border-left: 1px solid #ccc !important;
+  border-left: 1px solid #ccc !important;
 }

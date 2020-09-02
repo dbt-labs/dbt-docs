@@ -38,15 +38,29 @@ module.exports = {
             {
                 test: /.*src\/app\/.*\.html$/,
                 use: [
-                    {loader:'ngtemplate-loader?relativeTo=' + (path.resolve(__dirname, './src/app'))},
-                    {loader: 'html-loader'}
+                    { loader: 'ngtemplate-loader?relativeTo=' + (path.resolve(__dirname, './src/app')) },
+                    { loader: 'html-loader' }
                 ]
             },
             {
                 test: /\.css$/,
                 use: [
-                    {loader: "style-loader"},
-                    {loader: "css-loader"}
+                    { loader: "style-loader" },
+                    { loader: "css-loader" }
+                ]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    { loader: "style-loader" },
+                    { loader: "css-loader" },
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            includePaths: [
+                                path.resolve('../node_modules')]
+                        },
+                    }
                 ]
             },
             {
