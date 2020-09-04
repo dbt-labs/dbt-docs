@@ -34,7 +34,7 @@
     "jquery": "~3.4.0",
     "md5": "^2.2.1",
     "ngtemplate-loader": "^2.0.1",
-    "node-sass": "^4.9.2",
+    "node-sass": "^4.13.1",
     "prism-themes": "^1.4.0",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
