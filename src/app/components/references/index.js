@@ -8,6 +8,7 @@ angular
     return {
         scope: {
             references: '=',
+            node: '=',
         },
         restrict: 'E',
         templateUrl: template,
@@ -38,6 +39,8 @@ angular
                     return 'Analyses';
                 } else if (type == 'macro') {
                       return 'Macros';
+                } else if (type == 'report') {
+                      return 'Reports';
                 } else {
                     return 'Nodes';
                 }

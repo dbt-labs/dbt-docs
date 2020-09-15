@@ -155,6 +155,12 @@ angular
                 service.files.manifest.nodes[node.unique_id] = node;
             });
 
+            // Add reports back into nodes to make site logic work
+            _.each(service.files.manifest.reports, function(node) {
+                node.label = node.name;
+                service.files.manifest.nodes[node.unique_id] = node;
+            });
+
             var adapter = service.files.manifest.metadata.adapter_type;
             var macros = clean_project_macros(service.files.manifest.macros, adapter);
             service.files.manifest.macros = macros;
@@ -238,7 +244,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'report'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -346,7 +352,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'report'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -355,6 +361,10 @@ angular
 
             var sources = _.values(service.project.sources);
             service.tree.sources = buildSourceTree(sources, select);
+
+            var reports = _.values(service.project.reports);
+            service.tree.reports = buildReportTree(reports, select);
+
             cb(service.tree);
         });
     }
@@ -382,6 +392,7 @@ angular
         service.updateSelectedInTree(select, service.tree.project);
         service.updateSelectedInTree(select, service.tree.database);
         service.updateSelectedInTree(select, service.tree.sources);
+        service.updateSelectedInTree(select, service.tree.reports);
 
         return service.tree;
     }
@@ -442,6 +453,49 @@ angular
         return sources
     }
 
+    function buildReportTree(nodes, select) {
+        var reports = {}
+
+        _.each(nodes, function(node) {
+            var name = node.name;
+
+            var type = node.type || 'Uncategorized';
+            type = type[0].toUpperCase() + type.slice(1);
+
+            var is_active = node.unique_id == select;
+
+            if (!reports[type]) {
+                reports[type] = {
+                    type: "folder",
+                    name: type,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                reports[type].active = true;
+            }
+
+            reports[type].items.push({
+                type: 'file',
+                name: name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'report'
+            })
+        });
+
+        // sort report types
+        var reports = _.sortBy(_.values(reports), 'name');
+
+        // sort entries in the report folder
+        _.each(reports, function(report) {
+            report.items = _.sortBy(report.items, 'name');
+        });
+
+        return reports
+    }
+
     function consolidateAdapterMacros(macros, adapter) {
         var adapter_macros = {};
         _.each(macros, function(macro) {
@@ -488,7 +542,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source') {
+            if (node.resource_type == 'source' || node.resource_type == 'report') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {

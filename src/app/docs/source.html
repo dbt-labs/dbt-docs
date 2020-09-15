@@ -31,7 +31,6 @@
                 <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'description'})">Description</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'columns'})">Columns</a></li>
                 <li ui-sref-active='active' ng-show = "referencesLength != 0"><a ui-sref="dbt.source({'#': 'referenced_by'})">Referenced By</a></li>
-                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.source({'#': 'depends_on'})">Depends On</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.source({'#': 'code'})">SQL</a></li>
             </ul>
         </div>
@@ -67,15 +66,7 @@
                 <div class="section-target" id="referenced_by"></div>
                 <div class="section-content">
                     <h6>Referenced By</h6>
-                    <reference-list references="references" />
-                </div>
-            </section>
-
-            <section class="section" ng-show = "parentsLength != 0">
-                <div class="section-target" id="depends_on"></div>
-                <div class="section-content">
-                    <h6>Depends On</h6>
-                    <reference-list references="parents" />
+                    <reference-list references="references" node="model" />
                 </div>
             </section>
 

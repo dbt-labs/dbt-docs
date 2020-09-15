@@ -6,3 +6,4 @@ require('./snapshot');
 require('./test');
 require('./macro');
 require('./analysis');
+require('./report');

@@ -11,7 +11,8 @@ angular
     return {
         scope: {
             model: '=',
-            extras: '='
+            extras: '=',
+            showDefaults: '<',
         },
         templateUrl: template,
         link: function(scope) {
