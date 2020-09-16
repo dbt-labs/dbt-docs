@@ -15,7 +15,7 @@
                     </div>
                     <div class="detail-group">
                         <div class="detail-body">
-                            <dl class='detail' ng-if="model.tags != undefined">
+                            <dl class='detail' ng-if="model.tags != undefined && exclude.indexOf('tags') == -1">
                                 <dt class="detail-label">Tags</dt>
                                 <dd ng-if="model.tags.length > 0" class="detail-value">
                                     <span ng-repeat="tag in model.tags"><code><a ng-click=queryTag(tag)>{{ tag }}</a></code>&nbsp;</span>

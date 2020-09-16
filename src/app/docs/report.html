@@ -19,30 +19,44 @@
     <div class="app-links app-sticky">
         <div class="app-title">
             <div class="app-frame app-pad app-flush-bottom">
+
                 <h1>
-                    <span class="break">{{ model.name }}</span>
-                    <small>test</small>
+                    <span class="break">{{ report.name }}</span>
+                    <small>report</small>
+
+                    <div class='pull-right' ng-show="report.url">
+                        <a class='btn text-white btn-primary btn-sm' ng-href="{{ report.url }}" target="_blank">View this report</a>
+                    </div>
+
+                    <div class='clearfix'></div>
                 </h1>
+
             </div>
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
-                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.test({'#': 'depends_on'})">Depends On</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'code'})">SQL</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.report({'#': 'details'})">Details</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.report({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.report({'#': 'depends_on'})">Depends On</a></li>
             </ul>
         </div>
     </div>
     <div class="app-details">
         <div class="app-frame app-pad">
+
+            <section class="section">
+                <div class="section-target" id="details"></div>
+                <table-details model="report" extras="extra_table_fields" exclude="['tags']" />
+            </section>
+
             <section class="section">
                 <div class="section-target" id="description"></div>
                 <div class="section-content">
                     <h6>Description</h6>
                     <div class="panel">
                         <div class="panel-body">
-                            <div ng-if="model.description" class="model-markdown" marked="model.description"></div>
-                            <div ng-if="!model.description">This {{ model.resource_type }} is not currently documented</div>
+                            <div ng-if="report.description" class="model-markdown" marked="report.description"></div>
+                            <div ng-if="!report.description">This {{ report.resource_type }} is not currently documented</div>
                         </div>
                     </div>
                 </div>
@@ -52,16 +66,10 @@
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
                     <h6>Depends On</h6>
-                    <reference-list references="parents" node="model" />
+                    <reference-list references="parents" node="report" />
                 </div>
             </section>
 
-            <section class="section">
-                <div class="section-target" id="code"></div>
-                <div class="section-content">
-                    <code-block versions="versions" default="default_version"></code-block>
-                </div>
-            </section>
         </div>
     </div>
 </div>

@@ -11,13 +11,15 @@ angular
     return {
         scope: {
             model: '=',
-            extras: '='
+            extras: '=',
+            exclude: '<',
         },
         templateUrl: template,
         link: function(scope) {
 
             scope.details = [];
             scope.extended = [];
+            scope.exclude = scope.exclude || [];
             scope.meta = null;
             scope._show_expanded = false;
 
@@ -152,7 +154,10 @@ angular
                 scope.extended = getExtendedStats(nv.stats);
 
                 if (scope.extras) {
-                    scope.details = scope.details.concat(scope.extras);
+                    var extrasToAdd = _.filter(scope.extras, function(extra) {
+                        return extra.value !== undefined && extra.value !== null;
+                    });
+                    scope.details = scope.details.concat(extrasToAdd);
                 }
 
                 scope.show_extended = _.where(scope.extended, {include: true}).length > 0;

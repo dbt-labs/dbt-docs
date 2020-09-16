@@ -19,6 +19,7 @@ angular
             'source',
             'test',
             'analysis',
+            'report',
         ],
         depth: 1,
     };
@@ -34,7 +35,7 @@ angular
         options: {
             packages: [],
             tags: [null],
-            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis'],
+            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'report'],
         }
     };
 
@@ -50,7 +51,7 @@ angular
 
     service.resetSelection = function(node) {
         var include_selection;
-        if (node && _.includes(['model', 'seed', 'snapshot'], node.resource_type)) {
+        if (node && _.includes(['model', 'seed', 'snapshot', 'report'], node.resource_type)) {
             include_selection = '+' + node.name + '+';
         } else if (node && node.resource_type == 'source') {
             include_selection = '+source:' + node.source_name + "." + node.name + '+';

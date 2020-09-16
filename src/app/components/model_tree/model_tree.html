@@ -48,6 +48,17 @@
                     <br />
                 </div>
 
+                <div ng-show="tree.reports.length > 0">
+                    <strong>Reports</strong>
+                    <ul style="display: block">
+                        <model-tree-line
+                            item="item"
+                            resource-type="report"
+                            ng-repeat="item in tree.reports"></model-tree-line>
+                    </ul>
+                    <br />
+                </div>
+
                 <strong>Projects</strong>
                 <ul>
                     <model-tree-line

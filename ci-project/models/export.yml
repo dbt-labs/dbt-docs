@@ -1,0 +1,30 @@
+version: 2
+
+reports:
+  - name: crm_export
+    type: application
+    maturity: medium
+    description: >
+      An export model that is synced to our CRM nightly at 11pm ET
+
+    depends_on:
+      - ref('fct_orders')
+      - ref('dim_customers')
+
+    owner:
+      name: Alice Analyst
+      email: alice@example.com
+
+  - name: weekly_metrics
+    type: dashboard
+    maturity: high
+    url: https://www.getdbt.com
+    description: >
+      The Big Numbers, shared in #product every Monday morning. **Cool dashboard**
+
+    depends_on:
+      - ref('dim_customers')
+
+    owner:
+      name: Data Team
+      email: data@example.com

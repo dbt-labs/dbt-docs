@@ -8,6 +8,7 @@ angular
     return {
         scope: {
             references: '=',
+            node: '=',
         },
         restrict: 'E',
         templateUrl: template,
@@ -30,6 +31,8 @@ angular
             scope.mapResourceType = function(type) {
                 if (type == 'model') {
                     return 'Models';
+                } else if (type == 'seed') {
+                    return 'Seeds';
                 } else if (type == 'test') {
                     return 'Tests';
                 } else if (type == 'snapshot') {
@@ -38,6 +41,8 @@ angular
                     return 'Analyses';
                 } else if (type == 'macro') {
                       return 'Macros';
+                } else if (type == 'report') {
+                      return 'Reports';
                 } else {
                     return 'Nodes';
                 }

@@ -16,6 +16,7 @@ const templates = {
     test: require('./docs/test.html'),
     analysis: require('./docs/analysis.html'),
     macro: require('./docs/macro.html'),
+    report: require('./docs/report.html'),
 }
 
 angular
@@ -83,7 +84,7 @@ angular
             },
         })
         .state('dbt.analysis', {
-            url: 'analysis/:unique_id?section',
+            url: 'analysis/:unique_id?section&' + graph_params,
             controller: 'AnalysisCtrl',
             templateUrl: templates.analysis,
             params: {
@@ -99,7 +100,7 @@ angular
             },
         })
         .state('dbt.source_list', {
-            url: 'source_list/:source?' + graph_params,
+            url: 'source_list/:source?section&' + graph_params,
             controller: 'SourceListCtrl',
             templateUrl: templates.source_list,
             params: {
@@ -110,6 +111,14 @@ angular
             url: 'macro/:unique_id?section',
             controller: 'MacroCtrl',
             templateUrl: templates.macro,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.report', {
+            url: 'report/:unique_id?section&' + graph_params,
+            controller: 'ReportCtrl',
+            templateUrl: templates.report,
             params: {
                 unique_id: {type: 'string'}
             },
