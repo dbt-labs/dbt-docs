@@ -26,15 +26,15 @@ angular
         $scope.extra_table_fields = [
             {
                 name: "Maturity",
-                value: $scope.report.maturity
+                value: $scope.report.maturity,
             },
             {
                 name: "Owner",
-                value: $scope.report.owner.name
+                value: $scope.report.owner.name,
             },
             {
                 name: "Owner email",
-                value: $scope.report.owner.email
+                value: $scope.report.owner.email,
             },
         ]
     })

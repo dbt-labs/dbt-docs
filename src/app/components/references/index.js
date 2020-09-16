@@ -31,6 +31,8 @@ angular
             scope.mapResourceType = function(type) {
                 if (type == 'model') {
                     return 'Models';
+                } else if (type == 'seed') {
+                    return 'Seeds';
                 } else if (type == 'test') {
                     return 'Tests';
                 } else if (type == 'snapshot') {

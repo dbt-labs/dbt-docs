@@ -46,7 +46,7 @@
 
             <section class="section">
                 <div class="section-target" id="details"></div>
-                <table-details model="report" extras="extra_table_fields" show-defaults="false" />
+                <table-details model="report" extras="extra_table_fields" exclude="['tags']" />
             </section>
 
             <section class="section">
@@ -55,10 +55,6 @@
                     <h6>Description</h6>
                     <div class="panel">
                         <div class="panel-body">
-                            <div ng-show="report.url" class='margin'>
-                                View this report at <a ng-href="{{ report.url }}" target="_blank">{{ report.url }}</a>
-                            </div>
-
                             <div ng-if="report.description" class="model-markdown" marked="report.description"></div>
                             <div ng-if="!report.description">This {{ report.resource_type }} is not currently documented</div>
                         </div>
