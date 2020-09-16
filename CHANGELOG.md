@@ -1,5 +1,8 @@
 ## dbt 0.19.0 (Release TBD)
 
+## dbt 0.18.1 (Unreleased)
+- Add Report nodes ([docs#135](https://github.com/fishtown-analytics/dbt-docs/issues/135), [docs#136](https://github.com/fishtown-analytics/dbt-docs/pull/136))
+
 ## dbt 0.18.0 (September 2, 2020)
 - Add project level overviews ([docs#127](https://github.com/fishtown-analytics/dbt-docs/issues/127))
 
