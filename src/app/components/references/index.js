@@ -41,8 +41,8 @@ angular
                     return 'Analyses';
                 } else if (type == 'macro') {
                       return 'Macros';
-                } else if (type == 'report') {
-                      return 'Reports';
+                } else if (type == 'exposure') {
+                      return 'Exposures';
                 } else {
                     return 'Nodes';
                 }

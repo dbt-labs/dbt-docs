@@ -1,6 +1,6 @@
 version: 2
 
-reports:
+exposures:
   - name: crm_export
     type: application
     maturity: medium

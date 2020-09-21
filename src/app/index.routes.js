@@ -16,7 +16,7 @@ const templates = {
     test: require('./docs/test.html'),
     analysis: require('./docs/analysis.html'),
     macro: require('./docs/macro.html'),
-    report: require('./docs/report.html'),
+    exposure: require('./docs/exposure.html'),
 }
 
 angular
@@ -115,10 +115,10 @@ angular
                 unique_id: {type: 'string'}
             },
         })
-        .state('dbt.report', {
-            url: 'report/:unique_id?section&' + graph_params,
+        .state('dbt.exposure', {
+            url: 'exposure/:unique_id?section&' + graph_params,
             controller: 'ReportCtrl',
-            templateUrl: templates.report,
+            templateUrl: templates.exposure,
             params: {
                 unique_id: {type: 'string'}
             },
