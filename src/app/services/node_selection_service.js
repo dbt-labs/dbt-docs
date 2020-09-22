@@ -51,10 +51,12 @@ angular
 
     service.resetSelection = function(node) {
         var include_selection;
-        if (node && _.includes(['model', 'seed', 'snapshot', 'exposure'], node.resource_type)) {
+        if (node && _.includes(['model', 'seed', 'snapshot'], node.resource_type)) {
             include_selection = '+' + node.name + '+';
         } else if (node && node.resource_type == 'source') {
             include_selection = '+source:' + node.source_name + "." + node.name + '+';
+        } else if (node && node.resource_type == 'exposure') {
+            include_selection = '+exposure:' + node.name;
         } else if (node && _.includes(['analysis', 'test'], node.resource_type)) {
             include_selection = '+' + node.name;
         } else {
@@ -87,6 +89,9 @@ angular
         if (node.resource_type == 'source') {
             pre += "source:"
             node_name = node.source_name + "." + node.name;
+        } else if (node.resource_type == 'exposure') {
+            pre += "exposure:"
+            node_name = node.name;
         } else {
             node_name = node.name;
         }

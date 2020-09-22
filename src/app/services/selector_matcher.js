@@ -8,6 +8,7 @@ var SELECTOR_TYPE = {
     FQN: 'fqn',
     TAG: 'tag',
     SOURCE: 'source',
+    EXPOSURE: 'exposure',
     PATH: 'path',
     PACKAGE: 'package',
     CONFIG: 'config',
@@ -20,6 +21,7 @@ NODE_MATCHERS[SELECTOR_TYPE.IMPLICIT] = getNodesByImplicitSelection;
 NODE_MATCHERS[SELECTOR_TYPE.FQN] = getNodesByFQN;
 NODE_MATCHERS[SELECTOR_TYPE.TAG] = getNodesByTag;
 NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
+NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.PACKAGE] = getNodesByPackage;
 NODE_MATCHERS[SELECTOR_TYPE.CONFIG] = getNodesByConfig;
@@ -57,7 +59,7 @@ function getNodesByFQN(elements, qualified_name) {
         var node = el.data;
         var fqn = node.fqn;
 
-        if (!fqn || node.resource_type == 'source') {
+        if (!fqn || node.resource_type == 'source' || node.resource_type == 'exposure') {
             return;
         }
 
@@ -206,6 +208,27 @@ function getNodesBySource(elements, source) {
         } else if (selected_source_name == source_name && selected_source_table === name) {
             nodes.push(node_obj.data);
         } else if (selected_source_name == source_name && selected_source_table === null) {
+            nodes.push(node_obj.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesByExposure(elements, exposure) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'exposure') {
+            return;
+        }
+
+        var exposure_name = node.name;
+        var selected_exposure_name = exposure;
+
+        if (selected_exposure_name == '*') {
+            nodes.push(node_obj.data);
+        } else if (selected_exposure_name == exposure_name) {
             nodes.push(node_obj.data);
         }
     })

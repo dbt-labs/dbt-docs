@@ -146,6 +146,21 @@ test("Test parsing specs (explicit source.table)", () => {
     });
 })
 
+test("Test parsing specs (explicit exposure)", () => {
+    expect(
+        selectors.parseSpec('+exposure:a')
+    ).toStrictEqual({
+        select_at: false,
+        select_children: false,
+        select_parents: true,
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'exposure',
+        selector_value: 'a',
+        raw: '+exposure:a',
+    });
+})
+
 test("Test parsing specs (scoped fqn)", () => {
     expect(
         selectors.parseSpec('a.b.c+')
