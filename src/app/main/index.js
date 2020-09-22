@@ -87,7 +87,7 @@ angular
         $scope.tree.database = tree.database;
         $scope.tree.project = tree.project;
         $scope.tree.sources = tree.sources;
-        $scope.tree.reports = tree.reports;
+        $scope.tree.exposures = tree.exposures;
 
         setTimeout(function() {
             scrollToSelectedModel($scope.model_uid);

@@ -155,8 +155,8 @@ angular
                 service.files.manifest.nodes[node.unique_id] = node;
             });
 
-            // Add reports back into nodes to make site logic work
-            _.each(service.files.manifest.reports, function(node) {
+            // Add exposures back into nodes to make site logic work
+            _.each(service.files.manifest.exposures, function(node) {
                 node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
@@ -244,7 +244,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'report'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -352,7 +352,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'report'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -362,8 +362,8 @@ angular
             var sources = _.values(service.project.sources);
             service.tree.sources = buildSourceTree(sources, select);
 
-            var reports = _.values(service.project.reports);
-            service.tree.reports = buildReportTree(reports, select);
+            var exposures = _.values(service.project.exposures);
+            service.tree.exposures = buildReportTree(exposures, select);
 
             cb(service.tree);
         });
@@ -392,7 +392,7 @@ angular
         service.updateSelectedInTree(select, service.tree.project);
         service.updateSelectedInTree(select, service.tree.database);
         service.updateSelectedInTree(select, service.tree.sources);
-        service.updateSelectedInTree(select, service.tree.reports);
+        service.updateSelectedInTree(select, service.tree.exposures);
 
         return service.tree;
     }
@@ -454,7 +454,7 @@ angular
     }
 
     function buildReportTree(nodes, select) {
-        var reports = {}
+        var exposures = {}
 
         _.each(nodes, function(node) {
             var name = node.name;
@@ -464,36 +464,36 @@ angular
 
             var is_active = node.unique_id == select;
 
-            if (!reports[type]) {
-                reports[type] = {
+            if (!exposures[type]) {
+                exposures[type] = {
                     type: "folder",
                     name: type,
                     active: is_active,
                     items: []
                 };
             } else if (is_active) {
-                reports[type].active = true;
+                exposures[type].active = true;
             }
 
-            reports[type].items.push({
+            exposures[type].items.push({
                 type: 'file',
                 name: name,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
-                node_type: 'report'
+                node_type: 'exposure'
             })
         });
 
-        // sort report types
-        var reports = _.sortBy(_.values(reports), 'name');
+        // sort exposure types
+        var exposures = _.sortBy(_.values(exposures), 'name');
 
-        // sort entries in the report folder
-        _.each(reports, function(report) {
-            report.items = _.sortBy(report.items, 'name');
+        // sort entries in the exposure folder
+        _.each(exposures, function(exposure) {
+            exposure.items = _.sortBy(exposure.items, 'name');
         });
 
-        return reports
+        return exposures
     }
 
     function consolidateAdapterMacros(macros, adapter) {
@@ -542,7 +542,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'report') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {

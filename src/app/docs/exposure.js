@@ -16,25 +16,25 @@ angular
     $scope.extra_table_fields = [];
     $scope.versions = {};
 
-    $scope.report = {};
+    $scope.exposure = {};
     projectService.ready(function(project) {
-        let report = project.nodes[$scope.model_uid];
-        $scope.report = report;
-        $scope.parents = dag_utils.getParents(project, report);
+        let exposure = project.nodes[$scope.model_uid];
+        $scope.exposure = exposure;
+        $scope.parents = dag_utils.getParents(project, exposure);
         $scope.parentsLength = $scope.parents.length;
 
         $scope.extra_table_fields = [
             {
                 name: "Maturity",
-                value: $scope.report.maturity,
+                value: $scope.exposure.maturity,
             },
             {
                 name: "Owner",
-                value: $scope.report.owner.name,
+                value: $scope.exposure.owner.name,
             },
             {
                 name: "Owner email",
-                value: $scope.report.owner.email,
+                value: $scope.exposure.owner.email,
             },
         ]
     })

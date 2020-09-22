@@ -138,6 +138,8 @@ angular
 
                 if (node && node.resource_type == 'source') {
                     var nodes = graph.showFullGraph('source:' + node.source_name + "." + node.name);
+                } else if (node && node.resource_type == 'exposure') {
+                    var nodes = graph.showFullGraph('exposure:' + node.name);
                 } else {
                     var nodes = graph.showFullGraph(node_name);
                 }
@@ -149,6 +151,8 @@ angular
                 var node = selectorService.getViewNode();
                 if (node && node.resource_type == 'source') {
                     var nodes = graph.showVerticalGraph('source:' + node.source_name + "." + node.name, true);
+                } else if (node && node.resource_type == 'exposure') {
+                    var nodes = graph.showVerticalGraph('exposure:' + node.name, true);
                 } else {
                     var nodes = graph.showVerticalGraph(node.name, true);
                 }

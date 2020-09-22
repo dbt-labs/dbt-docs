@@ -180,7 +180,7 @@ angular
                     }
                 },
                 {
-                    selector: 'node[resource_type="report"]',
+                    selector: 'node[resource_type="exposure"]',
                     style: {
                         'background-color': '#ff694b',
                     }
@@ -329,7 +329,7 @@ angular
 
 
         _.each(_.filter(service.manifest.nodes, function(node) {
-            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'report'], node.resource_type);
+            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure'], node.resource_type);
             var is_data_test = node.resource_type == 'test' && _.includes(node.tags, 'data');
             return is_graph_type || is_data_test;
         }), function(node) {
