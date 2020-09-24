@@ -222,7 +222,7 @@ angular
         var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name'))
         var all_tags = [null];
         _.each(project.nodes, function(node) {
-            if (node.resource_type == 'model') {
+            if (node.resource_type == 'model' || node.resource_type == 'source') {
                 var tags = node.tags;
                 all_tags = _.union(all_tags, tags);
             };
