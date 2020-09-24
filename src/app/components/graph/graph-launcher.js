@@ -82,9 +82,9 @@ angular
             scope.onItemSelect = function(form, item, e) {
                 var dirty = selectorService.selection.dirty;
                 if (scope.isSelected(form, item)) {
-                    dirty[form] = _.without(dirty[form], item);
+                    dirty[form] = item === 'select_all' ? [...selectorService.options[form]] : _.without(dirty[form], item);
                 } else {
-                    dirty[form] = _.union(dirty[form], [item]);
+                    dirty[form] = item === 'select_all' ? [item] : _.union(dirty[form], [item]);
                 }
 
                 e.preventDefault();
