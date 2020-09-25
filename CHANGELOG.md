@@ -1,4 +1,8 @@
 ## dbt 0.19.0 (Release TBD)
+- Add select/deselect option in tags dropup in graph editor. ([docs#98](https://github.com/fishtown-analytics/dbt-docs/issues/98))
+
+Contributors:
+- [@Mr-Nobody99](https://github.com/Mr-Nobody99) ([docs#138](https://github.com/fishtown-analytics/dbt-docs/pull/138))
 
 ## dbt 0.18.1 (Unreleased)
 - Add Exposure nodes ([docs#135](https://github.com/fishtown-analytics/dbt-docs/issues/135), [docs#136](https://github.com/fishtown-analytics/dbt-docs/pull/136), [docs#137](https://github.com/fishtown-analytics/dbt-docs/pull/137))
