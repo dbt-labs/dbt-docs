@@ -1,5 +1,5 @@
 ## dbt 0.19.0 (Release TBD)
-- Fixed issue where sources with tags were not showing up in graph viz. ([docs#93](https://github.com/fishtown-analytics/dbt-docs/issues/93))
+- Fixed issue where sources with tags were not showing up in graph viz ([docs#93](https://github.com/fishtown-analytics/dbt-docs/issues/93))
 
 Contributors:
 - [@jplynch77](https://github.com/jplynch77) ([docs#139](https://github.com/fishtown-analytics/dbt-docs/pull/139))
