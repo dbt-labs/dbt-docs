@@ -115,6 +115,12 @@
                                         <ul
                                             class="dropdown-menu"
                                             ng-show="isVisible('resource_types')">
+                                            <li ng-click="onSelectAll('resource_types', allSelected ? false : true, $event)">
+                                                <strong class="text-dark">Select All</strong>
+                                                <span ng-show="allSelected">
+                                                    <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+                                                </span>
+                                            </li>
                                             <li
                                                 class='text-dark'
                                                 ng-repeat="item in selectorService.options.resource_types"
@@ -144,6 +150,12 @@
                                         <ul
                                             class="dropdown-menu"
                                             ng-show="isVisible('packages')">
+                                            <li ng-click="onSelectAll('packages', allSelected ? false : true, $event)">
+                                                <strong class="text-dark">Select All</strong>
+                                                <span ng-show="allSelected">
+                                                    <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+                                                </span>
+                                            </li>
                                             <li
                                                 class='text-dark'
                                                 ng-repeat="item in selectorService.options.packages"
@@ -173,9 +185,9 @@
                                         <ul
                                             class="dropdown-menu"
                                             ng-show="isVisible('tags')">
-                                            <li ng-click="onItemSelect('tags', 'select_all', $event)">
-                                                <span>Select All</span>
-                                                <span ng-show="!isSelected('tags', 'select_all')">
+                                            <li ng-click="onSelectAll('tags', allSelected ? false : true, $event)">
+                                                <strong class="text-dark">Select All</strong>
+                                                <span ng-show="allSelected">
                                                     <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                                                 </span>
                                             </li>
