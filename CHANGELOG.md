@@ -1,5 +1,5 @@
 ## dbt 0.19.0 (Release TBD)
-- Add select/deselect option in tags dropup in graph editor. ([docs#98](https://github.com/fishtown-analytics/dbt-docs/issues/98))
+- Add select/deselect option in DAG view dropups. ([docs#98](https://github.com/fishtown-analytics/dbt-docs/issues/98))
 
 Contributors:
 - [@Mr-Nobody99](https://github.com/Mr-Nobody99) ([docs#138](https://github.com/fishtown-analytics/dbt-docs/pull/138))
