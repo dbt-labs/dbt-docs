@@ -20,6 +20,7 @@ angular
 
             scope.graphService = graph;
             scope.selectorService = selectorService;
+            scope.allSelected = true;
 
             var forms = {
                 tags: {
@@ -77,6 +78,18 @@ angular
             scope.isSelected = function(form_name, item) {
                 var dirty = selectorService.selection.dirty[form_name];
                 return dirty.indexOf(item) != -1;
+            }
+
+            scope.onSelectAll = function(form, mode, e) {
+                var dirty = selectorService.selection.dirty;
+                if (mode) {
+                    dirty[form] = [...selectorService.options[form]];
+                } else {
+                    dirty[form] = [];
+                }
+                
+                scope.allSelected = !scope.allSelected;
+                e.preventDefault();
             }
 
             scope.onItemSelect = function(form, item, e) {
