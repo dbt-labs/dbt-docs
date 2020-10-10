@@ -80,8 +80,10 @@ angular
             scope.shorten = function(text) {
                 if(text != null && text.length > 0){  
                     let modified = text.replace(/\s+/g, ' '); 
-                    let first_token = splitQuery(scope.query)[0]; //choose the first word in the search as the anchor for shortening
-                    let indexOfInstance = modified.search(first_token);
+                    //choose the first word in the search as the anchor for shortening. 
+                    //Escaping in case the first token is "*" or another reserved regex character
+                    let first_token = escapeRegExp(splitQuery(scope.query)[0]); 
+                    let indexOfInstance = modified.search(new RegExp(first_token));
                     let startIndex = (indexOfInstance - 75) < 0? 0: indexOfInstance - 75;
                     let endIndex = (indexOfInstance + 75) > modified.length? modified.length: indexOfInstance + 75;
                     let shortened = "..." + modified.substring(startIndex, endIndex) + "...";
