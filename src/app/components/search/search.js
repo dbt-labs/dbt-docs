@@ -80,7 +80,8 @@ angular
             scope.shorten = function(text) {
                 if(text != null && text.length > 0){  
                     let modified = text.replace(/\s+/g, ' '); 
-                    let indexOfInstance = modified.search(scope.query);
+                    let first_token = splitQuery(scope.query)[0]; //choose the first word in the search as the anchor for shortening
+                    let indexOfInstance = modified.search(first_token);
                     let startIndex = (indexOfInstance - 75) < 0? 0: indexOfInstance - 75;
                     let endIndex = (indexOfInstance + 75) > modified.length? modified.length: indexOfInstance + 75;
                     let shortened = "..." + modified.substring(startIndex, endIndex) + "...";
@@ -93,7 +94,12 @@ angular
                 if (!scope.query || !text) {
                     return $sce.trustAsHtml(text);
                 }
-                return $sce.trustAsHtml(text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
+                //wrap each word in a capturing group with a pipe between them, to allow any of the matches to highlight
+                //e.g. "hello WORLD" changes to "(hello)|(world)"
+                let query_segments = splitQuery(scope.query);
+                let escaped_segments = query_segments.map(segment => escapeRegExp(segment));
+                let highlight_words = "(" + escaped_segments.join(")|(") + ")"; 
+                return $sce.trustAsHtml(text.replace(new RegExp(highlight_words, 'gi'), '<span class="search-result-match">$&</span>'));
             }
 
             scope.$watch("query", function(nv, ov) {
@@ -105,8 +111,10 @@ angular
 
             scope.columnFilter = function(columns) {
                 var matches = [];
+                let query_segments = splitQuery(scope.query);
+
                 for (var column in columns) {
-                    if (column.toLowerCase().indexOf(scope.query.toLowerCase()) != -1) {
+                    if (query_segments.every(segment => column.toLowerCase().indexOf(segment) != -1)) {
                         matches.push(column);
                     }
                 }
@@ -115,6 +123,15 @@ angular
 
             scope.limitColumns = function(id) {
                 return scope.limit_columns[id] !== undefined? scope.limit_columns[id] : 3;
+            }
+
+            //from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+            function escapeRegExp(string) {
+                return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+            }
+
+            function splitQuery(query){
+                return query.toLowerCase().split(" ").filter(s => s.length > 0);
             }
         }
     }

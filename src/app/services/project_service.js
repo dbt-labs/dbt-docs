@@ -261,7 +261,7 @@ angular
         });
     }
 
-    function fuzzySearchObj(val, obj) {
+    function fuzzySearchObj(query, obj) {
         var objects = [];
         var search_keys = {
             'name':'string',
@@ -271,23 +271,24 @@ angular
             'tags': 'array',
             'arguments': 'array',
         };
-        var search = new RegExp(val, "i")
+        
+        let query_segments = query.toLowerCase().split(" ").filter(s => s.length > 0);
 
         for (var i in search_keys) {
             if (!obj[i]) {
                continue;
-            } else if (search_keys[i] === 'string' && obj[i].toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                objects.push({key: i, value: val});
+            } else if (search_keys[i] === 'string' && query_segments.every(segment => obj[i].toLowerCase().indexOf(segment) != -1))  {
+                objects.push({key: i, value: query});
             } else if (search_keys[i] === 'object') {
                 for (var column_name in obj[i]) {
-                    if (obj[i][column_name]["name"].toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                        objects.push({key: i, value: val});
+                    if (query_segments.every(segment => obj[i][column_name]["name"].toLowerCase().indexOf(segment) != -1)) {
+                        objects.push({key: i, value: query});
                     }
                 }
             } else if (search_keys[i] === 'array') {
                 for (var tag of obj[i]) {
-                    if (JSON.stringify(tag).toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                        objects.push({key: i, value: val});
+                    if (query_segments.every(segment => JSON.stringify(tag).toLowerCase().indexOf(segment) != -1)) {
+                        objects.push({key: i, value: query});
                     }
                 }
             }
