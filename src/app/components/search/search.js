@@ -78,7 +78,7 @@ angular
             });
 
             scope.shorten = function(text) {
-                if(text != null && text.length > 0){  
+                if(text != null && text.trim().length > 0){  
                     let modified = text.replace(/\s+/g, ' '); 
                     //choose the first word in the search as the anchor for shortening. 
                     //Escaping in case the first token is "*" or another reserved regex character
