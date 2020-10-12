@@ -78,14 +78,14 @@ angular
             });
 
             scope.shorten = function(text) {
-                if(text != null && text.trim().length > 0){  
+                if(text != null && text.trim().length > 0 && scope.query != null && scope.query.trim().length > 0){  
                     let modified = text.replace(/\s+/g, ' '); 
                     //choose the first word in the search as the anchor for shortening. 
                     //Escaping in case the first token is "*" or another reserved regex character
                     let first_token = escapeRegExp(splitQuery(scope.query)[0]); 
                     let indexOfInstance = modified.search(new RegExp(first_token));
-                    let startIndex = (indexOfInstance - 75) < 0? 0: indexOfInstance - 75;
-                    let endIndex = (indexOfInstance + 75) > modified.length? modified.length: indexOfInstance + 75;
+                    let startIndex = (indexOfInstance - 75) < 0 ? 0 : indexOfInstance - 75;
+                    let endIndex = (indexOfInstance + 75) > modified.length ? modified.length : indexOfInstance + 75;
                     let shortened = "..." + modified.substring(startIndex, endIndex) + "...";
                     return shortened;
                  }
@@ -124,7 +124,7 @@ angular
             }
 
             scope.limitColumns = function(id) {
-                return scope.limit_columns[id] !== undefined? scope.limit_columns[id] : 3;
+                return scope.limit_columns[id] !== undefined ? scope.limit_columns[id] : 3;
             }
 
             //from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
