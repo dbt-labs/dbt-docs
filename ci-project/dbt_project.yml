@@ -1,6 +1,7 @@
 
 name: 'jaffle_shop'
 version: '0.1'
+config-version: 2
 profile: 'jaffle_shop'
 source-paths: ["models"]
 analysis-paths: ["analysis"]
@@ -16,7 +17,11 @@ clean-targets:
 
 models:
   jaffle_shop:
-      materialized: table
+      +materialized: table
+      marts:
+        core:
+          intermediate:
+            +materialized: ephemeral
       staging:
-        materialized: view
-        tags: ["staging", "hourly"]
+        +materialized: view
+        +tags: ["staging", "hourly"]
