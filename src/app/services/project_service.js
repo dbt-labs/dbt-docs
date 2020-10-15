@@ -21,7 +21,6 @@ angular
         files: {
             manifest: {},
             catalog: {},
-            run_results: {},
         },
         loaded: $q.defer(),
     }
@@ -81,29 +80,6 @@ angular
         });
 
         return merge(catalog, manifest)
-    }
-
-    function incorporate_run_results(project, run_results) {
-        if (!run_results) {
-            return project;
-        }
-
-        _.each(run_results.results, function(result) {
-            var node = result.node;
-
-            if (!node) {
-                return
-            }
-
-            var unique_id = node.unique_id;
-            var compiled_sql = node.compiled_sql;
-
-            if (project.nodes[unique_id]) {
-                project.nodes[unique_id].compiled_sql = node.compiled_sql;
-            }
-        });
-
-        return project
     }
 
     function loadFile(label, path) {
@@ -166,13 +142,12 @@ angular
             service.files.manifest.macros = macros;
 
             var project = incorporate_catalog(service.files.manifest, service.files.catalog);
-            var compiled_project = incorporate_run_results(project, service.files.run_results);
 
 
-            var models = compiled_project.nodes
+            var models = project.nodes
             var model_names = _.keyBy(models, 'name');
 
-            var tests = _.filter(compiled_project.nodes, {resource_type: 'test'})
+            var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
 
                 if (test.tags.indexOf('schema') == -1) {
@@ -236,7 +211,7 @@ angular
                 }
             });
 
-            service.project = compiled_project;
+            service.project = project;
 
             // performance hack
             var search_macros = _.filter(service.project.macros, function(macro) {
