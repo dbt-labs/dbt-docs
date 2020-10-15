@@ -30,7 +30,7 @@ angular
 
         $scope.versions = {
             'Source': $scope.model.raw_sql,
-            'Compiled': $scope.model.injected_sql
+            'Compiled': $scope.model.compiled_sql
         }
     })
 }]);

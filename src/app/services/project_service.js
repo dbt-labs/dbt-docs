@@ -96,10 +96,10 @@ angular
             }
 
             var unique_id = node.unique_id;
-            var injected_sql = node.injected_sql;
+            var compiled_sql = node.compiled_sql;
 
             if (project.nodes[unique_id]) {
-                project.nodes[unique_id].injected_sql = node.injected_sql;
+                project.nodes[unique_id].compiled_sql = node.compiled_sql;
             }
         });
 
