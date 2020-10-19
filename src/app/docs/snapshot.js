@@ -28,7 +28,7 @@ angular
         var default_compiled = "Compiled SQL is not available for this snapshot";
         $scope.versions = {
             'Source': $scope.model.raw_sql,
-            'Compiled': $scope.model.injected_sql || default_compiled
+            'Compiled': $scope.model.compiled_sql || default_compiled
         }
 
         setTimeout(function() {
