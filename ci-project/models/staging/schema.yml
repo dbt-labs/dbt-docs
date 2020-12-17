@@ -46,3 +46,6 @@ sources:
       tables:
         - name: orders
           identifier: "raw_orders"
+        - name: tagged_source
+          identifier: "raw_customers"
+          tags: ['important']
