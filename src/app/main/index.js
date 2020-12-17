@@ -222,10 +222,8 @@ angular
         var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name'))
         var all_tags = [null];
         _.each(project.nodes, function(node) {
-            if (node.resource_type != 'test') {
-                var tags = node.tags;
-                all_tags = _.union(all_tags, tags);
-            };
+            var tags = node.tags;
+            all_tags = _.union(all_tags, tags);
         });
 
         selectorService.init({packages: packages, tags: all_tags})

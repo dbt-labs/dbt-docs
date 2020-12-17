@@ -108,7 +108,6 @@ angular
         var promises = [
             loadFile('manifest', TARGET_PATH + "manifest.json" + cache_bust),
             loadFile('catalog', TARGET_PATH + "catalog.json" + cache_bust),
-            loadFile('run_results', TARGET_PATH + "run_results.json" + cache_bust),
         ]
 
         $q.all(promises).then(function(files) {

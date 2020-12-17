@@ -1,4 +1,7 @@
 ## dbt 0.19.0 (Release TBD)
+- Fixed issue where data tests with tags were not showing up in graph viz ([docs#147](https://github.com/fishtown-analytics/dbt-docs/issues/147), [docs#156](https://github.com/fishtown-analytics/dbt-docs/pull/156))
+
+## dbt 0.19.0b1 (October 20, 2020)
 - Add select/deselect option in DAG view dropups. ([docs#98](https://github.com/fishtown-analytics/dbt-docs/issues/98), [docs#138](https://github.com/fishtown-analytics/dbt-docs/pull/138))
 - Fixed issue where sources with tags were not showing up in graph viz ([docs#93](https://github.com/fishtown-analytics/dbt-docs/issues/93), [docs#139](https://github.com/fishtown-analytics/dbt-docs/pull/139))
 - Use `compiled_sql` instead of `injected_sql` for "Compiled" ([docs#146](https://github.com/fishtown-analytics/dbt-docs/issues/146), [docs#148](https://github.com/fishtown-analytics/dbt-docs/issues/148))

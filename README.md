@@ -62,7 +62,7 @@ yarn install
 webpack
 ```
 
-To run the dev server, first copy your `manifest.json`, `catalog.json`, and `run_results.json` files to
+To run the dev server, first copy your `manifest.json` and `catalog.json` files to
 the `src/` directory. Then run:
 
 ```bash

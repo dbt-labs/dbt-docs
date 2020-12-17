@@ -15,13 +15,16 @@ clean-targets:
     - "dbt_modules"
     - "logs"
 
+seeds:
+  +quote_columns: false
+
 models:
   jaffle_shop:
-      +materialized: table
-      marts:
-        core:
-          intermediate:
-            +materialized: ephemeral
-      staging:
-        +materialized: view
-        +tags: ["staging", "hourly"]
+    +materialized: table
+    marts:
+      core:
+        intermediate:
+          +materialized: ephemeral
+    staging:
+      +materialized: view
+      +tags: ["staging", "hourly"]
