@@ -289,6 +289,7 @@ angular
 		  includeScore: true
 		}
 
+		console.log(fuse);
 		const fuse = new Fuse(list, options)
 
 		const result = fuse.search('od man')
