@@ -2,6 +2,7 @@
 const angular = require('angular');
 const $ = require('jquery');
 const _ = require('lodash');
+const Fuse = require('fuse.js');
 
 import merge from 'deepmerge';
 
@@ -282,6 +283,18 @@ angular
 
         var res = [];
         _.each(service.project.searchable, function(model) {
+
+		const list = ["Old Man's War", "The Lock Artist"]
+		const options = {
+		  includeScore: true
+		}
+
+		const fuse = new Fuse(list, options)
+
+		const result = fuse.search('od man')
+		console.log(result)
+
+
             var matches = fuzzySearchObj(q, model);
             if (matches.length) {
                 res.push({
