@@ -3,7 +3,6 @@
 const angular = require('angular');
 const _ = require('underscore');
 const $ = require('jquery');
-const Fuse = require('fuse.js');
 
 const logo = require('./../../assets/images/logo.svg');
 

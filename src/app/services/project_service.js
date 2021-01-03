@@ -284,13 +284,20 @@ angular
         var res = [];
         _.each(service.project.searchable, function(model) {
 
+		console.log("in search");
 		const list = ["Old Man's War", "The Lock Artist"]
+		console.log(list);
 		const options = {
 		  includeScore: true
 		}
+		console.log(options);
 
-		console.log(fuse);
+		console.log("raw Fuse:")
+		console.log(Fuse);
+		
+		console.log("populated fuse)
 		const fuse = new Fuse(list, options)
+		console.log(fuse)
 
 		const result = fuse.search('od man')
 		console.log(result)
