@@ -295,7 +295,7 @@ angular
 		console.log("raw Fuse:")
 		console.log(Fuse);
 		
-		console.log("populated fuse)
+		console.log("populated fuse")
 		const fuse = new Fuse(list, options)
 		console.log(fuse)
 
