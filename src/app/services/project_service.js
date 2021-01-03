@@ -2,7 +2,7 @@
 const angular = require('angular');
 const $ = require('jquery');
 const _ = require('lodash');
-import * as Fuse from 'fuse.js';
+const Fuse = require('fuse.js');
 
 import merge from 'deepmerge';
 
