@@ -318,7 +318,7 @@ angular
     function prepareModelsForSearching(models) {
     	var transformed = {};
     	for (var key in models) {
-    		transformed.add(
+    		transformed.push(
     			{
     				"node": key,
     				"alias": models[key].alias,
