@@ -318,12 +318,16 @@ angular
     function prepareModelsForSearching(models) {
     	var transformed = [];
     	for (var key in models) {
-    		transformed.push(
-    			{
+    		var model = models[key];
+    		newNode = {
     				"node": key,
-    				"alias": models[key].alias,
+    				"alias": model.alias,
+    				"description": model.description
+    				"columns": model.columns.map(c => {c.name, c.description, c.tags}),
+    				"tags": model.tags,
+    				"raw_sql": model.raw_sql
     			}
-    		)
+    		transformed.push(newNode);
     	}
     	console.log(transformed);
     }
