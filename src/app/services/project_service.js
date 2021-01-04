@@ -319,7 +319,7 @@ angular
     	var transformed = [];
     	for (var key in models) {
     		var model = models[key];
-    		newNode = {
+    		var newNode = {
     				"node": key,
     				"alias": model.alias,
     				"description": model.description,
