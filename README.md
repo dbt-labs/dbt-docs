@@ -32,12 +32,6 @@ After cloning this repository, run:
 git submodule update --init --recursive
 ```
 
-Then, install yarn and webpack.
-
-```bash
-npm install -g yarn webpack webpack-cli
-```
-
 You'll also need to install bundler if you don't already have it:
 ```bash
 gem install bundler
@@ -58,14 +52,14 @@ cd -
 To build an index.html file:
 
 ```bash
-yarn install
-webpack
+npm install
+npx webpack
 ```
 
 To run the dev server, first copy your `manifest.json` and `catalog.json` files to
 the `src/` directory. Then run:
 
 ```bash
-yarn install
+npm install
 npm start
 ```
