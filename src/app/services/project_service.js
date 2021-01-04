@@ -157,9 +157,9 @@ angular
 			console.log("raw Fuse:")
 			console.log(Fuse);
 		
-			console.log("populated fuse:")
-			const fuse = new Fuse(list, fuseOptions) //list should be replaced by searchableModels
-			console.log(fuse)
+			//console.log("populated fuse:")
+			//const fuse = new Fuse(list, fuseOptions) //list should be replaced by searchableModels
+			//console.log(fuse)
 
             var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
@@ -300,8 +300,8 @@ angular
 
 		try {
 			console.log("in search");
-			const result = fuse.search(q)
-			console.log(result)
+			//const result = fuse.search(q)
+			//console.log(result)
 		}
 		catch (e){
 			console.log(`Error searching with fuse: ${e}`);
