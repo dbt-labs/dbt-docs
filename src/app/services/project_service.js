@@ -323,10 +323,18 @@ angular
     				"node": key,
     				"alias": model.alias,
     				"description": model.description,
-    				"columns": model.columns.map(c => {c.name, c.description, c.tags}),
+    				"columns": [],
     				"tags": model.tags,
     				"raw_sql": model.raw_sql
     			}
+    		for (var column in model.columns) {
+    			newNode.columns.push({
+    					"name": column.name,
+    					"description": column.description,
+    					"tags": column.tags
+    				}
+    			)
+    		}
     		transformed.push(newNode);
     	}
     	console.log(transformed);
