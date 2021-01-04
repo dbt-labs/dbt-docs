@@ -331,8 +331,8 @@ angular
     			var column = model.columns[colKey];
     			newNode.columns.push({
     					"name": column.name,
-    					"description": column.description ?? "",
-    					"tags": column.tags ?? []
+    					"description": column.description ? column.description : "",
+    					"tags": column.tags ? column.tags : []
     				}
     			)
     		}
