@@ -8,5 +8,4 @@ tmp
 env/
 .tmp/
 dist/
-yarn-error.log
 .sass-cache/
