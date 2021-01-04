@@ -146,6 +146,7 @@ angular
 
             var models = project.nodes
             var model_names = _.keyBy(models, 'name');
+            var searchable_models = prepareModelsForSearching(models);
 
             var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
@@ -312,6 +313,19 @@ angular
             }
         });
         return res;
+    }
+    
+    function prepareModelsForSearching(models) {
+    	var transformed = {};
+    	for (var key in models) {
+    		transformed.add(
+    			{
+    				"node": key,
+    				"alias": models[key].alias,
+    			}
+    		)
+    	}
+    	console.log(transformed);
     }
 
     function clean_project_macros(macros, adapter) {
