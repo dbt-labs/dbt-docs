@@ -316,7 +316,7 @@ angular
     }
     
     function prepareModelsForSearching(models) {
-    	var transformed = {};
+    	var transformed = [];
     	for (var key in models) {
     		transformed.push(
     			{
