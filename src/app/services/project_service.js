@@ -148,10 +148,22 @@ angular
             var model_names = _.keyBy(models, 'name');
             var searchableModels = prepareModelsForSearching(models);
 
-			// Placeholder to check that the simplest possible Fuse implementation works            		
+			// Placeholder to check that the simplest possible Fuse implementation works. TODO: Remove
             const list = ["Old Man's War", "The Lock Artist"]
+			
 			const fuseOptions = {
-			  includeScore: true
+			  includeScore: true,
+			  includeMatches: true,
+			  ignoreLocation: true,
+			  //TODO: respect tickboxes for filtering to specific types
+			  keys: [
+			  	'alias',
+			  	'columns.name',
+			  	'columns.description',
+			  	'columns.tags',
+			  	'tags',
+			  	'raw_sql'
+			  ],
 			}
 
 			console.log("raw Fuse:")
@@ -298,14 +310,15 @@ angular
         var res = [];
         _.each(service.project.searchable, function(model) {
 
-		try {
-			console.log("in search");
-			//const result = fuse.search(q)
-			//console.log(result)
-		}
-		catch (e){
-			console.log(`Error searching with fuse: ${e}`);
-		}
+			try {
+				console.log("in search");
+				//fuse.options.minMatchCharLength = Math.min(2, q.length); //single-char matches aren't useful, unless you've only searched for a single character
+				//const result = fuse.search(q)
+				//console.log(result)
+			}
+			catch (e){
+				console.log(`Error searching with fuse: ${e}`);
+			}
 
             var matches = fuzzySearchObj(q, model);
             if (matches.length) {
