@@ -327,11 +327,12 @@ angular
     				"tags": model.tags,
     				"raw_sql": model.raw_sql
     			}
-    		for (var column in model.columns) {
+    		for (var colKey in model.columns) {
+    			var column = model.columns[colKey];
     			newNode.columns.push({
     					"name": column.name,
-    					"description": column.description,
-    					"tags": column.tags
+    					"description": column.description ? column.description : "",
+    					"tags": column.tags ? column.tags : []
     				}
     			)
     		}
