@@ -146,7 +146,20 @@ angular
 
             var models = project.nodes
             var model_names = _.keyBy(models, 'name');
-            var searchable_models = prepareModelsForSearching(models);
+            var searchableModels = prepareModelsForSearching(models);
+
+			// Placeholder to check that the simplest possible Fuse implementation works            		
+            const list = ["Old Man's War", "The Lock Artist"]
+			const fuseOptions = {
+			  includeScore: true
+			}
+
+			console.log("raw Fuse:")
+			console.log(Fuse);
+		
+			console.log("populated fuse:")
+			const fuse = new Fuse(list, fuseOptions) //list should be replaced by searchableModels
+			console.log(fuse)
 
             var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
@@ -285,24 +298,11 @@ angular
         var res = [];
         _.each(service.project.searchable, function(model) {
 
-		console.log("in search");
-		const list = ["Old Man's War", "The Lock Artist"]
-		console.log(list);
-		const options = {
-		  includeScore: true
+		try {
+			console.log("in search");
+			const result = fuse.search(q)
+			console.log(result)
 		}
-		console.log(options);
-
-		console.log("raw Fuse:")
-		console.log(Fuse);
-		
-		console.log("populated fuse")
-		const fuse = new Fuse(list, options)
-		console.log(fuse)
-
-		const result = fuse.search('od man')
-		console.log(result)
-
 
             var matches = fuzzySearchObj(q, model);
             if (matches.length) {
