@@ -2,7 +2,8 @@
 const angular = require('angular');
 const $ = require('jquery');
 const _ = require('lodash');
-const Fuse = require('fuse.js');
+
+import Fuse from 'fuse.js';
 
 import merge from 'deepmerge';
 
@@ -23,6 +24,7 @@ angular
             manifest: {},
             catalog: {},
         },
+        fuse: {},
         loaded: $q.defer(),
     }
 
@@ -148,9 +150,6 @@ angular
             var model_names = _.keyBy(models, 'name');
             var searchableModels = prepareModelsForSearching(models);
 
-			// Placeholder to check that the simplest possible Fuse implementation works. TODO: Remove
-            const list = ["Old Man's War", "The Lock Artist"]
-			
 			const fuseOptions = {
 			  includeScore: true,
 			  includeMatches: true,
@@ -165,13 +164,10 @@ angular
 			  	'raw_sql'
 			  ],
 			}
-
-			console.log("raw Fuse:")
-			console.log(Fuse);
-		
-			//console.log("populated fuse:")
-			//const fuse = new Fuse(list, fuseOptions) //list should be replaced by searchableModels
-			//console.log(fuse)
+					
+			console.log("populated fuse:")
+			service.fuse = new Fuse(searchableModels, fuseOptions) //list should be replaced by searchableModels
+			console.log(service.fuse)
 
             var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
@@ -307,19 +303,18 @@ angular
             })
         }
 
+		try {
+			//console.log("in search");
+			service.fuse.options.minMatchCharLength = Math.min(2, q.length); //single-char matches aren't useful, unless you've only searched for a single character
+			const result = service.fuse.search(q)
+			console.log(result)
+		}
+		catch (e) {
+			console.log(`Error searching with fuse: ${e}`);
+		}
+
         var res = [];
         _.each(service.project.searchable, function(model) {
-
-			try {
-				console.log("in search");
-				//fuse.options.minMatchCharLength = Math.min(2, q.length); //single-char matches aren't useful, unless you've only searched for a single character
-				//const result = fuse.search(q)
-				//console.log(result)
-			}
-			catch (e){
-				console.log(`Error searching with fuse: ${e}`);
-			}
-
             var matches = fuzzySearchObj(q, model);
             if (matches.length) {
                 res.push({
