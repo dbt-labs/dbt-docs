@@ -303,6 +303,9 @@ angular
 			const result = fuse.search(q)
 			console.log(result)
 		}
+		catch (e){
+			console.log(`Error searching with fuse: ${e}`);
+		}
 
             var matches = fuzzySearchObj(q, model);
             if (matches.length) {
