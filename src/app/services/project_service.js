@@ -322,7 +322,7 @@ angular
     		newNode = {
     				"node": key,
     				"alias": model.alias,
-    				"description": model.description
+    				"description": model.description,
     				"columns": model.columns.map(c => {c.name, c.description, c.tags}),
     				"tags": model.tags,
     				"raw_sql": model.raw_sql
