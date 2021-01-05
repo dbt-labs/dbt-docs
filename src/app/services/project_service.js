@@ -148,27 +148,6 @@ angular
 
             var models = project.nodes
             var model_names = _.keyBy(models, 'name');
-            var searchableModels = prepareModelsForSearching(models);
-
-			const fuseOptions = {
-			  includeScore: true,
-			  includeMatches: true,
-			  ignoreLocation: true,
-			  //TODO: respect tickboxes for filtering to specific types
-			  keys: [
-			  	'alias',
-			  	'columns.name',
-			  	'columns.description',
-			  	'columns.tags',
-			  	'tags',
-			  	'raw_sql'
-			  ],
-			}
-			
-			console.log("populated fuse:")
-			service.fuse = new Fuse(searchableModels, fuseOptions) //list should be replaced by searchableModels
-			console.log(service.fuse)
-
             var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
 
@@ -248,6 +227,27 @@ angular
                 // It should not be possible to search for hidden documentation
                 return !obj.docs || obj.docs.show;
             });
+
+			const fuseOptions = {
+			  includeScore: true,
+			  includeMatches: true,
+			  ignoreLocation: true,
+			  //TODO: respect tickboxes for filtering to specific types
+			  keys: [
+			  	'alias',
+			  	'columns.name',
+			  	'columns.description',
+			  	'columns.tags',
+			  	'tags',
+			  	'raw_sql'
+			  ],
+			}
+			
+			service.fuse = new Fuse(
+				prepareModelsForSearching(service.project.searchable), 
+				fuseOptions
+			);
+
             service.loaded.resolve();
         });
     }
