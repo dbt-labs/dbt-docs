@@ -234,12 +234,13 @@ angular
 			  ignoreLocation: true,
 			  //TODO: respect tickboxes for filtering to specific types
 			  keys: [
-			  	'alias',
-			  	'columns.name',
-			  	'columns.description',
-			  	'columns.tags',
-			  	'tags',
-			  	'raw_sql'
+			  	{name: 'alias', weight: 20},
+			  	{name: 'tags', weight: 5},
+			  	{name: 'description', weight: 2},
+			  	{name: 'columns.tags', weight: 3},
+			  	{name: 'columns.name', weight: 2},
+			  	{name: 'columns.description', weight: 1},
+			  	{name: 'raw_sql', weight: 1}
 			  ],
 			}
 			
@@ -304,8 +305,9 @@ angular
         }
 
 		try {
-			//console.log("in search");
-			service.fuse.options.minMatchCharLength = Math.min(2, q.length); //single-char matches aren't useful, unless you've only searched for a single character
+			//As search terms become longer, be less tolerant of tiny fuzzy matches
+			var shortestWord = q.split(' ').sort(function(a, b){ return a.length - b.length})[0]
+			service.fuse.options.minMatchCharLength = Math.max(1, shortestWord.length - 2);
 			const result = service.fuse.search(q)
 			console.log(result)
 		}
@@ -336,7 +338,6 @@ angular
 		  newModel.columns = _.values(model.columns);
 		  return newModel;
 		});
-		
 		return modelList;
     }
 
