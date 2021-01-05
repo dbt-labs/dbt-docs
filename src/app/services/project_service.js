@@ -164,7 +164,7 @@ angular
 			  	'raw_sql'
 			  ],
 			}
-					
+			
 			console.log("populated fuse:")
 			service.fuse = new Fuse(searchableModels, fuseOptions) //list should be replaced by searchableModels
 			console.log(service.fuse)
@@ -327,29 +327,17 @@ angular
     }
     
     function prepareModelsForSearching(models) {
-    	var transformed = [];
-    	for (var key in models) {
-    		var model = models[key];
-    		var newNode = {
-    				"node": key,
-    				"alias": model.alias,
-    				"description": model.description,
-    				"columns": [],
-    				"tags": model.tags,
-    				"raw_sql": model.raw_sql
-    			}
-    		for (var colKey in model.columns) {
-    			var column = model.columns[colKey];
-    			newNode.columns.push({
-    					"name": column.name,
-    					"description": column.description ? column.description : "",
-    					"tags": column.tags ? column.tags : []
-    				}
-    			)
-    		}
-    		transformed.push(newNode);
-    	}
-    	console.log(transformed);
+    	//To tell fuse which fields to search, 
+    	//columns needs to be an array to avoid 
+    	//naming each object individually.
+    	var modelList = _.map(models, function(model) {
+		  // make a copy
+		  var newModel = _.assign({}, model);
+		  newModel.columns = _.values(model.columns);
+		  return newModel;
+		});
+		
+		return modelList;
     }
 
     function clean_project_macros(macros, adapter) {
