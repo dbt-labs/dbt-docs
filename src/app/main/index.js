@@ -144,66 +144,8 @@ angular
     });
 
     $scope.$watch('search.query', function(q) {
-        $scope.search.results = assignSearchRelevance(projectService.search(q));
+        $scope.search.results = projectService.search(q);
     });
-
-    function assignSearchRelevance(results){
-        if($scope.search.query === "")
-            return results;
-        let criteriaArr = {
-            "name": 10,
-            "tags": 5,
-            "description": 3,
-            "raw_sql": 2,
-            "columns": 1
-        };
-        _.each(results, function(result){
-            result.overallWeight = 0;
-            _.each(Object.keys(criteriaArr), function(criteria){
-                if(result.model[criteria] != undefined){
-                    let count = 0;
-                    let body = result.model[criteria];
-                    let query = ($scope.search.query).toLowerCase();
-                    if(criteria === "columns"){
-                        _.each(body, function(column){
-                            let columnName = column.name.toLowerCase();
-                            let index = 0;
-                            while(index != -1){
-                                index = columnName.indexOf(query, index);
-                                if (index != -1) {
-                                    count++; index++;
-                                }
-                            }
-                        });
-                    }
-                    else if(criteria === "tags"){
-                        _.each(body, function(tag){
-                            let tagName = tag.toLowerCase();
-                            let index = 0;
-                            while(index != -1){
-                                index = tagName.indexOf(query, index);
-                                if (index != -1) {
-                                    count++; index++;
-                                }
-                            }
-                        });
-                    }
-                    else{
-                        body = body.toLowerCase();
-                        let index = 0;
-                        while(index != -1){
-                            index = body.indexOf(query, index);
-                            if(index != -1){
-                                count++; index++;
-                            }
-                        }
-                    }
-                    result.overallWeight += (count * criteriaArr[criteria]);
-                }
-            });
-        }); 
-        return results;
-    }
 
     /*
     INITIALIZE THE APPLICATION:

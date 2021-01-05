@@ -308,24 +308,20 @@ angular
 			//As search terms become longer, be less tolerant of tiny fuzzy matches
 			var shortestWord = q.split(' ').sort(function(a, b){ return a.length - b.length})[0]
 			service.fuse.options.minMatchCharLength = Math.max(1, shortestWord.length - 2);
+			
 			const result = service.fuse.search(q)
-			console.log(result)
+			
+			return _.map(result, function(res) {
+				return {
+					model: res.item,
+					matches: [], //TODO: add info for highlighting to work,
+					overallWeight: res.score * -1 //hack to get sorting right for the moment
+				}
+			});
 		}
 		catch (e) {
-			console.log(`Error searching with fuse: ${e}`);
+			console.error(`Error searching with fuse: ${e}`);
 		}
-
-        var res = [];
-        _.each(service.project.searchable, function(model) {
-            var matches = fuzzySearchObj(q, model);
-            if (matches.length) {
-                res.push({
-                    model: model,
-                    matches: matches,
-                });
-            }
-        });
-        return res;
     }
     
     function prepareModelsForSearching(models) {
