@@ -259,41 +259,6 @@ angular
         });
     }
 
-    function fuzzySearchObj(val, obj) {
-        var objects = [];
-        var search_keys = {
-            'name':'string',
-            'description':'string',
-            'raw_sql':'string',
-            'columns':'object',
-            'tags': 'array',
-            'arguments': 'array',
-        };
-        var search = new RegExp(val, "i")
-
-        for (var i in search_keys) {
-            if (!obj[i]) {
-               continue;
-            } else if (search_keys[i] === 'string' && obj[i].toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                objects.push({key: i, value: val});
-            } else if (search_keys[i] === 'object') {
-                for (var column_name in obj[i]) {
-                    if (obj[i][column_name]["name"].toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                        objects.push({key: i, value: val});
-                    }
-                }
-            } else if (search_keys[i] === 'array') {
-                for (var tag of obj[i]) {
-                    if (JSON.stringify(tag).toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                        objects.push({key: i, value: val});
-                    }
-                }
-            }
-        }
-
-        return objects
-    }
-
     service.search = function(q) {
         if (q.length == 0) {
             return _.map(service.project.searchable, function(model) {
