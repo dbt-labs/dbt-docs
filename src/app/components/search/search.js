@@ -96,6 +96,27 @@ angular
                 return $sce.trustAsHtml(text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
             }
 
+            scope.highlight2 = function(result, key) {
+            	const match = result.matches.find(m => m.key == key)
+            	console.log(match);
+            	if (!match){
+            		console.log("no match");
+            	}
+            	//const modelPrefix = getModelNamePrefix(result.model);
+            	var modelName = result.model[key];
+            	const start = '<span class="search-result-match">'
+            	const end = '</span>'
+            	//Work from end of string back to avoid offsetting charindex of ones we still need to touch
+            	if (match && match.indices) {
+					for (var i = match.indices.length - 1; i >= 0; i--){
+						const bounds = match.indices[i];
+						modelName = `${modelName.slice(0, bounds[0])}${start}${modelName.slice(bounds[0], bounds[1] + 1)}${end}${modelName.slice(bounds[1]+1)}`;
+						console.log(modelName);
+					}
+				}
+                return $sce.trustAsHtml(modelName)//text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
+            }
+
             scope.$watch("query", function(nv, ov) {
                 if (nv.length == 0) {
                     scope.show_all = false;

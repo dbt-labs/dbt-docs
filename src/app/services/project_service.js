@@ -279,7 +279,7 @@ angular
 			return _.map(result, function(res) {
 				return {
 					model: res.item,
-					matches: [], //TODO: add info for highlighting to work,
+					matches: res.matches,
 					overallWeight: res.score * -1 //hack to get sorting right for the moment
 				}
 			});
