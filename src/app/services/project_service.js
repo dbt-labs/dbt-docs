@@ -259,8 +259,8 @@ angular
         });
     }
 
-    service.search = function(q) {
-        if (q.length == 0) {
+    service.search = function(searchTerm) {
+        if (searchTerm.length == 0) {
             return _.map(service.project.searchable, function(model) {
                 return {
                     model: model,
@@ -271,10 +271,10 @@ angular
 
 		try {
 			//As search terms become longer, be less tolerant of tiny fuzzy matches
-			var shortestWord = q.split(' ').sort(function(a, b){ return a.length - b.length})[0]
+			var shortestWord = searchTerm.split(' ').sort(function(a, b){ return a.length - b.length})[0]
 			service.fuse.options.minMatchCharLength = Math.max(1, shortestWord.length - 2);
 			
-			const result = service.fuse.search(q)
+			const result = service.fuse.search(searchTerm)
 			
 			return _.map(result, function(res) {
 				return {
