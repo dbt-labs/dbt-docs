@@ -62,7 +62,7 @@ angular
                 _.each(results, function(result){
                     _.each(result.matches, function(match){
                        if(!fileIDs.includes(result.model['unique_id'])){
-                           if((show_names && match.key === "name") || (show_descriptions && match.key === "description") || (show_columns && match.key === "columns") || (show_code && match.key === "raw_sql") || (show_tags && match.key === "tags")){
+                           if((show_names && match.key === "alias") || (show_descriptions && (match.key === "description" || match.key == "columns.description")) || (show_columns && match.key === "columns.name") || (show_code && match.key === "raw_sql") || (show_tags && (match.key === "tags" || match.key == "columns.tags") )){
                             fileIDs.push(result.model['unique_id']);
                             finalResults.push(result);
                            }
