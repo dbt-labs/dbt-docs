@@ -38,6 +38,7 @@
                             ng-model="search.query"
                             ng-focus="onSearchFocus($event, true)"
                             ng-keydown="onSearchKeypress($event)"
+                            ng-disabled="!search.is_ready"
                             type="text"
                             class="form-control"
                             placeholder="Search for models..." />

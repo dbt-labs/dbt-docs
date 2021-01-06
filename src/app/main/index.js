@@ -28,7 +28,8 @@ angular
     $scope.search = {
         query: '',
         results: [],
-        is_focused: false
+        is_focused: false,
+        is_ready: false
     }
 
     $scope.logo = logo;
@@ -159,6 +160,7 @@ angular
 
         // set initial search results
         $scope.search.results = projectService.search('');
+        $scope.search.is_ready = true; 
 
         var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name'))
         var all_tags = [null];
