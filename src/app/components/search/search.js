@@ -40,16 +40,6 @@ angular
                 return 'dbt.' + node.resource_type;
             }
 
-            scope.getModelName = function(model) {
-                if (model.resource_type == 'source') {
-                    return model.source_name + "." + model.name;
-                } else if (model.resource_type == 'macro') {
-                    return model.package_name + "." + model.name;
-                } else {
-                    return model.name;
-                }
-            }
-
             function filterResults(results, checkboxStatus){
                 if(!_.some(_.values(checkboxStatus))){
                     return results;
@@ -62,7 +52,13 @@ angular
                 _.each(results, function(result){
                     _.each(result.matches, function(match){
                        if(!fileIDs.includes(result.model['unique_id'])){
-                           if((show_names && match.key === "alias") || (show_descriptions && (match.key === "description" || match.key == "columns.description")) || (show_columns && match.key === "columns.name") || (show_code && match.key === "raw_sql") || (show_tags && (match.key === "tags" || match.key == "columns.tags") )){
+                           if(
+                           		   (show_names && match.key === "searchableName") 
+                           		|| (show_descriptions && (match.key === "description" || match.key == "columns.description")) 
+                           		|| (show_columns && match.key === "columns.name") 
+                           		|| (show_code && match.key === "raw_sql") 
+                           		|| (show_tags && (match.key === "tags" || match.key == "columns.tags"))
+                           ) {
                             fileIDs.push(result.model['unique_id']);
                             finalResults.push(result);
                            }
@@ -98,11 +94,7 @@ angular
 
             scope.highlight2 = function(result, key) {
             	const match = result.matches.find(m => m.key == key)
-            	console.log(match);
-            	if (!match){
-            		console.log("no match");
-            	}
-            	//const modelPrefix = getModelNamePrefix(result.model);
+
             	var modelName = result.model[key];
             	const start = '<span class="search-result-match">'
             	const end = '</span>'
@@ -111,7 +103,6 @@ angular
 					for (var i = match.indices.length - 1; i >= 0; i--){
 						const bounds = match.indices[i];
 						modelName = `${modelName.slice(0, bounds[0])}${start}${modelName.slice(bounds[0], bounds[1] + 1)}${end}${modelName.slice(bounds[1]+1)}`;
-						console.log(modelName);
 					}
 				}
                 return $sce.trustAsHtml(modelName)//text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));

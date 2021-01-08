@@ -223,10 +223,10 @@ angular
                 return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure'], node.resource_type);
             });
 
-            service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
+            service.project.searchable = prepareModelsForSearching(_.filter(search_nodes.concat(search_macros), function(obj) {
                 // It should not be possible to search for hidden documentation
                 return !obj.docs || obj.docs.show;
-            });
+            }));
 
 			const fuseOptions = {
 			  includeScore: true,
@@ -234,7 +234,7 @@ angular
 			  ignoreLocation: true,
 			  //TODO: respect tickboxes for filtering to specific types
 			  keys: [
-			  	{name: 'alias', weight: 20},
+			  	{name: 'searchableName', weight: 20},
 			  	{name: 'tags', weight: 5},
 			  	{name: 'description', weight: 2},
 			  	{name: 'columns.tags', weight: 3},
@@ -245,7 +245,7 @@ angular
 			}
 			
 			service.fuse = new Fuse(
-				prepareModelsForSearching(service.project.searchable), 
+				service.project.searchable, 
 				fuseOptions
 			);
 
@@ -297,10 +297,21 @@ angular
 		  // make a copy
 		  var newModel = _.assign({}, model);
 		  newModel.columns = _.values(model.columns);
+		  newModel.searchableName = getModelName(model);
 		  return newModel;
 		});
 		return modelList;
     }
+    
+	function getModelName(model) {
+		if (model.resource_type == 'source') {
+			return model.source_name + "." + model.name;
+		} else if (model.resource_type == 'macro') {
+			return model.package_name + "." + model.name;
+		} else {
+			return model.name;
+		}
+	}
 
     function clean_project_macros(macros, adapter) {
         var all_macros = macros || [];
