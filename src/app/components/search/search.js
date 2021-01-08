@@ -99,21 +99,21 @@ angular
             	const start = '<span class="search-result-match">';
             	const end = '</span>';
             	if (match && match.indices) {
-            		//Ensure an array of arrays (a single match comes in as a single array)
+            		//Ensure an array of arrays (when there's only one match, it comes as [0, 10] instead of [[0, 10]])
             		var indicesToInclude = Array.isArray(match.indices[0]) ? match.indices : [match.indices];
             		
             		if (shorten) {
-            			// [...indicesToInclude] makes a copy of the array, to prevent the original from being sorted
-            			indicesToInclude = [ [...indicesToInclude].sort(function(a, b) {return (b[1] - b[0]) - (a[1] - a[0]) }) [0] ]
+            			//Get only the longest match (the biggest difference between start and end character) as a proxy for most relevant. 
+            			//The fuzzy matching is very aggressive - this helps tone down the confusion from half the text being inexplicably highlighted 
+            			indicesToInclude = [ [indicesToInclude].sort(function(a, b) {return (b[1] - b[0]) - (a[1] - a[0]) }) [0] ]
             		}
             		
             		const numContextChars = 50;
-            		//Work from end of string back to avoid offsetting charindex of ones we still need to touch
+            		//Work from end of string backwards, to avoid offsetting charindex of parts of the string we still need to touch
 					for (var i = indicesToInclude.length - 1; i >= 0; i--){
 						const bounds = indicesToInclude[i];
 						
 						const startIndex = shorten ? Math.max(bounds[0] - numContextChars, 0) : 0;
-						//const endIndex = shorten ? (bounds[1] + numContextChars) : Number.MAX_SAFE_INTEGER
 
 						const prefix = (startIndex == 0 ? "" : "...") + text.slice(startIndex, bounds[0]);
 						const mainContent = text.slice(bounds[0], bounds[1] + 1);
@@ -122,7 +122,7 @@ angular
 						text = `${prefix}${start}${mainContent}${end}${suffix}`;
 					}
 				}
-                return $sce.trustAsHtml(text)//text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
+                return $sce.trustAsHtml(text)
             }
 
             scope.$watch("query", function(nv, ov) {
