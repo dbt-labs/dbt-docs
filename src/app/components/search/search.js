@@ -95,11 +95,12 @@ angular
             scope.highlight2 = function(result, key, shorten) {
             	const match = result.matches.find(m => m.key == key)
             	
-            	var modelName = result.model[key];
+            	var text = result.model[key];
             	const start = '<span class="search-result-match">';
             	const end = '</span>';
             	if (match && match.indices) {
-            		var indicesToInclude = Array.isArray(match.indices[0]) ? [...match.indices] : [match.indices];
+            		//Ensure an array of arrays (a single match comes in as a single array)
+            		var indicesToInclude = Array.isArray(match.indices[0]) ? match.indices : [match.indices];
             		
             		if (shorten) {
             			// [...indicesToInclude] makes a copy of the array, to prevent the original from being sorted
@@ -112,16 +113,16 @@ angular
 						const bounds = indicesToInclude[i];
 						
 						const startIndex = shorten ? Math.max(bounds[0] - numContextChars, 0) : 0;
-						const endIndex = shorten ? (bounds[1] + numContextChars) : Number.MAX_SAFE_INTEGER
+						//const endIndex = shorten ? (bounds[1] + numContextChars) : Number.MAX_SAFE_INTEGER
 
-						const prefix = (startIndex == 0 ? "" : "...") + modelName.slice(startIndex, bounds[0]);
-						const mainContent = modelName.slice(bounds[0], bounds[1] + 1);
-						var suffix = modelName.slice(bounds[1] + 1, endIndex) + (shorten ? "..." : "");
+						const prefix = (startIndex == 0 ? "" : "...") + text.slice(startIndex, bounds[0]);
+						const mainContent = text.slice(bounds[0], bounds[1] + 1);
+						var suffix = text.slice(bounds[1] + 1);
 						 
-						modelName = `${prefix}${start}${mainContent}${end}${suffix}`;
+						text = `${prefix}${start}${mainContent}${end}${suffix}`;
 					}
 				}
-                return $sce.trustAsHtml(modelName)//text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
+                return $sce.trustAsHtml(text)//text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
             }
 
             scope.$watch("query", function(nv, ov) {

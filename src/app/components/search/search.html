@@ -9,6 +9,14 @@
     .sub-results {
         margin-left: 36px;
     }
+    .line-clamp {
+	   overflow: hidden;
+	   text-overflow: ellipsis;
+	   display: -webkit-box;
+	   -webkit-line-clamp: 2; 
+	   -webkit-box-orient: vertical;
+	}
+
     </style>
     <div class="app-title">
         <div class="app-frame app-pad">
@@ -44,7 +52,7 @@
                                     <span ng-bind-html="highlight2(result, 'searchableName', false)"></span>
                                     <small>{{result.model.resource_type}}</small>
                                 </h4>
-                                <p ng-bind-html="highlight2(result, 'description', true)"></p>
+                                <p class="line-clamp" ng-bind-html="highlight2(result, 'description', true)"></p>
                             </div>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
