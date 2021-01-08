@@ -96,13 +96,29 @@ angular
             	const match = result.matches.find(m => m.key == key)
             	
             	var modelName = result.model[key];
-            	const start = (shorten ? "..." : "") + '<span class="search-result-match">'
-            	const end = '</span>' + (shorten ? "..." : "")
-            	//Work from end of string back to avoid offsetting charindex of ones we still need to touch
+            	const start = '<span class="search-result-match">';
+            	const end = '</span>';
             	if (match && match.indices) {
-					for (var i = match.indices.length - 1; i >= 0; i--){
-						const bounds = match.indices[i];
-						modelName = `${modelName.slice(0, bounds[0])}${start}${modelName.slice(bounds[0], bounds[1] + 1)}${end}${modelName.slice(bounds[1]+1)}`;
+            		var indicesToInclude = Array.isArray(match.indices[0]) ? [...match.indices] : [match.indices];
+            		
+            		if (shorten) {
+            			// [...indicesToInclude] makes a copy of the array, to prevent the original from being sorted
+            			indicesToInclude = [ [...indicesToInclude].sort(function(a, b) {return (b[1] - b[0]) - (a[1] - a[0]) }) [0] ]
+            		}
+            		
+            		const numContextChars = 50;
+            		//Work from end of string back to avoid offsetting charindex of ones we still need to touch
+					for (var i = indicesToInclude.length - 1; i >= 0; i--){
+						const bounds = indicesToInclude[i];
+						
+						const startIndex = shorten ? Math.max(bounds[0] - numContextChars, 0) : 0;
+						const endIndex = shorten ? (bounds[1] + numContextChars) : Number.MAX_SAFE_INTEGER
+
+						const prefix = (startIndex == 0 ? "" : "...") + modelName.slice(startIndex, bounds[0]);
+						const mainContent = modelName.slice(bounds[0], bounds[1] + 1);
+						var suffix = modelName.slice(bounds[1] + 1, endIndex) + (shorten ? "..." : "");
+						 
+						modelName = `${prefix}${start}${mainContent}${end}${suffix}`;
 					}
 				}
                 return $sce.trustAsHtml(modelName)//text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
