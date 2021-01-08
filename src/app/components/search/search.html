@@ -58,7 +58,7 @@
                             ng-click="$event.stopPropagation(); limit_columns[result.model.unique_id] = 100">Show {{ columnFilter(result.model.columns).length - max_results_columns }} more</a>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
-                        <span>
+                        <span style="font-family: monospace">
                             <span ng-bind-html = "highlight(shorten(result.model['raw_sql']))"></span>
                         </span>
                         </div>
