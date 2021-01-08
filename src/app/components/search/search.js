@@ -93,36 +93,53 @@ angular
             }
 
             scope.highlight2 = function(result, key, shorten) {
-            	const match = result.matches.find(m => m.key == key)
+            	const matches = result.matches.filter(m => m.key == key);
             	
-            	var text = result.model[key];
-            	const start = '<span class="search-result-match">';
-            	const end = '</span>';
-            	if (match && match.indices) {
-            		//Ensure an array of arrays (when there's only one match, it comes as [0, 10] instead of [[0, 10]])
-            		var indicesToInclude = Array.isArray(match.indices[0]) ? match.indices : [match.indices];
-            		
-            		if (shorten) {
-            			//Get only the longest match (the biggest difference between start and end character) as a proxy for most relevant. 
-            			//The fuzzy matching is very aggressive - this helps tone down the confusion from half the text being inexplicably highlighted 
-            			indicesToInclude = [ [indicesToInclude].sort(function(a, b) {return (b[1] - b[0]) - (a[1] - a[0]) }) [0] ]
-            		}
-            		
-            		const numContextChars = 50;
-            		//Work from end of string backwards, to avoid offsetting charindex of parts of the string we still need to touch
-					for (var i = indicesToInclude.length - 1; i >= 0; i--){
-						const bounds = indicesToInclude[i];
+            	if (!matches[0]){
+            		//Non-nested values (name, description, sql) are shown regardless of whether they were a search match. 
+            		//Getting them directly from the model avoids blanks where something else matched but not the name. 
+					return $sce.trustAsHtml(result.model[key]);
+            	}
+            	
+				var finalText = "";
+				
+				for (var matchNum = 0; matchNum < matches.length; matchNum++){
+					const isLast = matchNum == matches.length - 1;
+					const match = matches[matchNum];
+					
+            		var text = match.value;
+            	
+					const start = '<span class="search-result-match">';
+					const end = '</span>';
+					if (match && match.indices) {
+						//Ensure an array of arrays (when there's only one match, it comes as [0, 10] instead of [[0, 10]])
+						var indicesToInclude = Array.isArray(match.indices[0]) ? match.indices : [match.indices];
+					
+						if (shorten) {
+							//Get only the longest match (the biggest difference between start and end character) as a proxy for most relevant. 
+							//The fuzzy matching is very aggressive - this helps tone down the confusion from half the text being inexplicably highlighted 
+							indicesToInclude = [ indicesToInclude.sort(function(a, b) {return (b[1] - b[0]) - (a[1] - a[0]) }) [0] ]
+						}
+					
+						const numContextChars = 50;
+						//Work from end of string backwards, to avoid offsetting charindex of parts of the string we still need to touch
+						for (var i = indicesToInclude.length - 1; i >= 0; i--){
+							const bounds = indicesToInclude[i];
 						
-						const startIndex = shorten ? Math.max(bounds[0] - numContextChars, 0) : 0;
+							const startIndex = shorten ? Math.max(bounds[0] - numContextChars, 0) : 0;
 
-						const prefix = (startIndex == 0 ? "" : "...") + text.slice(startIndex, bounds[0]);
-						const mainContent = text.slice(bounds[0], bounds[1] + 1);
-						var suffix = text.slice(bounds[1] + 1);
-						 
-						text = `${prefix}${start}${mainContent}${end}${suffix}`;
+							const prefix = (startIndex == 0 ? "" : "...") + text.slice(startIndex, bounds[0]);
+							const mainContent = text.slice(bounds[0], bounds[1] + 1);
+							var suffix = text.slice(bounds[1] + 1);
+						 	
+							text = `${prefix}${start}${mainContent}${end}${suffix}`;
+						}
+						
+						finalText += text + (isLast ? "" : ", ");
 					}
 				}
-                return $sce.trustAsHtml(text)
+				
+                return $sce.trustAsHtml(finalText)
             }
 
             scope.$watch("query", function(nv, ov) {

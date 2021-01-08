@@ -9,11 +9,18 @@
     .sub-results {
         margin-left: 36px;
     }
-    .line-clamp {
+    .line-clamp-2 {
 	   overflow: hidden;
 	   text-overflow: ellipsis;
 	   display: -webkit-box;
 	   -webkit-line-clamp: 2; 
+	   -webkit-box-orient: vertical;
+	}
+    .line-clamp-1 {
+	   overflow: hidden;
+	   text-overflow: ellipsis;
+	   display: -webkit-box;
+	   -webkit-line-clamp: 1; 
 	   -webkit-box-orient: vertical;
 	}
 
@@ -52,14 +59,12 @@
                                     <span ng-bind-html="highlight2(result, 'searchableName', false)"></span>
                                     <small>{{result.model.resource_type}}</small>
                                 </h4>
-                                <p class="line-clamp" ng-bind-html="highlight2(result, 'description', true)"></p>
+                                <p class="line-clamp-2" ng-bind-html="highlight2(result, 'description', true)"></p>
                             </div>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
-                        <span ng-repeat="column in columnFilter(result.model.columns) | limitTo:limitColumns(result.model.unique_id)">
-                            <span ng-show="$first === true">columns:</span>
-                            <span ng-bind-html="highlight(column + ',')" ng-show="$last === false"></span>
-                            <span ng-bind-html="highlight(column)" ng-show="$last === true"></span>
+                        <span class="line-clamp-1"> Columns: 
+                            <span ng-bind-html="highlight2(result, 'columns.name', false)"></span>
                         </span>
                         <a
                             ng-show="columnFilter(result.model.columns).length > max_results_columns && !limit_columns[result.model.unique_id]"
