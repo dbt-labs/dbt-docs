@@ -92,12 +92,12 @@ angular
                 return $sce.trustAsHtml(text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
             }
 
-            scope.highlight2 = function(result, key) {
+            scope.highlight2 = function(result, key, shorten) {
             	const match = result.matches.find(m => m.key == key)
-
+            	
             	var modelName = result.model[key];
-            	const start = '<span class="search-result-match">'
-            	const end = '</span>'
+            	const start = (shorten ? "..." : "") + '<span class="search-result-match">'
+            	const end = '</span>' + (shorten ? "..." : "")
             	//Work from end of string back to avoid offsetting charindex of ones we still need to touch
             	if (match && match.indices) {
 					for (var i = match.indices.length - 1; i >= 0; i--){
