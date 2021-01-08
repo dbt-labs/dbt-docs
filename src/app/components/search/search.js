@@ -73,26 +73,7 @@ angular
                 scope.results = filterResults(projectService.search(scope.query), scope.checkboxStatus);
             });
 
-            scope.shorten = function(text) {
-                if(text != null && text.length > 0){  
-                    let modified = text.replace(/\s+/g, ' '); 
-                    let indexOfInstance = modified.search(scope.query);
-                    let startIndex = (indexOfInstance - 75) < 0? 0: indexOfInstance - 75;
-                    let endIndex = (indexOfInstance + 75) > modified.length? modified.length: indexOfInstance + 75;
-                    let shortened = "..." + modified.substring(startIndex, endIndex) + "...";
-                    return shortened;
-                 }
-                return text;
-            }
-
-            scope.highlight = function(text) {
-                if (!scope.query || !text) {
-                    return $sce.trustAsHtml(text);
-                }
-                return $sce.trustAsHtml(text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
-            }
-
-            scope.highlight2 = function(result, key, shorten) {
+            scope.highlight = function(result, key, shorten) {
             	const matches = result.matches.filter(m => m.key == key);
             	
             	if (!matches[0]){
@@ -153,20 +134,6 @@ angular
                     scope.limit_columns = {};
                 }
             });
-
-            scope.columnFilter = function(columns) {
-                var matches = [];
-                for (var column in columns) {
-                    if (column.toLowerCase().indexOf(scope.query.toLowerCase()) != -1) {
-                        matches.push(column);
-                    }
-                }
-                return matches;
-            }
-
-            scope.limitColumns = function(id) {
-                return scope.limit_columns[id] !== undefined? scope.limit_columns[id] : 3;
-            }
         }
     }
 }]);

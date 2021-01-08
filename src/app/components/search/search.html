@@ -56,25 +56,25 @@
                             </div>
                             <div class="result-body">
                                 <h4 class="a">
-                                    <span ng-bind-html="highlight2(result, 'searchableName', false)"></span>
+                                    <span ng-bind-html="highlight(result, 'searchableName', false)"></span>
                                     <small>{{result.model.resource_type}}</small>
                                 </h4>
-                                <p class="line-clamp-2" ng-bind-html="highlight2(result, 'description', true)"></p>
+                                <p class="line-clamp-2" ng-bind-html="highlight(result, 'description', true)"></p>
                             </div>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
 							<span class="line-clamp-1"> Columns: 
-								<span ng-bind-html="highlight2(result, 'columns.name', false)"></span>
+								<span ng-bind-html="highlight(result, 'columns.name', false)"></span>
 							</span>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
-							<span style="font-family: monospace">
-								<span ng-bind-html = "highlight(shorten(result.model['raw_sql']))"></span>
+							<span class="line-clamp-2" style="font-family: monospace">
+								<span ng-bind-html = "highlight(result, 'raw_sql', true)"></span>
 							</span>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
 							<span class="line-clamp-1"> Tags:
-								<span ng-bind-html="highlight2(result, 'tags', false)"></span>
+								<span ng-bind-html="highlight(result, 'tags', false)"></span>
 							</span>
                         </div>
                 </div>
