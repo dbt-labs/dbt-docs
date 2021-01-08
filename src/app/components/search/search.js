@@ -98,7 +98,12 @@ angular
             	if (!matches[0]){
             		//Non-nested values (name, description, sql) are shown regardless of whether they were a search match. 
             		//Getting them directly from the model avoids blanks where something else matched but not the name. 
-					return $sce.trustAsHtml(result.model[key]);
+            		//Tags are arrays and don't need to be shown, so we're skipping them
+            		var resp = "";
+            		if (typeof(result.model[key]) == "string") {
+            			resp = result.model[key];
+            		}
+					return $sce.trustAsHtml(resp);
             	}
             	
 				var finalText = "";

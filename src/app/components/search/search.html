@@ -63,24 +63,19 @@
                             </div>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
-                        <span class="line-clamp-1"> Columns: 
-                            <span ng-bind-html="highlight2(result, 'columns.name', false)"></span>
-                        </span>
-                        <a
-                            ng-show="columnFilter(result.model.columns).length > max_results_columns && !limit_columns[result.model.unique_id]"
-                            ng-click="$event.stopPropagation(); limit_columns[result.model.unique_id] = 100">Show {{ columnFilter(result.model.columns).length - max_results_columns }} more</a>
+							<span class="line-clamp-1"> Columns: 
+								<span ng-bind-html="highlight2(result, 'columns.name', false)"></span>
+							</span>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
-                        <span style="font-family: monospace">
-                            <span ng-bind-html = "highlight(shorten(result.model['raw_sql']))"></span>
-                        </span>
+							<span style="font-family: monospace">
+								<span ng-bind-html = "highlight(shorten(result.model['raw_sql']))"></span>
+							</span>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
-                        <span ng-repeat="tag in result.model.tags">
-                            <span ng-show="$first === true">tags:</span>
-                            <span ng-bind-html="highlight(tag + ',')" ng-show="$last === false"></span>
-                            <span ng-bind-html="highlight(tag)" ng-show="$last === true"></span>
-                        </span>
+							<span class="line-clamp-1"> Tags:
+								<span ng-bind-html="highlight2(result, 'tags', false)"></span>
+							</span>
                         </div>
                 </div>
                 <a
