@@ -98,9 +98,6 @@ angular
 					if (match && match.indices) {
 						//Ensure an array of arrays (when there's only one match, it comes as [0, 10] instead of [[0, 10]])
 						var indicesToInclude = Array.isArray(match.indices[0]) ? match.indices : [match.indices];
-
-						//Ensure the indices run from start to end of string 
-						indicesToInclude = indicesToInclude.sort(function(a, b) {return a[0] - b[0]});
 					
 						if (shorten) {
 							//Get only the longest match (the biggest difference between start and end character) as a proxy for most relevant. 
@@ -111,18 +108,7 @@ angular
 						const numContextChars = 50;
 						//Work from end of string backwards, to avoid offsetting charindex of parts of the string we still need to touch
 						for (var i = indicesToInclude.length - 1; i >= 0; i--){
-							var bounds = indicesToInclude[i];
-
-							//With extendedSearch enabled, sometimes the end of one array 
-							//is the start of its neighbour, e.g. [[7, 21], [21, 28], [32, 39]]
-							//This causes all sorts of off-by-one drama, 
-							//so we're combining them: [[7, 28], [32, 39]] 
-							if (indicesToInclude[i - 1] && indicesToInclude[i - 1][1] == bounds[0]) {
-								bounds = [ indicesToInclude[i - 1][0], bounds[1] ];
-								
-								//Decrement i early to avoid double-handling
-								i--
-							}
+							const bounds = indicesToInclude[i];
 						
 							const startIndex = shorten ? Math.max(bounds[0] - numContextChars, 0) : 0;
 
