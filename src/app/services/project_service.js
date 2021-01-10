@@ -280,7 +280,7 @@ angular
 				return {
 					model: res.item,
 					matches: res.matches,
-					overallWeight: res.score * -1 //hack to get sorting right for the moment
+					overallWeight: res.score
 				}
 			});
 		}
