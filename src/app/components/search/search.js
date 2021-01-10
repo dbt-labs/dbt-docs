@@ -131,6 +131,10 @@ angular
                     scope.show_all = false;
                 }
             });
+            
+            scope.anyRecords = function(result, key){
+            	return _.some(result.matches.filter(m => m.key == key));
+            }
         }
     }
 }]);

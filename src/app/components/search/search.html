@@ -2,6 +2,7 @@
     <style>
     .search-result-match {
         background-color: #eee;
+        font-weight: bold
     }
     .spacing {
         margin-right: 0.25em;
@@ -62,19 +63,19 @@
                                 <p class="line-clamp-2" ng-bind-html="highlight(result, 'description', true)"></p>
                             </div>
                         </div>
-                        <div class="sub-results" ng-show="query.length > 0">
+                        <div class="sub-results" ng-show="anyRecords(result, 'columns.name')">
 							<span class="line-clamp-1"> Columns: 
 								<span ng-bind-html="highlight(result, 'columns.name', false)"></span>
+							</span>
+                        </div>
+                        <div class="sub-results" ng-show="anyRecords(result, 'tags')">
+							<span class="line-clamp-1"> Tags:
+								<span ng-bind-html="highlight(result, 'tags', false)"></span>
 							</span>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
 							<span class="line-clamp-2" style="font-family: monospace">
 								<span ng-bind-html = "highlight(result, 'raw_sql', true)"></span>
-							</span>
-                        </div>
-                        <div class="sub-results" ng-show="query.length > 0">
-							<span class="line-clamp-1"> Tags:
-								<span ng-bind-html="highlight(result, 'tags', false)"></span>
 							</span>
                         </div>
                 </div>
