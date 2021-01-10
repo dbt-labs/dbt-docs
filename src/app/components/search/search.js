@@ -21,8 +21,6 @@ angular
         link: function(scope) {
             scope.max_results = 20;                                             //# of results on the page at once
             scope.show_all = false;
-            scope.max_results_columns = 3;
-            scope.limit_columns = {};
 
             scope.checkboxStatus = {
                 show_names : false,
@@ -131,7 +129,6 @@ angular
             scope.$watch("query", function(nv, ov) {
                 if (nv.length == 0) {
                     scope.show_all = false;
-                    scope.limit_columns = {};
                 }
             });
         }
