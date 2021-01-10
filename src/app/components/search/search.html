@@ -36,7 +36,6 @@
                 <span class="break">{{ query }}</span>
                 <small><span>{{ results.length }}</span> search results</small>
             </h1>
-            <p class="search-hint">Hint: prefix query terms with a single quote (<code>'</code>) to disable fuzzy matching. <a href="https://fusejs.io/examples.html#extended-search" target = "_blank">See all search parameters</a>.</p>
             <div id="checkboxes">
 				<input type="checkbox" id="name" ng-model="checkboxStatus.show_names" ng-click="filterResults(results, checkboxStatus)" style = "margin-left:10px;margin-right:5px">
 				<label for="name" style="margin-right:25px">Name</label> 
