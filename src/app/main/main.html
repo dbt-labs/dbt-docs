@@ -44,6 +44,11 @@
                             placeholder="Search for models..." />
                     <div class="app-body">
                     </div>
+                    <div class="app-footer app-icn" ng-show="search.is_focused"> 
+	                    <a href="https://fusejs.io/examples.html#extended-search" target="_" title="View advanced search options">
+                        	<svg class="icn icn-md"><use xlink:href="#icn-tree"></use></svg>
+                        </a>
+                    </div>
                     <div class="app-footer app-icn" ng-show="search.is_focused" ng-click="clearSearch()">
                         <svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
                     </div>
