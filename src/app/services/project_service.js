@@ -232,7 +232,7 @@ angular
 			  includeScore: true,
 			  includeMatches: true,
 			  ignoreLocation: true,
-			  //TODO: respect tickboxes for filtering to specific types
+			  useExtendedSearch: true,
 			  keys: [
 			  	{name: 'searchableName', weight: 20},
 			  	{name: 'tags', weight: 5},
