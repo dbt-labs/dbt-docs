@@ -144,10 +144,6 @@ angular
         }
     });
 
-    $scope.$watch('search.query', function(q) {
-        $scope.search.results = projectService.search(q);
-    });
-
     /*
     INITIALIZE THE APPLICATION:
         1. Set the selected model (if there is one) via the url
