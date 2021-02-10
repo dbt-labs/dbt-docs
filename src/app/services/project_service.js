@@ -270,7 +270,11 @@ angular
             })
         }
 
-		try {			
+		try {
+			//As search terms become longer, be less tolerant of tiny fuzzy matches
+			var shortestWord = searchTerm.split(' ').sort(function(a, b){ return a.length - b.length})[0]
+			service.fuse.options.minMatchCharLength = Math.max(1, shortestWord.length - 2);
+			
 			const result = service.fuse.search(searchTerm)
 			
 			return _.map(result, function(res) {
