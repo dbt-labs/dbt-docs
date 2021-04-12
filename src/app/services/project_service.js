@@ -170,7 +170,7 @@ angular
                     test_info.short = 'U';
                     test_info.label = 'Unique';
                 } else if (test.test_metadata.name == 'relationships') {
-                    var rel_model_name = test.refs[1];
+                    var rel_model_name = test.refs[0];
                     var rel_model = model_names[rel_model_name];
                     if (rel_model && test.test_metadata.kwargs.field) {
                         // FKs get extra fields
@@ -197,7 +197,11 @@ angular
                 var depends_on = test.depends_on.nodes;
                 var test_column = test.column_name || test.test_metadata.kwargs.column_name || test.test_metadata.kwargs.arg;
                 if (depends_on.length && test_column) {
-                    var model = depends_on[0];
+                    if (test.test_metadata.name == 'relationships') {
+                        var model = depends_on[1];
+                    } else {
+                        var model = depends_on[0]
+                    }
                     var node = project.nodes[model];
                     var column = _.find(node.columns, function(col, col_name) {
                         return col_name.toLowerCase() == test_column.toLowerCase();
@@ -573,7 +577,7 @@ angular
         var databases = {};
         var tree_nodes = _.filter(nodes, function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (!show) { 
+            if (!show) {
                 return false;
             } else if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
                 return true;
