@@ -81,10 +81,6 @@ function getNodesByFQN(elements, qualified_name) {
          */
         var unscoped_flat_fqn = _.rest(flat_fqn);
 
-        console.log(`SELECTOR_FQN: ${selector_fqn} !!!`)
-        console.log(`FQN: ${fqn} !!!`)
-        console.log(`UNESCOPED_FQN: ${unscoped_flat_fqn} !!!`)
-
         // if qualified_name matches exactly model name (fqn's leaf), this is a match
         if (qualified_name === _.last(fqn)) {
             nodes.push(node);
