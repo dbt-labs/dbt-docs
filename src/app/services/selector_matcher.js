@@ -29,20 +29,19 @@ NODE_MATCHERS[SELECTOR_TYPE.TEST_NAME] = getNodesByTestName;
 NODE_MATCHERS[SELECTOR_TYPE.TEST_TYPE] = getNodesByTestType;
 
 
-function isFQNMatch(node_fqn, node_selector) {
+function isFQNMatch(node_flat_fqn, node_selector) {
+
+    if (node_flat_fqn.length < node_selector.length) {
+        return false;
+    }
+
     for (var i=0; i<node_selector.length; i++) {
 
         var selector_part = node_selector[i];
-        var is_last = (i == (node_selector.length - 1));
 
-        var ret;
         if (selector_part == SELECTOR_GLOB) {
             return true;
-        } else if (is_last && selector_part == _.last(node_fqn)) {
-            return true;
-        } else if (node_fqn.length <= i) {
-            return false;
-        } else if (node_fqn[i] == selector_part) {
+        } else if (node_flat_fqn[i] == selector_part) {
             // pass
         } else {
             return false;
@@ -64,17 +63,34 @@ function getNodesByFQN(elements, qualified_name) {
         }
 
         /*
+         * Allow dots in model names as namespace separators, eg:
+         *
+         *     FQN: ['snowplow', 'pageviews', 'namespace.snowplow_pageviews']
+         *     SELECTOR: ['snowplow', 'pageviews', 'namespace', 'snowplow_pageviews']
+         *
+         * Should match
+         */
+        var flat_fqn = fqn.flatMap(e => e.split('.'))
+        /*
          * Allow fqn selectors that omit the parent package name, eg:
          *
-         *     FQN: ['snowplow', 'page_views', 'snowplow_pageviews']
+         *     FQN: ['snowplow', 'pageviews', 'snowplow_pageviews']
          *     SELECTOR: ['pageviews', 'snowplow_pageviews']
          *
          * Should match
          */
-        var unscoped_fqn = _.rest(fqn);
-        if (isFQNMatch(fqn, selector_fqn)) {
+        var unscoped_flat_fqn = _.rest(flat_fqn);
+
+        console.log(`SELECTOR_FQN: ${selector_fqn} !!!`)
+        console.log(`FQN: ${fqn} !!!`)
+        console.log(`UNESCOPED_FQN: ${unscoped_flat_fqn} !!!`)
+
+        // if qualified_name matches exactly model name (fqn's leaf), this is a match
+        if (qualified_name === _.last(fqn)) {
             nodes.push(node);
-        } else if (isFQNMatch(unscoped_fqn, selector_fqn)) {
+        } else if (isFQNMatch(flat_fqn, selector_fqn)) {
+            nodes.push(node);
+        } else if (isFQNMatch(unscoped_flat_fqn, selector_fqn)) {
             nodes.push(node);
         }
     });
