@@ -29,7 +29,23 @@ NODE_MATCHERS[SELECTOR_TYPE.TEST_NAME] = getNodesByTestName;
 NODE_MATCHERS[SELECTOR_TYPE.TEST_TYPE] = getNodesByTestType;
 
 
-function isFQNMatch(node_flat_fqn, node_selector) {
+function isFQNMatch(node_fqn, qualified_name) {
+
+    // if qualified_name matches exactly model name (fqn's leaf), this is a match
+    if (qualified_name === _.last(node_fqn)) {
+        return true;
+    }
+
+    /*
+    * Flatten FQN to allow dots in model names as namespace separators, eg:
+    *
+    *     FQN: ['snowplow', 'pageviews', 'namespace.snowplow_pageviews']
+    *     SELECTOR: ['snowplow', 'pageviews', 'namespace', 'snowplow_pageviews']
+    *
+    * Should match
+    */
+    var node_flat_fqn = node_fqn.reduce((r, i) => r.concat(i.split('.')), [])
+    var node_selector = qualified_name.split(".");
 
     if (node_flat_fqn.length < node_selector.length) {
         return false;
@@ -53,7 +69,6 @@ function isFQNMatch(node_flat_fqn, node_selector) {
 function getNodesByFQN(elements, qualified_name) {
     var nodes = [];
 
-    var selector_fqn = qualified_name.split(".");
     _.each(elements, function(el) {
         var node = el.data;
         var fqn = node.fqn;
@@ -63,15 +78,6 @@ function getNodesByFQN(elements, qualified_name) {
         }
 
         /*
-         * Allow dots in model names as namespace separators, eg:
-         *
-         *     FQN: ['snowplow', 'pageviews', 'namespace.snowplow_pageviews']
-         *     SELECTOR: ['snowplow', 'pageviews', 'namespace', 'snowplow_pageviews']
-         *
-         * Should match
-         */
-        var flat_fqn = fqn.flatMap(e => e.split('.'))
-        /*
          * Allow fqn selectors that omit the parent package name, eg:
          *
          *     FQN: ['snowplow', 'pageviews', 'snowplow_pageviews']
@@ -79,14 +85,11 @@ function getNodesByFQN(elements, qualified_name) {
          *
          * Should match
          */
-        var unscoped_flat_fqn = _.rest(flat_fqn);
+        var unscoped_fqn = _.rest(fqn);
 
-        // if qualified_name matches exactly model name (fqn's leaf), this is a match
-        if (qualified_name === _.last(fqn)) {
+        if (isFQNMatch(fqn, qualified_name)) {
             nodes.push(node);
-        } else if (isFQNMatch(flat_fqn, selector_fqn)) {
-            nodes.push(node);
-        } else if (isFQNMatch(unscoped_flat_fqn, selector_fqn)) {
+        } else if (isFQNMatch(unscoped_fqn, qualified_name)) {
             nodes.push(node);
         }
     });
