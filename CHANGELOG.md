@@ -1,8 +1,10 @@
-## dbt 0.19.2 (Release TBD)
+## dbt 0.20.0 (Release TBD)
 - Reversed the rendering direction of relationship tests so that the test renders in the model it is defined in ([docs#181](https://github.com/fishtown-analytics/dbt-docs/issues/181), [docs#183](https://github.com/fishtown-analytics/dbt-docs/pull/183))
+- Support dots in model names: display them in the graphs ([docs#184](https://github.com/fishtown-analytics/dbt-docs/issues/184))
 
 Contributors:
 - [@mascah](https://github.com/mascah) ([docs#181](https://github.com/fishtown-analytics/dbt-docs/issues/181), [docs#183](https://github.com/fishtown-analytics/dbt-docs/pull/183))
+- [@monti-python](https://github.com/monti-python) ([docs#184](https://github.com/fishtown-analytics/dbt-docs/issues/184))
 
 ## dbt 0.19.0 (January 27, 2021)
 - Fixed issue where data tests with tags were not showing up in graph viz ([docs#147](https://github.com/fishtown-analytics/dbt-docs/issues/147), [docs#156](https://github.com/fishtown-analytics/dbt-docs/pull/156))
