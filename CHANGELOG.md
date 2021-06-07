@@ -5,6 +5,7 @@
 Contributors:
 - [@mascah](https://github.com/mascah) ([docs#181](https://github.com/fishtown-analytics/dbt-docs/issues/181), [docs#183](https://github.com/fishtown-analytics/dbt-docs/pull/183))
 - [@monti-python](https://github.com/monti-python) ([docs#184](https://github.com/fishtown-analytics/dbt-docs/issues/184))
+- [@stkbailey](https://github.com/stkbailey) ([docs#194](https://github.com/fishtown-analytics/dbt-docs/issues/194))
 
 ## dbt 0.19.0 (January 27, 2021)
 - Fixed issue where data tests with tags were not showing up in graph viz ([docs#147](https://github.com/fishtown-analytics/dbt-docs/issues/147), [docs#156](https://github.com/fishtown-analytics/dbt-docs/pull/156))
