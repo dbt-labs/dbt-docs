@@ -3,7 +3,6 @@
 Contributors:
 - [@stkbailey](https://github.com/stkbailey) ([docs#194](https://github.com/fishtown-analytics/dbt-docs/issues/194))
 
-
 ## dbt 0.20.0rc1 (June 4, 2021)
 - Reversed the rendering direction of relationship tests so that the test renders in the model it is defined in ([docs#181](https://github.com/fishtown-analytics/dbt-docs/issues/181), [docs#183](https://github.com/fishtown-analytics/dbt-docs/pull/183))
 - Support dots in model names: display them in the graphs ([docs#184](https://github.com/fishtown-analytics/dbt-docs/issues/184))
