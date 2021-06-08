@@ -1,5 +1,6 @@
 ## dbt 0.20.0 (Release TBD)
 
+
 Contributors:
 - [@stkbailey](https://github.com/stkbailey) ([docs#194](https://github.com/fishtown-analytics/dbt-docs/issues/194))
 
