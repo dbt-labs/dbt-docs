@@ -1,6 +1,6 @@
 # dbt docs
 
-[dbt](https://github.com/fishtown-analytics/dbt) (data build tool) helps analysts write reliable, modular code using a workflow that closely mirrors software development.
+[dbt](https://github.com/dbt-labs/dbt) (data build tool) helps analysts write reliable, modular code using a workflow that closely mirrors software development.
 
 This repository contains code for generating a [documentation site](https://www.getdbt.com/example-documentation/#!/overview) for dbt projects. Check out the [dbt documentation](https://docs.getdbt.com/docs/overview) for more information.
 
