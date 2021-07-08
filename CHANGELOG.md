@@ -1,8 +1,13 @@
 ## dbt 0.20.0 (Release TBD)
 
+- Update dbt logo and links ([docs#197](https://github.com/fishtown-analytics/dbt-docs/issues/197))
+
+## dbt 0.20.0rc1 (June 30, 2021)
+
+- Display `tags` on exposures ([docs#194](https://github.com/fishtown-analytics/dbt-docs/issues/194), [docs#195](https://github.com/fishtown-analytics/dbt-docs/issues/195))
 
 Contributors:
-- [@stkbailey](https://github.com/stkbailey) ([docs#194](https://github.com/fishtown-analytics/dbt-docs/issues/194))
+- [@stkbailey](https://github.com/stkbailey) ([docs#195](https://github.com/fishtown-analytics/dbt-docs/issues/195))
 
 ## dbt 0.20.0rc1 (June 4, 2021)
 - Reversed the rendering direction of relationship tests so that the test renders in the model it is defined in ([docs#181](https://github.com/fishtown-analytics/dbt-docs/issues/181), [docs#183](https://github.com/fishtown-analytics/dbt-docs/pull/183))
