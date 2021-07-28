@@ -198,7 +198,7 @@ angular
                 var test_column = test.column_name || test.test_metadata.kwargs.column_name || test.test_metadata.kwargs.arg;
                 if (depends_on.length && test_column) {
                     if (test.test_metadata.name == 'relationships') {
-                        var model = depends_on[1];
+                        var model = depends_on[depends_on.length - 1];
                     } else {
                         var model = depends_on[0]
                     }

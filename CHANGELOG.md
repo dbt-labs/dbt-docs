@@ -1,4 +1,8 @@
-## dbt 0.20.0 (Release TBD)
+## dbt 0.20.1rc1 (Release TBD)
+
+- Fix docs site crash if `relationships` test has one dependency instead of two ([docs#207](https://github.com/dbt-labs/dbt-docs/issues/207), ([docs#208](https://github.com/dbt-labs/dbt-docs/issues/208)))
+
+## dbt 0.20.0 (July 12, 2021
 
 - Update dbt logo and links ([docs#197](https://github.com/fishtown-analytics/dbt-docs/issues/197))
 
