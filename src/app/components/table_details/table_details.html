@@ -29,13 +29,29 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="detail-group" ng-if="hasData(extended)">
+                    <div class="detail-group">
                         <div class="detail-body">
-                            <dl class="detail"
-                                ng-repeat="item in extended"
-                                ng-if="item.include">
-                                <dt data-toggle="tooltip" title="{{ item.description }}" class="detail-label">{{ item.label }}</dt>
-                                <dd class="detail-value">{{ item.value }}</dd>
+                            <dl class="detail">
+                                <dt class="detail-label">Last run</dt>
+                                <dd class="detail-value">
+                                    <a target='_blank' href="https://cloud.getdbt.com/#/accounts/{{model.accountId}}/projects/{{model.projectId}}/runs/{{model.runId}}/">#{{model.runId}}</a>
+                                </dd>
+                            </dl>
+                            <dl class="detail">
+                                <dt class="detail-label">Total Tests</dt>
+                                <dd class="detail-value">{{ tests.all }}</dd>
+                            </dl>
+                            <dl class="detail">
+                                <dt class="detail-label">Test Passing</dt>
+                                <dd class="detail-value text-success">{{ tests.good }}</dd>
+                            </dl>
+                            <dl class="detail">
+                                <dt class="detail-label">Test Warnings</dt>
+                                <dd class="detail-value text-orange">{{ tests.warn }}</dd>
+                            </dl>
+                            <dl class="detail">
+                                <dt class="detail-label">Errors</dt>
+                                <dd class="detail-value text-danger">{{ tests.fail }}</dd>
                             </dl>
                         </div>
                     </div>

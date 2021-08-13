@@ -35,10 +35,8 @@
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'details'})">Details</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'columns'})">Columns</a></li>
                 <li ui-sref-active='active' ng-show = "referencesLength != 0"><a ui-sref="dbt.model({'#': 'referenced_by'})">Referenced By</a></li>
                 <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.model({'#': 'depends_on'})">Depends On</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'code'})">SQL</a></li>
             </ul>
         </div>
     </div>
@@ -62,14 +60,6 @@
                 </div>
             </section>
 
-            <section class="section">
-                <div class="section-target" id="columns"></div>
-                <div class="section-content">
-                    <h6>Columns</h6>
-                    <column-details model="model" />
-                </div>
-            </section>
-
             <section class="section" ng-show = "referencesLength != 0">
                 <div class="section-target" id="referenced_by"></div>
                 <div class="section-content">
@@ -83,13 +73,6 @@
                 <div class="section-content">
                     <h6>Depends On</h6>
                     <reference-list references="parents" node="model" />
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-target" id="code"></div>
-                <div class="section-content">
-                    <code-block versions="versions" default="default_version"></code-block>
                 </div>
             </section>
         </div>

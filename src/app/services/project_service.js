@@ -81,6 +81,50 @@ angular
 
         return merge(catalog, manifest)
     }
+    
+    function loadManifest() {
+        return $http({
+            method: 'POST',
+            url: 'https://metadata.cloud.getdbt.com/graphql',
+            headers: {
+              "Authorization":"Token ..."
+            },
+            data: {
+                "query": `{
+                  models(jobId: 940) {
+                    resourceType
+                    name
+                    database
+                    schema
+                    alias
+                    uniqueId
+                  }
+
+                  sources(jobId: 940) {
+                    database
+                    schema
+                    identifier
+                    resourceType
+                    uniqueId
+                    sourceName
+                    name
+                  }
+                }`
+            }
+        }).then(function(response) {
+            return response.data
+        }, function onError(e) {
+            console.error(e);
+            alert("dbt Docs was unable to load the "
+                  + label
+                  + " file at path: \n  "
+                  + path
+                  + "\n\nError: " + e.statusText + " (" + e.status + ")"
+                  + "\n\nThe dbt Docs site may not work as expected if this file cannot be found."
+                  + "Please try again, and contact support if this error persists.");
+        })
+
+    }
 
     function loadFile(label, path) {
         return $http({
@@ -104,133 +148,55 @@ angular
     }
 
     service.loadProject = function() {
-        var cache_bust = "?cb=" + (new Date()).getTime();
-        var promises = [
-            loadFile('manifest', TARGET_PATH + "manifest.json" + cache_bust),
-            loadFile('catalog', TARGET_PATH + "catalog.json" + cache_bust),
-        ]
-
-        $q.all(promises).then(function(files) {
-            _.each(files, function(file) {
-                if (file) {
-                    service.files[file.label] = file.data
-                } else {
-                    console.error("FILE FAILED TO LOAD!");
-                }
-            });
-
-            // Set node labels
-            _.each(service.files.manifest.nodes, function(node) {
+        var promise = loadManifest();
+        promise.then(function(resp) {
+            _.each(resp.data.models, function(node) {
                 node.label = node.name;
+                node.depends_on = [];
+
+                node.package_name = node.packageName;
+                node.resource_type = node.resourceType;
+                node.unique_id = node.uniqueId;
+                node.identifier = node.alias;
+                node.config = {};
             });
+
+            _.each(resp.data.sources, function(source) {
+                source.label = source.sourceName + '.' + source.name ;
+                source.resource_type = source.resourceType;
+                source.unique_id = source.uniqueId;
+                source.identifier = source.name;
+                source.config = {};
+                source.package_name = source.packageName;
+            });
+
+            var all_nodes = resp.data.models.concat(resp.data.sources);
+
+            var project = {
+                nodes: all_nodes,
+                sources: resp.data.sources,
+                parent_map: {}
+            }
+            // Set node labels
+            //service.files['manifest.json'] = file.data
+
 
             // Add sources back into nodes to make site logic work
-            _.each(service.files.manifest.sources, function(node) {
-                node.label = "" + node.source_name + "." + node.name;
-                service.files.manifest.nodes[node.unique_id] = node;
-            });
-
-            // Add exposures back into nodes to make site logic work
-            _.each(service.files.manifest.exposures, function(node) {
-                node.label = node.name;
-                service.files.manifest.nodes[node.unique_id] = node;
-            });
-
-            var adapter = service.files.manifest.metadata.adapter_type;
-            var macros = clean_project_macros(service.files.manifest.macros, adapter);
-            service.files.manifest.macros = macros;
-
-            var project = incorporate_catalog(service.files.manifest, service.files.catalog);
-
-
-            var models = project.nodes
-            var model_names = _.keyBy(models, 'name');
-
-            var tests = _.filter(project.nodes, {resource_type: 'test'})
-            _.each(tests, function(test) {
-
-                if (test.tags.indexOf('schema') == -1) {
-                    return;
-                }
-
-                var test_name;
-                if (test.test_metadata.namespace) {
-                    test_name = test.test_metadata.namespace + "." + test.test_metadata.name;
-                } else {
-                    test_name = test.test_metadata.name;
-                }
-
-                var test_info = {
-                    test_name: test_name
-                }
-                if (test.test_metadata.name == 'not_null') {
-                    test_info.short = 'N';
-                    test_info.label = 'Not Null';
-                } else if (test.test_metadata.name == 'unique') {
-                    test_info.short = 'U';
-                    test_info.label = 'Unique';
-                } else if (test.test_metadata.name == 'relationships') {
-                    var rel_model_name = test.refs[0];
-                    var rel_model = model_names[rel_model_name];
-                    if (rel_model && test.test_metadata.kwargs.field) {
-                        // FKs get extra fields
-                        test_info.fk_field = test.test_metadata.kwargs.field;
-                        test_info.fk_model = rel_model;
-                    }
-
-                    test_info.short = 'F';
-                    test_info.label = 'Foreign Key';
-                } else if (test.test_metadata.name == 'accepted_values') {
-                    if (Array.isArray(test.test_metadata.kwargs.values)) {
-                        var values = test.test_metadata.kwargs.values.join(", ")
-                    } else {
-                        var values = JSON.stringify(test.test_metadata.kwargs.values);
-                    }
-                    test_info.short = 'A';
-                    test_info.label = 'Accepted Values: ' + values;
-                } else {
-                    var kwargs = _.omit(test.test_metadata.kwargs, 'column_name');
-                    test_info.short = '+';
-                    test_info.label = test_name + '(' + JSON.stringify(kwargs) + ')';
-                }
-
-                var depends_on = test.depends_on.nodes;
-                var test_column = test.column_name || test.test_metadata.kwargs.column_name || test.test_metadata.kwargs.arg;
-                if (depends_on.length && test_column) {
-                    if (test.test_metadata.name == 'relationships') {
-                        var model = depends_on[depends_on.length - 1];
-                    } else {
-                        var model = depends_on[0]
-                    }
-                    var node = project.nodes[model];
-                    var column = _.find(node.columns, function(col, col_name) {
-                        return col_name.toLowerCase() == test_column.toLowerCase();
-                    });
-
-                    if (column) {
-                        column.tests = column.tests || [];
-                        column.tests.push(test_info);
-                    }
-                }
-            });
+            //_.each(service.files.manifest.sources, function(node) {
+            //    node.label = "" + node.source_name + "." + node.name;
+            //    service.files.manifest.nodes[node.unique_id] = node;
+            //});
 
             service.project = project;
 
-            // performance hack
-            var search_macros = _.filter(service.project.macros, function(macro) {
-                return !macro.is_adapter_macro_impl;
-            });
-
-            var search_nodes = _.filter(service.project.nodes, function(node) {
+            var search_nodes = _.filter(project.nodes, function(node) {
                 return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure'], node.resource_type);
             });
 
-            service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
-                // It should not be possible to search for hidden documentation
-                return !obj.docs || obj.docs.show;
-            });
+            service.project.searchable = search_nodes
             service.loaded.resolve();
-        });
+
+        })
     }
 
     service.ready = function(cb) {
@@ -323,25 +289,12 @@ angular
 
     service.getModelTree = function(select, cb) {
         service.loaded.promise.then(function() {
-            var macros = _.values(service.project.macros);
             var nodes = _.filter(service.project.nodes, function(node) {
-                // only grab custom data tests
-                if (node.resource_type == 'test' && !_.includes(node.tags, 'schema')) {
-                    return true;
-                }
-
                 var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure'];
                 return _.includes(accepted, node.resource_type);
             })
 
             service.tree.database = buildDatabaseTree(nodes, select);
-            service.tree.project = buildProjectTree(nodes, macros, select);
-
-            var sources = _.values(service.project.sources);
-            service.tree.sources = buildSourceTree(sources, select);
-
-            var exposures = _.values(service.project.exposures);
-            service.tree.exposures = buildReportTree(exposures, select);
 
             cb(service.tree);
         });
@@ -579,15 +532,13 @@ angular
             var show = _.get(node, ['docs', 'show'], true);
             if (!show) {
                 return false;
-            } else if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
+            } else {
                 return true;
-            } else if (node.resource_type == 'model') {
-                return node.config.materialized != 'ephemeral';
             }
         });
 
         var tree_nodes_sorted = _.sortBy(tree_nodes, function(node) {
-            return node.database + '.' + node.schema +  '.' + (node.identifier || node.alias || node.name);
+            return node.database + '.' + node.schema +  '.' + (node.alias || node.name);
         });
 
         var by_database = _.groupBy(tree_nodes_sorted, 'database');

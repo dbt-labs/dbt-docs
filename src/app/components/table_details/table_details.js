@@ -64,6 +64,11 @@ angular
                 return $filter('number')(input, decimals)
             }
 
+            function asTimeInterval(input, decimals) {
+                if (typeof decimals === 'undefined') decimals = 0;
+                return $filter('number')(input, decimals) + 's'
+            }
+
             function translateRelationType(type) {
                 if (type == 'BASE TABLE') {
                     return {type: 'table', name: 'table'}
@@ -72,48 +77,6 @@ angular
                 } else {
                     return {type: type.toLowerCase(), name: type.toLowerCase()}
                 }
-            }
-
-            function getBaseStats(model) {
-                var is_ephemeral = !model.metadata;
-                var metadata = model.metadata || {};
-
-                var database;
-                if (!model.database) { 
-                    database = '' 
-                } else {
-                    database = model.database + '.'
-                }
-
-                var relation;
-                if (is_ephemeral) {
-                    relation = undefined;
-                } else if (model.resource_type == 'source') {
-                    relation = database + model.schema + "." + model.identifier;
-                } else {
-                    relation = database + model.schema + "." + model.alias;
-                }
-
-                var stats = [
-                    {
-                        name: "Owner",
-                        value: metadata.owner
-                    },
-                    {
-                        name: "Type",
-                        value: is_ephemeral ? undefined : translateRelationType(metadata.type).name
-                    },
-                    {
-                        name: "Package",
-                        value: model.package_name
-                    },
-                    {
-                        name: "Relation",
-                        value: relation
-                    },
-                ]
-
-                return _.filter(stats, function(s) { return s.value !== undefined })
             }
 
             function getExtendedStats(stats) {
@@ -145,14 +108,46 @@ angular
             }
 
             scope.$watch("model", function(nv, ov) {
+                if (nv === undefined) {
+                    return
+                }
                 var get_type = _.property(['metadata', 'type'])
                 var rel_type = get_type(nv);
 
                 var sources_meta = nv.hasOwnProperty('sources') ? nv.sources[0] != undefined ? nv.sources[0].source_meta : null : null;
                 scope.meta = nv.meta || sources_meta;
-                
-                scope.details = getBaseStats(nv);
-                scope.extended = getExtendedStats(nv.stats);
+
+                var model = nv;
+                var relation;
+                if (model.resource_type == 'source') {
+                    relation = model.database + "." + model.schema + "." + model.identifier;
+                } else {
+                    relation = model.database + "." + model.schema + "." + model.alias;
+                }
+
+                var tests = model.tests || [];
+                var testGood = _.filter(tests, {state: 'pass'})
+                var testWarn = _.filter(tests, {state: 'warn'})
+                var testFail = _.filter(tests, {state: 'fail'})
+
+                scope.tests = {
+                    good: testGood.length,
+                    warn: testWarn.length,
+                    fail: testFail.length,
+                    all: tests.length,
+                }
+
+                scope.details = [
+                    { name: "Relation", value: relation },
+                    { name: "Last ran at", value: model.executeCompletedAt },
+                    { name: "Execution time", value: asTimeInterval(model.executionTime, 2) },
+                    { name: "Run Status", value: model.status },
+                ]
+
+                //{ name: "Passing tests", value: testGood.length },
+                //{ name: "Warning tests", value: testWarn.length },
+                //{ name: "Failing tests", value: testFail.length },
+
 
                 if (scope.extras) {
                     var extrasToAdd = _.filter(scope.extras, function(extra) {
@@ -161,7 +156,7 @@ angular
                     scope.details = scope.details.concat(extrasToAdd);
                 }
 
-                scope.show_extended = _.where(scope.extended, {include: true}).length > 0;
+                scope.show_extended = false;
             });
 
             scope.queryTag = function(tag) {
