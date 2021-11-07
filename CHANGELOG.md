@@ -1,10 +1,13 @@
-## dbt 0.20.1rc1 (Release TBD)
+## dbt-core 1.0.0rc1 (Release TBD)
 
-- Fix docs site crash if `relationships` test has one dependency instead of two ([docs#207](https://github.com/dbt-labs/dbt-docs/issues/207), ([docs#208](https://github.com/dbt-labs/dbt-docs/issues/208)))
 - Fix non-alphabetical sort of Source Tables in source overview page ([docs#81](https://github.com/dbt-labs/dbt-docs/issues/81))
 
 Contributors:
 - [@salmonsd](https://github.com/salmonsd) ([docs#81](https://github.com/dbt-labs/dbt-docs/issues/81))
+
+## dbt 0.20.1rc1 (August 02, 2021)
+
+- Fix docs site crash if `relationships` test has one dependency instead of two ([docs#207](https://github.com/dbt-labs/dbt-docs/issues/207), ([docs#208](https://github.com/dbt-labs/dbt-docs/issues/208)))
 
 ## dbt 0.20.0 (July 12, 2021
 
