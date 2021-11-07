@@ -80,7 +80,7 @@ const elements = [
         data: {
             id: 7,
             resource_type: 'test',
-            tags: ['data'],
+            tags: [],
             name: 'test_unique_page_views_id',
             original_file_path: 'tests/test_unique.yml',
             package_name: 'my_package',
@@ -446,9 +446,21 @@ test("Test getting nodes by test type", () => {
     )
 
     expect(
+        matchByTestType('singular')
+    ).toStrictEqual(
+        [7]
+    )
+
+    expect(
         matchByTestType('schema')
     ).toStrictEqual(
         []
+    )
+
+    expect(
+        matchByTestType('generic')
+    ).toStrictEqual(
+        [7]
     )
 
     expect(
