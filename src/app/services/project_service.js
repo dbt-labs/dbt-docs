@@ -149,7 +149,7 @@ angular
             var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
 
-                if !test.hasOwnProperty('test_metadata') {
+                if (!test.hasOwnProperty('test_metadata')) {
                     return;
                 }
 
@@ -326,7 +326,7 @@ angular
             var macros = _.values(service.project.macros);
             var nodes = _.filter(service.project.nodes, function(node) {
                 // only grab custom singular tests
-                if (node.resource_type == 'test' && !node.hasOwnProperty('test_metadata') {
+                if (node.resource_type == 'test' && !node.hasOwnProperty('test_metadata')) {
                     return true;
                 }
 
