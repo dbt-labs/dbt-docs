@@ -486,15 +486,26 @@ angular
     
     function buildMetricTree(nodes, select) {
         var metrics = {}
-        metrics.items = []
 
-        // stick all metrics in one big folder for now
         _.each(nodes, function(node) {
             var name = node.name;
 
+            var project = node.package_name;
+
             var is_active = node.unique_id == select;
 
-            metrics.items.push({
+            if (!metrics[project]) {
+                metrics[project] = {
+                    type: "folder",
+                    name: project,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                metrics[project].active = true;
+            }
+
+            metrics[project].items.push({
                 type: 'file',
                 name: name,
                 node: node,
@@ -504,8 +515,11 @@ angular
             })
         });
 
-        // sort all metrics)
-        metrics.items = _.sortBy(metrics.items, 'name');
+        var metrics = _.sortBy(_.values(metrics), 'name');
+
+        _.each(metrics, function(metric) {
+            metrics.items = _.sortBy(metrics.items, 'name');
+        });
 
         return metrics
     }
@@ -556,7 +570,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'exposure') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {

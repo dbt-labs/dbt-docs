@@ -125,7 +125,7 @@ angular
             },
         })
         .state('dbt.metric', {
-            url: 'exposure/:unique_id?section&' + graph_params,
+            url: 'metric/:unique_id?section&' + graph_params,
             controller: 'ReportCtrl',
             templateUrl: templates.metric,
             params: {
