@@ -330,8 +330,8 @@ angular
 
         _.each(_.filter(service.manifest.nodes, function(node) {
             var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure'], node.resource_type);
-            var is_data_test = node.resource_type == 'test' && _.includes(node.tags, 'data');
-            return is_graph_type || is_data_test;
+            var is_singular_test = node.resource_type == 'test' && !node.hasOwnProperty('test_metadata');
+            return is_graph_type || is_singular_test;
         }), function(node) {
             var node_obj = {
                 group: "nodes",
@@ -352,7 +352,7 @@ angular
 
                 if (!_.includes(['model', 'source', 'seed', 'snapshot'], parent_node.resource_type)) {
                     return;
-                } else if (child_node.resource_type == 'test' && _.includes(child_node.tags, 'schema')) {
+                } else if (child_node.resource_type == 'test' && child_node.hasOwnProperty('test_metadata')) {
                     return;
                 }
 

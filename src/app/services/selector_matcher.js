@@ -1,4 +1,3 @@
-
 const _ = require('underscore');
 const selectorGraph = require('./selector_graph');
 
@@ -186,9 +185,11 @@ function getNodesByTestType(elements, test_type) {
 
         if (node.resource_type != 'test') {
             return false;
-        } else if (_.includes(node.tags, 'schema') && test_type == 'schema') {
+        // generic tests have `test_metadata`, singular tests do not
+        // for backwards compatibility, keep supporting old test_type names
+        } else if (node.hasOwnProperty('test_metadata') && ['schema', 'generic'].indexOf(test_type) > -1) {
             nodes.push(node);
-        } else if (_.includes(node.tags, 'data') && test_type == 'data') {
+        } else if (!node.hasOwnProperty('test_metadata') && ['data', 'singular'].indexOf(test_type) > -1) {
             nodes.push(node);
         }
     });

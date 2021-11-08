@@ -149,7 +149,7 @@ angular
             var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
 
-                if (test.tags.indexOf('schema') == -1) {
+                if (!test.hasOwnProperty('test_metadata')) {
                     return;
                 }
 
@@ -325,8 +325,8 @@ angular
         service.loaded.promise.then(function() {
             var macros = _.values(service.project.macros);
             var nodes = _.filter(service.project.nodes, function(node) {
-                // only grab custom data tests
-                if (node.resource_type == 'test' && !_.includes(node.tags, 'schema')) {
+                // only grab custom singular tests
+                if (node.resource_type == 'test' && !node.hasOwnProperty('test_metadata')) {
                     return true;
                 }
 

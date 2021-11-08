@@ -1,9 +1,12 @@
 ## dbt-core 1.0.0rc1 (Release TBD)
 
-- Fix non-alphabetical sort of Source Tables in source overview page ([docs#81](https://github.com/dbt-labs/dbt-docs/issues/81))
+- Fix non-alphabetical sort of Source Tables in source overview page ([docs#81](https://github.com/dbt-labs/dbt-docs/issues/81), [docs#218](https://github.com/dbt-labs/dbt-docs/pull/218))
+- Add title tag to node elements in tree ([docs#202](https://github.com/dbt-labs/dbt-docs/issues/202), [docs#203](https://github.com/dbt-labs/dbt-docs/pull/203))
+- Account for test rename: `schema` &rarr; `generic`, `data` &rarr;` singular`. Use `test_metadata` instead of `schema`/`data` tags to differentiate ([docs#216](https://github.com/dbt-labs/dbt-docs/issues/216), [docs#222](https://github.com/dbt-labs/dbt-docs/pull/222))
 
 Contributors:
-- [@salmonsd](https://github.com/salmonsd) ([docs#81](https://github.com/dbt-labs/dbt-docs/issues/81))
+- [@salmonsd](https://github.com/salmonsd) ([docs#218](https://github.com/dbt-labs/dbt-docs/pull/218))
+- [@miike](https://github.com/miike) ([docs#203](https://github.com/dbt-labs/dbt-docs/pull/203))
 
 ## dbt 0.20.1rc1 (August 02, 2021)
 
