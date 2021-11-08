@@ -21,6 +21,8 @@ angular
                 return 'source:' + node.source_name + "." + node.name;
             } else if (node && node.resource_type == 'exposure') {
                 return 'exposure:' + node.name;
+            } else if (node && node.resource_type == 'metric') {
+                return 'metric:' + node.name;
             } else if (node.name)  {
                 return node.name;
             } else {

@@ -186,6 +186,12 @@ angular
                     }
                 },
                 {
+                    selector: 'node[resource_type="metric"]',
+                    style: {
+                        'background-color': '#ff5688',
+                    }
+                },
+                {
                     selector: 'node[selected=1]',
                     style: {
                         'background-color': '#bd6bb6',
@@ -329,7 +335,7 @@ angular
 
 
         _.each(_.filter(service.manifest.nodes, function(node) {
-            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure'], node.resource_type);
+            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure', 'metric'], node.resource_type);
             var is_singular_test = node.resource_type == 'test' && !node.hasOwnProperty('test_metadata');
             return is_graph_type || is_singular_test;
         }), function(node) {

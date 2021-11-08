@@ -58,6 +58,17 @@
                     </ul>
                     <br />
                 </div>
+                
+                <div ng-show="tree.metrics.length > 0">
+                    <strong>Metrics</strong>
+                    <ul style="display: block">
+                        <model-tree-line
+                            item="item"
+                            resource-type="metric"
+                            ng-repeat="item in tree.metrics"></model-tree-line>
+                    </ul>
+                    <br />
+                </div>
 
                 <strong>Projects</strong>
                 <ul>

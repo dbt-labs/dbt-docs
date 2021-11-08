@@ -135,6 +135,12 @@ angular
                 node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
+            
+            // Add metrics back into nodes to make site logic work
+            _.each(service.files.manifest.metrics, function(node) {
+                node.label = node.name;
+                service.files.manifest.nodes[node.unique_id] = node;
+            });
 
             var adapter = service.files.manifest.metadata.adapter_type;
             var macros = clean_project_macros(service.files.manifest.macros, adapter);
@@ -222,7 +228,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -330,7 +336,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -341,7 +347,10 @@ angular
             service.tree.sources = buildSourceTree(sources, select);
 
             var exposures = _.values(service.project.exposures);
-            service.tree.exposures = buildReportTree(exposures, select);
+            service.tree.exposures = buildExposureTree(exposures, select);
+            
+            var metrics = _.values(service.project.metrics);
+            service.tree.metrics = buildMetricTree(metrics, select);
 
             cb(service.tree);
         });
@@ -371,6 +380,7 @@ angular
         service.updateSelectedInTree(select, service.tree.database);
         service.updateSelectedInTree(select, service.tree.sources);
         service.updateSelectedInTree(select, service.tree.exposures);
+        service.updateSelectedInTree(select, service.tree.metrics);
 
         return service.tree;
     }
@@ -431,7 +441,7 @@ angular
         return sources
     }
 
-    function buildReportTree(nodes, select) {
+    function buildExposureTree(nodes, select) {
         var exposures = {}
 
         _.each(nodes, function(node) {
@@ -472,6 +482,46 @@ angular
         });
 
         return exposures
+    }
+    
+    function buildMetricTree(nodes, select) {
+        var metrics = {}
+
+        _.each(nodes, function(node) {
+            var name = node.name;
+
+            var project = node.package_name;
+
+            var is_active = node.unique_id == select;
+
+            if (!metrics[project]) {
+                metrics[project] = {
+                    type: "folder",
+                    name: project,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                metrics[project].active = true;
+            }
+
+            metrics[project].items.push({
+                type: 'file',
+                name: name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'metric'
+            })
+        });
+
+        var metrics = _.sortBy(_.values(metrics), 'name');
+
+        _.each(metrics, function(metric) {
+            metrics.items = _.sortBy(metrics.items, 'name');
+        });
+
+        return metrics
     }
 
     function consolidateAdapterMacros(macros, adapter) {
@@ -520,7 +570,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'exposure') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {

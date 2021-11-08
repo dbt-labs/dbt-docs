@@ -3,6 +3,7 @@
 - Fix non-alphabetical sort of Source Tables in source overview page ([docs#81](https://github.com/dbt-labs/dbt-docs/issues/81), [docs#218](https://github.com/dbt-labs/dbt-docs/pull/218))
 - Add title tag to node elements in tree ([docs#202](https://github.com/dbt-labs/dbt-docs/issues/202), [docs#203](https://github.com/dbt-labs/dbt-docs/pull/203))
 - Account for test rename: `schema` &rarr; `generic`, `data` &rarr;` singular`. Use `test_metadata` instead of `schema`/`data` tags to differentiate ([docs#216](https://github.com/dbt-labs/dbt-docs/issues/216), [docs#222](https://github.com/dbt-labs/dbt-docs/pull/222))
+- Add metrics ([core#216](https://github.com/dbt-labs/dbt-core/issues/4235), [docs#223](https://github.com/dbt-labs/dbt-docs/pull/223))
 
 Contributors:
 - [@salmonsd](https://github.com/salmonsd) ([docs#218](https://github.com/dbt-labs/dbt-docs/pull/218))
