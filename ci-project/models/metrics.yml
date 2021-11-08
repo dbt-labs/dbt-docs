@@ -1,0 +1,20 @@
+version: 2
+
+metrics:
+
+  - name: count_orders
+    model: ref('fct_orders')
+    label: "Number of orders"
+    type: count
+    sql: "*"
+    timestamp: order_date
+    time_grains: [day, week, month, year]
+
+  - name: cohorted_lifetime_value
+    model: ref('dim_customers')
+    description: Customer lifetime value, cohorted by first order date
+    label: "Number of orders"
+    type: sum
+    sql: customer_lifetime_value
+    timestamp: first_order
+    time_grains: [week, month, year]

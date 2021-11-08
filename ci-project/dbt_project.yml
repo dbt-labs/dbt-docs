@@ -3,10 +3,10 @@ name: 'jaffle_shop'
 version: '0.1'
 config-version: 2
 profile: 'jaffle_shop'
-source-paths: ["models"]
+model-paths: ["models"]
 analysis-paths: ["analysis"]
 test-paths: ["tests"]
-data-paths: ["data"]
+seed-paths: ["data"]
 macro-paths: ["macros"]
 
 target-path: "target"
@@ -14,9 +14,6 @@ clean-targets:
     - "target"
     - "dbt_modules"
     - "logs"
-
-seeds:
-  +quote_columns: false
 
 models:
   jaffle_shop:
