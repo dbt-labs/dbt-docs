@@ -486,6 +486,7 @@ angular
     
     function buildMetricTree(nodes, select) {
         var metrics = {}
+        metrics.items = []
 
         // stick all metrics in one big folder for now
         _.each(nodes, function(node) {

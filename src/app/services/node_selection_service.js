@@ -92,7 +92,7 @@ angular
         if (node.resource_type == 'source') {
             pre += "source:"
             node_name = node.source_name + "." + node.name;
-        } else if (node.resource_type in ('exposure', 'metric') {
+        } else if (['exposure', 'metric'].indexOf(node.resource_type) > -1) {
             pre += node.resource_type + ":"
             node_name = node.name;
         } else {
