@@ -43,6 +43,8 @@ angular
                       return 'Macros';
                 } else if (type == 'exposure') {
                       return 'Exposures';
+                } else if (type == 'metric') {
+                      return 'Metrics';
                 } else {
                     return 'Nodes';
                 }

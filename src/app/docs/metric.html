@@ -1,0 +1,71 @@
+<style>
+/* TODO */
+.section-target {
+    top: -8em;
+}
+
+.noflex {
+    flex: 0 0 160px !important;
+}
+
+.highlight {
+    color: #24292e;
+    background-color: white;
+}
+
+</style>
+
+<div class='app-scroll'>
+    <div class="app-links app-sticky">
+        <div class="app-title">
+            <div class="app-frame app-pad app-flush-bottom">
+
+                <h1>
+                    <span class="break">{{ metric.name }}</span>
+                    <small>metric</small>
+
+                    <div class='clearfix'></div>
+                </h1>
+
+            </div>
+        </div>
+        <div class="app-frame app-pad-h">
+            <ul class="nav nav-tabs">
+                <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'details'})">Details</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.metric({'#': 'depends_on'})">Depends On</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="app-details">
+        <div class="app-frame app-pad">
+
+            <section class="section">
+                <div class="section-target" id="details"></div>
+                <table-details model="metric" extras="extra_table_fields" />
+            </section>
+
+            <section class="section">
+                <div class="section-target" id="description"></div>
+                <div class="section-content">
+                    <h6>Description</h6>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div ng-if="metric.description" class="model-markdown" marked="metric.description"></div>
+                            <div ng-if="!metric.description">This {{ metric.resource_type }} is not currently documented</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" ng-show = "parentsLength != 0">
+                <div class="section-target" id="depends_on"></div>
+                <div class="section-content">
+                    <h6>Depends On</h6>
+                    <reference-list references="parents" node="metric" />
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>

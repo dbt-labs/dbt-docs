@@ -8,6 +8,7 @@ var SELECTOR_TYPE = {
     TAG: 'tag',
     SOURCE: 'source',
     EXPOSURE: 'exposure',
+    METRIC: 'metric',
     PATH: 'path',
     PACKAGE: 'package',
     CONFIG: 'config',
@@ -21,6 +22,7 @@ NODE_MATCHERS[SELECTOR_TYPE.FQN] = getNodesByFQN;
 NODE_MATCHERS[SELECTOR_TYPE.TAG] = getNodesByTag;
 NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
 NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
+NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.PACKAGE] = getNodesByPackage;
 NODE_MATCHERS[SELECTOR_TYPE.CONFIG] = getNodesByConfig;
@@ -72,7 +74,12 @@ function getNodesByFQN(elements, qualified_name) {
         var node = el.data;
         var fqn = node.fqn;
 
-        if (!fqn || node.resource_type == 'source' || node.resource_type == 'exposure') {
+        if (
+          !fqn || 
+          node.resource_type == 'source' || 
+          node.resource_type == 'exposure' || 
+          node.resource_type == 'metric'
+        ) {
             return;
         }
 
@@ -245,6 +252,27 @@ function getNodesByExposure(elements, exposure) {
         if (selected_exposure_name == '*') {
             nodes.push(node_obj.data);
         } else if (selected_exposure_name == exposure_name) {
+            nodes.push(node_obj.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesByMetric(elements, metric) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'metric') {
+            return;
+        }
+
+        var metric_name = node.name;
+        var selected_metric_name = metric;
+
+        if (selected_metric_name == '*') {
+            nodes.push(node_obj.data);
+        } else if (selected_metric_name == metric_name) {
             nodes.push(node_obj.data);
         }
     })

@@ -20,6 +20,7 @@ angular
             'test',
             'analysis',
             'exposure',
+            'metric',
         ],
         depth: 1,
     };
@@ -35,7 +36,7 @@ angular
         options: {
             packages: [],
             tags: [null],
-            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure'],
+            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric'],
         }
     };
 
@@ -57,6 +58,8 @@ angular
             include_selection = '+source:' + node.source_name + "." + node.name + '+';
         } else if (node && node.resource_type == 'exposure') {
             include_selection = '+exposure:' + node.name;
+        } else if (node && node.resource_type == 'metric') {
+            include_selection = '+metric:' + node.name;
         } else if (node && _.includes(['analysis', 'test'], node.resource_type)) {
             include_selection = '+' + node.name;
         } else {
@@ -89,8 +92,8 @@ angular
         if (node.resource_type == 'source') {
             pre += "source:"
             node_name = node.source_name + "." + node.name;
-        } else if (node.resource_type == 'exposure') {
-            pre += "exposure:"
+        } else if (node.resource_type in ('exposure', 'metric') {
+            pre += node.resource_type + ":"
             node_name = node.name;
         } else {
             node_name = node.name;

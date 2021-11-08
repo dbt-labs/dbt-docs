@@ -88,6 +88,7 @@ angular
         $scope.tree.project = tree.project;
         $scope.tree.sources = tree.sources;
         $scope.tree.exposures = tree.exposures;
+        $scope.tree.metrics = tree.metrics;
 
         setTimeout(function() {
             scrollToSelectedModel($scope.model_uid);
