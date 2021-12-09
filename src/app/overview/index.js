@@ -3,8 +3,10 @@
 const angular = require('angular');
 const _ = require('lodash');
 
+import ngSanitize from "angular-sanitize";
+
 angular
-.module('dbt')
+.module('dbt', ['ngSanitize'])
 .controller('OverviewCtrl', ['$scope', '$state', 'project',
     function($scope, $state, projectService) {
         $scope.overview_md = '(loading)'
