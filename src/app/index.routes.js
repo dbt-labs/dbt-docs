@@ -126,7 +126,7 @@ angular
         })
         .state('dbt.metric', {
             url: 'metric/:unique_id?section&' + graph_params,
-            controller: 'ReportCtrl',
+            controller: 'MetricCtrl',
             templateUrl: templates.metric,
             params: {
                 unique_id: {type: 'string'}

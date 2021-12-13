@@ -6,5 +6,5 @@ require('./snapshot');
 require('./test');
 require('./macro');
 require('./analysis');
-require('./metric');
 require('./exposure');
+require('./metric');
