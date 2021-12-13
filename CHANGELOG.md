@@ -1,4 +1,8 @@
-## dbt-core 1.0.0rc1 (Release TBD)
+## dbt-core 1.0.1 (TBD)
+
+- Fix bug with missing exposure details. ([docs#228](https://github.com/dbt-labs/dbt-docs/pull/228))
+
+## dbt-core 1.0.0rc1 (November 10, 2021)
 
 - Fix non-alphabetical sort of Source Tables in source overview page ([docs#81](https://github.com/dbt-labs/dbt-docs/issues/81), [docs#218](https://github.com/dbt-labs/dbt-docs/pull/218))
 - Add title tag to node elements in tree ([docs#202](https://github.com/dbt-labs/dbt-docs/issues/202), [docs#203](https://github.com/dbt-labs/dbt-docs/pull/203))
