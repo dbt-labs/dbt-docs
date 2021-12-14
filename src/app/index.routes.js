@@ -118,7 +118,7 @@ angular
         })
         .state('dbt.exposure', {
             url: 'exposure/:unique_id?section&' + graph_params,
-            controller: 'ReportCtrl',
+            controller: 'ExposureCtrl',
             templateUrl: templates.exposure,
             params: {
                 unique_id: {type: 'string'}
