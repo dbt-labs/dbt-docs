@@ -224,7 +224,7 @@ angular
         var all_tags = [null];
         _.each(project.nodes, function(node) {
             var tags = node.tags;
-            all_tags = _.union(all_tags, tags);
+            all_tags = _.union(all_tags, tags).sort();
         });
 
         selectorService.init({packages: packages, tags: all_tags})
