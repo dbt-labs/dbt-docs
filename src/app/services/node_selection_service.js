@@ -36,7 +36,7 @@ angular
         options: {
             packages: [],
             tags: [null],
-            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric'],
+            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric'].sort(),
         }
     };
 
