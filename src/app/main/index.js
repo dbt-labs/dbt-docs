@@ -220,7 +220,7 @@ angular
         // set initial search results
         $scope.search.results = projectService.search('');
 
-        var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name'))
+        var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name')).sort()
         var all_tags = [null];
         _.each(project.nodes, function(node) {
             var tags = node.tags;
