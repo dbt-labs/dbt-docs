@@ -20,8 +20,7 @@ angular
             'test',
             'analysis',
             'exposure',
-            'metric',
-            'operation'
+            'metric'
         ],
         depth: 1,
     };
@@ -37,7 +36,7 @@ angular
         options: {
             packages: [],
             tags: [null],
-            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric', 'operation'],
+            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric'],
         }
     };
 

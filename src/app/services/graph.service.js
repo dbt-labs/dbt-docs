@@ -335,6 +335,7 @@ angular
 
 
         _.each(_.filter(service.manifest.nodes, function(node) {
+            // operation needs to be a graph type so that the parent/child mpa can be resolved even though we won't be displaying it
             var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure', 'metric', 'operation'], node.resource_type);
             var is_singular_test = node.resource_type == 'test' && !node.hasOwnProperty('test_metadata');
             return is_graph_type || is_singular_test;
