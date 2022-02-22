@@ -336,7 +336,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric', 'operation'];
                 return _.includes(accepted, node.resource_type);
             })
 
