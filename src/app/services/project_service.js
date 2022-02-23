@@ -264,8 +264,13 @@ angular
                 objects.push({key: i, value: val});
             } else if (search_keys[i] === 'object') {
                 for (var column_name in obj[i]) {
-                    if (obj[i][column_name]["name"].toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                        objects.push({key: i, value: val});
+                    // there a spark bug where columns are missign from the catalog.  That needs to be fixed
+                    // outside of docs but this if != null check will allow docs to continue to function now
+                    // and also when the bug is fixed.
+                    if (obj[i][column_name]["name"] != null) {
+                        if (obj[i][column_name]["name"].toLowerCase().indexOf(val.toLowerCase()) != -1) {
+                            objects.push({key: i, value: val});
+                        }
                     }
                 }
             } else if (search_keys[i] === 'array') {

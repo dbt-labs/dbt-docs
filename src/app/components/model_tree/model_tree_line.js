@@ -25,6 +25,13 @@ angular
             // start = everything up to end
 
             var name = scope.item.name;
+
+            // name *should* always exists but there is a bug where some items don't make it into the catalog.
+            // This allows docs to continue to work while the bug gets fixed outside dbt-docs.  Once the bug 
+            // is fixed, we will just never fall into this if.
+            if (!name) {
+                return
+            }
             var end_chars = 15;
             var end = _.last(name, end_chars).join('');
             var start = _.initial(name, end.length).join('');

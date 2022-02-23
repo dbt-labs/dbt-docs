@@ -1,4 +1,8 @@
-## dbt-core 1.0.1 (TBD)
+## dbt-core 1.0.4 (TBD)
+
+- Patch spark specific bug to allow docs to continue working. ([#236](https://github.com/dbt-labs/dbt-docs/issues/236), [#247](https://github.com/dbt-labs/dbt-docs/pull/247))
+
+## dbt-core 1.0.1 (January 03, 2022)
 
 - Fix bug with missing exposure details. ([docs#228](https://github.com/dbt-labs/dbt-docs/pull/228))
 
