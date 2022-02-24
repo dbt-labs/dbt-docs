@@ -168,12 +168,18 @@ angular
                     let query = ($scope.search.query).toLowerCase();
                     if(criteria === "columns"){
                         _.each(body, function(column){
-                            let columnName = column.name.toLowerCase();
-                            let index = 0;
-                            while(index != -1){
-                                index = columnName.indexOf(query, index);
-                                if (index != -1) {
-                                    count++; index++;
+                            // there a spark bug where columns are missign from the catalog.  That
+                            // needs to be fixed outside of docs but this if != null check will
+                            // allow docs to continue to function now and also when the bug is
+                            // fixed.
+                            if (column.name) {
+                                let columnName = column.name.toLowerCase();
+                                let index = 0;
+                                while(index != -1){
+                                    index = columnName.indexOf(query, index);
+                                    if (index != -1) {
+                                        count++; index++;
+                                    }
                                 }
                             }
                         });
