@@ -1,6 +1,7 @@
 ## dbt-core 1.0.4 (TBD)
 
 - Patch spark specific bug to allow docs to continue working. ([#236](https://github.com/dbt-labs/dbt-docs/issues/236), [#247](https://github.com/dbt-labs/dbt-docs/pull/247))
+- Add operations to nodes so the parents/child map can be resolved. ([#229](https://github.com/dbt-labs/dbt-docs/issues/229), [#248](https://github.com/dbt-labs/dbt-docs/pull/248))
 
 ## dbt-core 1.0.1 (January 03, 2022)
 

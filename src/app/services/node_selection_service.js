@@ -20,7 +20,7 @@ angular
             'test',
             'analysis',
             'exposure',
-            'metric',
+            'metric'
         ],
         depth: 1,
     };
