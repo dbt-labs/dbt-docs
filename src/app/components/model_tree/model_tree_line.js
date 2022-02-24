@@ -29,7 +29,7 @@ angular
             // name *should* always exists but there is a bug where some items don't make it into the catalog.
             // This allows docs to continue to work while the bug gets fixed outside dbt-docs.  Once the bug 
             // is fixed, we will just never fall into this if.
-            // relevant bug issue: https://github.com/dbt-labs/dbt-spark/issues/295
+            // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
             if (!name) {
                 return
             }

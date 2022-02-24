@@ -172,6 +172,7 @@ angular
                             // needs to be fixed outside of docs but this if != null check will
                             // allow docs to continue to function now and also when the bug is
                             // fixed.
+                            // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
                             if (column.name) {
                                 let columnName = column.name.toLowerCase();
                                 let index = 0;
