@@ -1,4 +1,8 @@
-## dbt-core 1.0.1 (TBD)
+## dbt-core 1.0.4 (TBD)
+
+- Add operations to nodes so the parents/child map can be resolved. ([#229](https://github.com/dbt-labs/dbt-docs/issues/229), [#248](https://github.com/dbt-labs/dbt-docs/pull/248))
+
+## dbt-core 1.0.1 (January 03, 2022)
 
 - Fix bug with missing exposure details. ([docs#228](https://github.com/dbt-labs/dbt-docs/pull/228))
 
