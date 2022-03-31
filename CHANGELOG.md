@@ -1,4 +1,4 @@
-## dbt-core 1.0.5 (TBD)
+## dbt-core 1.1.0 (TBD)
 - Fixed capitalization in UI for exposures of `type: ml` ([#256](https://github.com/dbt-labs/dbt-docs/issues/256))
 
 ## dbt-core 1.0.4 (March 18th, 2022)
