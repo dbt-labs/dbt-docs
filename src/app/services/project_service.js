@@ -5,6 +5,16 @@ const _ = require('lodash');
 
 import merge from 'deepmerge';
 
+function capitalizeType(type) {
+    var staticCapitalizations = {
+        'ml': "ML",
+    }
+    if (staticCapitalizations.hasOwnProperty(type)) {
+        return staticCapitalizations[type];
+    }
+    return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
 angular
 .module('dbt')
 .factory('project', ['$q', '$http', function($q, $http) {
@@ -454,7 +464,7 @@ angular
             var name = node.name;
 
             var type = node.type || 'Uncategorized';
-            type = type[0].toUpperCase() + type.slice(1);
+            type = capitalizeType(type);
 
             var is_active = node.unique_id == select;
 
