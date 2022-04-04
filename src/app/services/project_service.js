@@ -5,6 +5,16 @@ const _ = require('lodash');
 
 import merge from 'deepmerge';
 
+function capitalizeType(type) {
+    var staticCapitalizations = {
+        'ml': "ML",
+    }
+    if (staticCapitalizations.hasOwnProperty(type)) {
+        return staticCapitalizations[type];
+    }
+    return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
 angular
 .module('dbt')
 .factory('project', ['$q', '$http', function($q, $http) {
@@ -264,8 +274,14 @@ angular
                 objects.push({key: i, value: val});
             } else if (search_keys[i] === 'object') {
                 for (var column_name in obj[i]) {
-                    if (obj[i][column_name]["name"].toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                        objects.push({key: i, value: val});
+                    // there a spark bug where columns are missign from the catalog.  That needs to be fixed
+                    // outside of docs but this if != null check will allow docs to continue to function now
+                    // and also when the bug is fixed.
+                    // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
+                    if (obj[i][column_name]["name"] != null) {
+                        if (obj[i][column_name]["name"].toLowerCase().indexOf(val.toLowerCase()) != -1) {
+                            objects.push({key: i, value: val});
+                        }
                     }
                 }
             } else if (search_keys[i] === 'array') {
@@ -448,7 +464,7 @@ angular
             var name = node.name;
 
             var type = node.type || 'Uncategorized';
-            type = type[0].toUpperCase() + type.slice(1);
+            type = capitalizeType(type);
 
             var is_active = node.unique_id == select;
 

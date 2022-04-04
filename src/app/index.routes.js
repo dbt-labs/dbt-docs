@@ -18,6 +18,7 @@ const templates = {
     macro: require('./docs/macro.html'),
     exposure: require('./docs/exposure.html'),
     metric: require('./docs/metric.html'),
+    operation: require('./docs/operation.html'),
 }
 
 angular
@@ -128,6 +129,14 @@ angular
             url: 'metric/:unique_id?section&' + graph_params,
             controller: 'MetricCtrl',
             templateUrl: templates.metric,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.operation', {
+            url: 'operation/:unique_id?section&' + graph_params,
+            controller: 'OperationCtrl',
+            templateUrl: templates.operation,
             params: {
                 unique_id: {type: 'string'}
             },

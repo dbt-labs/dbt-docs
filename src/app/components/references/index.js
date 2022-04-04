@@ -45,6 +45,8 @@ angular
                       return 'Exposures';
                 } else if (type == 'metric') {
                       return 'Metrics';
+                } else if (type == 'operation') {
+                        return 'Operations';
                 } else {
                     return 'Nodes';
                 }

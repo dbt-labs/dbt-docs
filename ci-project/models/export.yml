@@ -28,3 +28,16 @@ exposures:
     owner:
       name: Data Team
       email: data@example.com
+
+  - name: company_projections
+    type: ml
+    maturity: low
+    description: >
+      A model that predicts the future revenue of a company.
+    
+    depends_on:
+      - ref('fct_orders')
+
+    owner:
+      name: Data Science Team
+      email: data_science@example.com

@@ -1,4 +1,12 @@
-## dbt-core 1.0.1 (TBD)
+## dbt-core 1.1.0 (TBD)
+- Fixed capitalization in UI for exposures of `type: ml` ([#256](https://github.com/dbt-labs/dbt-docs/issues/256))
+
+## dbt-core 1.0.4 (March 18th, 2022)
+
+- Patch spark specific bug to allow docs to continue working. ([#236](https://github.com/dbt-labs/dbt-docs/issues/236), [#247](https://github.com/dbt-labs/dbt-docs/pull/247))
+- Add operations to nodes so the parents/child map can be resolved. ([#229](https://github.com/dbt-labs/dbt-docs/issues/229), [#248](https://github.com/dbt-labs/dbt-docs/pull/248))
+
+## dbt-core 1.0.1 (January 03, 2022)
 
 - Fix bug with missing exposure details. ([docs#228](https://github.com/dbt-labs/dbt-docs/pull/228))
 - List packages and tags in alphabetical order ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))

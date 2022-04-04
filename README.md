@@ -1,8 +1,8 @@
 # dbt docs
 
-[dbt](https://github.com/dbt-labs/dbt) (data build tool) helps analysts write reliable, modular code using a workflow that closely mirrors software development.
+[dbt](https://github.com/dbt-labs/dbt-core) helps analysts write reliable, modular code using a workflow that closely mirrors software development.
 
-This repository contains code for generating a [documentation site](https://www.getdbt.com/example-documentation/#!/overview) for dbt projects. Check out the [dbt documentation](https://docs.getdbt.com/docs/overview) for more information.
+This repository contains code for generating a documentation site for dbt projects. Check out the [dbt documentation](https://docs.getdbt.com/docs/overview) for more information.
 
 ---
 ### Getting Started
@@ -18,11 +18,14 @@ This repository contains code for generating a [documentation site](https://www.
 Everyone interacting in the dbt project's codebases, issue trackers, chat rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
-[slack-url]: https://slack.getdbt.com/
+[slack-url]: https://www.getdbt.com/community/
 [Installation]: https://docs.getdbt.com/docs/installation
 [What is dbt]: https://docs.getdbt.com/docs/overview
 [dbt viewpoint]: https://docs.getdbt.com/docs/viewpoint
 
+### Showing dbt docs
+
+In your dbt project, run `dbt docs generate` then `dbt docs serve`. 
 
 ### Development
 
