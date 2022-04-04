@@ -1,6 +1,10 @@
 ## dbt-core 1.0.1 (TBD)
 
 - Fix bug with missing exposure details. ([docs#228](https://github.com/dbt-labs/dbt-docs/pull/228))
+- List packages and tags in alphabetical order ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
+
+Contributors:
+- [@pgoslatara](https://github.com/pgoslatara) ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
 
 ## dbt-core 1.0.0rc1 (November 10, 2021)
 
