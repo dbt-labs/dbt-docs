@@ -39,7 +39,7 @@
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "svg-url-loader": "^2.3.2",
-    "underscore": "^1.9.0",
+    "underscore": "^1.12.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.1.11",
