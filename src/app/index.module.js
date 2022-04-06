@@ -25,7 +25,7 @@ angular
 config(['markedProvider', '$locationProvider',
        function(markedProvider, $locationProvider) {
 
-    markedProvider.setOptions({gfm: true});
+    markedProvider.setOptions({gfm: true, sanitize: true});
     markedProvider.setRenderer({
         table: function(header, body) {
             return "<table class='table'><thead>" + header + "</thead><tbody>"+ body + "</tbody></table>"

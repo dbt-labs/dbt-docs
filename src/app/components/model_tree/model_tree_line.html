@@ -18,7 +18,8 @@
        class='unselectable'
        ng-class="getClass(item)"
        ng-click="activate(item)"
-       data-nav-unique-id="{{ item.unique_id }}">
+       data-nav-unique-id="{{ item.unique_id }}"
+       title="{{ name.name }}">
         <span class="filename">
             <span class="filename-normal">
                 <svg class="icn menu-icon-on"><use xlink:href="{{ getIcon(item.type, 'on') }}"></use></svg>

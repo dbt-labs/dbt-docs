@@ -87,6 +87,7 @@ angular
         $scope.tree.project = tree.project;
         $scope.tree.sources = tree.sources;
         $scope.tree.exposures = tree.exposures;
+        $scope.tree.metrics = tree.metrics;
 
         setTimeout(function() {
             scrollToSelectedModel($scope.model_uid);
@@ -166,12 +167,19 @@ angular
                     let query = ($scope.search.query).toLowerCase();
                     if(criteria === "columns"){
                         _.each(body, function(column){
-                            let columnName = column.name.toLowerCase();
-                            let index = 0;
-                            while(index != -1){
-                                index = columnName.indexOf(query, index);
-                                if (index != -1) {
-                                    count++; index++;
+                            // there a spark bug where columns are missign from the catalog.  That
+                            // needs to be fixed outside of docs but this if != null check will
+                            // allow docs to continue to function now and also when the bug is
+                            // fixed.
+                            // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
+                            if (column.name) {
+                                let columnName = column.name.toLowerCase();
+                                let index = 0;
+                                while(index != -1){
+                                    index = columnName.indexOf(query, index);
+                                    if (index != -1) {
+                                        count++; index++;
+                                    }
                                 }
                             }
                         });
@@ -218,13 +226,11 @@ angular
         // set initial search results
         $scope.search.results = projectService.search('');
 
-        var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name'))
+        var packages = _.unique(_.pluck(_.values(project.nodes), 'package_name')).sort()
         var all_tags = [null];
         _.each(project.nodes, function(node) {
-            if (node.resource_type != 'test') {
-                var tags = node.tags;
-                all_tags = _.union(all_tags, tags);
-            };
+            var tags = node.tags;
+            all_tags = _.union(all_tags, tags).sort();
         });
 
         selectorService.init({packages: packages, tags: all_tags})

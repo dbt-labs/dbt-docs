@@ -49,6 +49,11 @@ models:
           - relationships:
               to: ref('dim_customers')
               field: customer_id
+          # intentionally bad: this test will only have one entry in depends_on.nodes.
+          # make sure it doesn't brick the entire dbt-docs site: https://github.com/dbt-labs/dbt-docs/issues/207
+          - relationships:
+              to: "{{ target.schema}}.dim_customers"
+              field: customer_id
 
       - name: order_date
         description: Date (UTC) that the order was placed

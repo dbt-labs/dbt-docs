@@ -2,7 +2,7 @@
   "scripts": {
     "test": "jest src/app/services",
     "watch": "jest --watch src/app/services",
-    "start": "webpack-dev-server --disable-host-check"
+    "start": "npx webpack-dev-server --disable-host-check"
   },
   "devDependencies": {
     "angular": "^1.7.9",
@@ -21,7 +21,7 @@
     "cytoscape-context-menus": "3.0.5",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-expand-collapse": "^3.1.1",
-    "dagre": "^0.7.4",
+    "dagre": "^0.8.5",
     "deepmerge": "^2.1.1",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
@@ -31,7 +31,7 @@
     "html5-boilerplate": "^5.3.0",
     "inline-source": "^6.1.5",
     "jest": "^26.2.2",
-    "jquery": "~3.4.0",
+    "jquery": "^3.5.1",
     "md5": "^2.2.1",
     "ngtemplate-loader": "^2.0.1",
     "node-sass": "^4.9.2",
@@ -39,14 +39,13 @@
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "svg-url-loader": "^2.3.2",
-    "uglifyjs-webpack-plugin": "^1.2.7",
     "underscore": "^1.9.0",
-    "webpack": "^4.15.1",
-    "webpack-cli": "^3.0.8",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.1.11",
     "webpack-inline-svg-plugin": "^1.1.4"
   },
   "dependencies": {
-    "prismjs": "^1.20.0"
+    "prismjs": "^1.27.0"
   }
 }

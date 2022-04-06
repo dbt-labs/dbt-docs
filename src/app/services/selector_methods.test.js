@@ -161,6 +161,21 @@ test("Test parsing specs (explicit exposure)", () => {
     });
 })
 
+test("Test parsing specs (explicit metric)", () => {
+    expect(
+        selectors.parseSpec('+metric:a')
+    ).toStrictEqual({
+        select_at: false,
+        select_children: false,
+        select_parents: true,
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'metric',
+        selector_value: 'a',
+        raw: '+metric:a',
+    });
+})
+
 test("Test parsing specs (scoped fqn)", () => {
     expect(
         selectors.parseSpec('a.b.c+')

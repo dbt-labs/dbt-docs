@@ -1,1 +1,382 @@
-{"nodes": {"model.jaffle_shop.customer_orders": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "customer_orders", "comment": null, "owner": "drew"}, "columns": {"customer_id": {"type": "integer", "comment": null, "index": 1, "name": "customer_id"}, "first_order": {"type": "date", "comment": null, "index": 2, "name": "first_order"}, "most_recent_order": {"type": "date", "comment": null, "index": 3, "name": "most_recent_order"}, "number_of_orders": {"type": "bigint", "comment": null, "index": 4, "name": "number_of_orders"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.customer_orders"}, "model.jaffle_shop.customer_payments": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "customer_payments", "comment": null, "owner": "drew"}, "columns": {"customer_id": {"type": "integer", "comment": null, "index": 1, "name": "customer_id"}, "total_amount": {"type": "bigint", "comment": null, "index": 2, "name": "total_amount"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.customer_payments"}, "model.jaffle_shop.dim_customers": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "dim_customers", "comment": null, "owner": "drew"}, "columns": {"customer_id": {"type": "integer", "comment": null, "index": 1, "name": "customer_id"}, "first_order": {"type": "date", "comment": null, "index": 2, "name": "first_order"}, "most_recent_order": {"type": "date", "comment": null, "index": 3, "name": "most_recent_order"}, "number_of_orders": {"type": "bigint", "comment": null, "index": 4, "name": "number_of_orders"}, "customer_lifetime_value": {"type": "bigint", "comment": null, "index": 5, "name": "customer_lifetime_value"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.dim_customers"}, "model.jaffle_shop.fct_orders": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "fct_orders", "comment": null, "owner": "drew"}, "columns": {"order_id": {"type": "integer", "comment": null, "index": 1, "name": "order_id"}, "customer_id": {"type": "integer", "comment": null, "index": 2, "name": "customer_id"}, "order_date": {"type": "date", "comment": null, "index": 3, "name": "order_date"}, "status": {"type": "text", "comment": null, "index": 4, "name": "status"}, "credit_card_amount": {"type": "bigint", "comment": null, "index": 5, "name": "credit_card_amount"}, "coupon_amount": {"type": "bigint", "comment": null, "index": 6, "name": "coupon_amount"}, "bank_transfer_amount": {"type": "bigint", "comment": null, "index": 7, "name": "bank_transfer_amount"}, "gift_card_amount": {"type": "bigint", "comment": null, "index": 8, "name": "gift_card_amount"}, "amount": {"type": "bigint", "comment": null, "index": 9, "name": "amount"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.fct_orders"}, "model.jaffle_shop.hidden_model": {"metadata": {"type": "VIEW", "database": "analytics", "schema": "test_schema", "name": "hidden_model", "comment": null, "owner": "drew"}, "columns": {"order_id": {"type": "integer", "comment": null, "index": 1, "name": "order_id"}, "customer_id": {"type": "integer", "comment": null, "index": 2, "name": "customer_id"}, "order_date": {"type": "date", "comment": null, "index": 3, "name": "order_date"}, "status": {"type": "text", "comment": null, "index": 4, "name": "status"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.hidden_model"}, "model.jaffle_shop.order_payments": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "order_payments", "comment": null, "owner": "drew"}, "columns": {"order_id": {"type": "integer", "comment": null, "index": 1, "name": "order_id"}, "credit_card_amount": {"type": "bigint", "comment": null, "index": 2, "name": "credit_card_amount"}, "coupon_amount": {"type": "bigint", "comment": null, "index": 3, "name": "coupon_amount"}, "bank_transfer_amount": {"type": "bigint", "comment": null, "index": 4, "name": "bank_transfer_amount"}, "gift_card_amount": {"type": "bigint", "comment": null, "index": 5, "name": "gift_card_amount"}, "total_amount": {"type": "bigint", "comment": null, "index": 6, "name": "total_amount"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.order_payments"}, "seed.jaffle_shop.raw_customers": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "raw_customers", "comment": null, "owner": "drew"}, "columns": {"id": {"type": "integer", "comment": null, "index": 1, "name": "id"}, "first_name": {"type": "text", "comment": null, "index": 2, "name": "first_name"}, "last_name": {"type": "text", "comment": null, "index": 3, "name": "last_name"}, "email": {"type": "text", "comment": null, "index": 4, "name": "email"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "seed.jaffle_shop.raw_customers"}, "seed.jaffle_shop.raw_orders": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "raw_orders", "comment": null, "owner": "drew"}, "columns": {"id": {"type": "integer", "comment": null, "index": 1, "name": "id"}, "user_id": {"type": "integer", "comment": null, "index": 2, "name": "user_id"}, "order_date": {"type": "date", "comment": null, "index": 3, "name": "order_date"}, "status": {"type": "text", "comment": null, "index": 4, "name": "status"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "seed.jaffle_shop.raw_orders"}, "source.jaffle_shop.payments.orders": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "raw_orders", "comment": null, "owner": "drew"}, "columns": {"id": {"type": "integer", "comment": null, "index": 1, "name": "id"}, "user_id": {"type": "integer", "comment": null, "index": 2, "name": "user_id"}, "order_date": {"type": "date", "comment": null, "index": 3, "name": "order_date"}, "status": {"type": "text", "comment": null, "index": 4, "name": "status"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "source.jaffle_shop.payments.orders"}, "seed.jaffle_shop.raw_payments": {"metadata": {"type": "BASE TABLE", "database": "analytics", "schema": "test_schema", "name": "raw_payments", "comment": null, "owner": "drew"}, "columns": {"id": {"type": "integer", "comment": null, "index": 1, "name": "id"}, "order_id": {"type": "integer", "comment": null, "index": 2, "name": "order_id"}, "payment_method": {"type": "text", "comment": null, "index": 3, "name": "payment_method"}, "amount": {"type": "integer", "comment": null, "index": 4, "name": "amount"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "seed.jaffle_shop.raw_payments"}, "model.jaffle_shop.stg_customers": {"metadata": {"type": "VIEW", "database": "analytics", "schema": "test_schema", "name": "stg_customers", "comment": null, "owner": "drew"}, "columns": {"customer_id": {"type": "integer", "comment": null, "index": 1, "name": "customer_id"}, "first_name": {"type": "text", "comment": null, "index": 2, "name": "first_name"}, "last_name": {"type": "text", "comment": null, "index": 3, "name": "last_name"}, "email": {"type": "text", "comment": null, "index": 4, "name": "email"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.stg_customers"}, "model.jaffle_shop.stg_orders": {"metadata": {"type": "VIEW", "database": "analytics", "schema": "test_schema", "name": "stg_orders", "comment": null, "owner": "drew"}, "columns": {"order_id": {"type": "integer", "comment": null, "index": 1, "name": "order_id"}, "customer_id": {"type": "integer", "comment": null, "index": 2, "name": "customer_id"}, "order_date": {"type": "date", "comment": null, "index": 3, "name": "order_date"}, "status": {"type": "text", "comment": null, "index": 4, "name": "status"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.stg_orders"}, "model.jaffle_shop.stg_payments": {"metadata": {"type": "VIEW", "database": "analytics", "schema": "test_schema", "name": "stg_payments", "comment": null, "owner": "drew"}, "columns": {"payment_id": {"type": "integer", "comment": null, "index": 1, "name": "payment_id"}, "order_id": {"type": "integer", "comment": null, "index": 2, "name": "order_id"}, "payment_method": {"type": "text", "comment": null, "index": 3, "name": "payment_method"}, "amount": {"type": "integer", "comment": null, "index": 4, "name": "amount"}}, "stats": {"has_stats": {"id": "has_stats", "label": "Has Stats?", "value": false, "description": "Indicates whether there are statistics for this table", "include": false}}, "unique_id": "model.jaffle_shop.stg_payments"}}, "generated_at": "2020-03-04T16:18:41.992259Z", "errors": null}
+{
+    "errors": null,
+    "metadata": {
+        "dbt_schema_version": "https://schemas.getdbt.com/dbt/catalog/v1.json",
+        "dbt_version": "1.0.4",
+        "env": {},
+        "generated_at": "2022-03-30T04:26:49.167825Z",
+        "invocation_id": "04d0afaa-1481-4110-82da-e1ddf3a17ad7"
+    },
+    "nodes": {
+        "model.jaffle_shop.stg_customers": {
+            "columns": {
+                "customer_id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "customer_id",
+                    "type": "integer"
+                },
+                "email": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "email",
+                    "type": "text"
+                },
+                "first_name": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "first_name",
+                    "type": "text"
+                },
+                "last_name": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "last_name",
+                    "type": "text"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "stg_customers",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "VIEW"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "model.jaffle_shop.stg_customers"
+        },
+        "model.jaffle_shop.stg_orders": {
+            "columns": {
+                "customer_id": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "customer_id",
+                    "type": "integer"
+                },
+                "order_date": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "order_date",
+                    "type": "date"
+                },
+                "order_id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "order_id",
+                    "type": "integer"
+                },
+                "status": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "status",
+                    "type": "text"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "stg_orders",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "VIEW"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "model.jaffle_shop.stg_orders"
+        },
+        "model.jaffle_shop.stg_payments": {
+            "columns": {
+                "amount": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "amount",
+                    "type": "integer"
+                },
+                "order_id": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "order_id",
+                    "type": "integer"
+                },
+                "payment_id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "payment_id",
+                    "type": "integer"
+                },
+                "payment_method": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "payment_method",
+                    "type": "text"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "stg_payments",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "VIEW"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "model.jaffle_shop.stg_payments"
+        },
+        "seed.jaffle_shop.raw_customers": {
+            "columns": {
+                "email": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "email",
+                    "type": "text"
+                },
+                "first_name": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "first_name",
+                    "type": "text"
+                },
+                "id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "id",
+                    "type": "integer"
+                },
+                "last_name": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "last_name",
+                    "type": "text"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "raw_customers",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "BASE TABLE"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "seed.jaffle_shop.raw_customers"
+        },
+        "seed.jaffle_shop.raw_orders": {
+            "columns": {
+                "id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "id",
+                    "type": "integer"
+                },
+                "order_date": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "order_date",
+                    "type": "date"
+                },
+                "status": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "status",
+                    "type": "text"
+                },
+                "user_id": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "user_id",
+                    "type": "integer"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "raw_orders",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "BASE TABLE"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "seed.jaffle_shop.raw_orders"
+        },
+        "seed.jaffle_shop.raw_payments": {
+            "columns": {
+                "amount": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "amount",
+                    "type": "integer"
+                },
+                "id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "id",
+                    "type": "integer"
+                },
+                "order_id": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "order_id",
+                    "type": "integer"
+                },
+                "payment_method": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "payment_method",
+                    "type": "text"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "raw_payments",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "BASE TABLE"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "seed.jaffle_shop.raw_payments"
+        }
+    },
+    "sources": {
+        "source.jaffle_shop.payments.orders": {
+            "columns": {
+                "id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "id",
+                    "type": "integer"
+                },
+                "order_date": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "order_date",
+                    "type": "date"
+                },
+                "status": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "status",
+                    "type": "text"
+                },
+                "user_id": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "user_id",
+                    "type": "integer"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "raw_orders",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "BASE TABLE"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "source.jaffle_shop.payments.orders"
+        },
+        "source.jaffle_shop.payments.tagged_source": {
+            "columns": {
+                "email": {
+                    "comment": null,
+                    "index": 4,
+                    "name": "email",
+                    "type": "text"
+                },
+                "first_name": {
+                    "comment": null,
+                    "index": 2,
+                    "name": "first_name",
+                    "type": "text"
+                },
+                "id": {
+                    "comment": null,
+                    "index": 1,
+                    "name": "id",
+                    "type": "integer"
+                },
+                "last_name": {
+                    "comment": null,
+                    "index": 3,
+                    "name": "last_name",
+                    "type": "text"
+                }
+            },
+            "metadata": {
+                "comment": null,
+                "database": "jaffle_shop",
+                "name": "raw_customers",
+                "owner": "postgres",
+                "schema": "dbt_alice",
+                "type": "BASE TABLE"
+            },
+            "stats": {
+                "has_stats": {
+                    "description": "Indicates whether there are statistics for this table",
+                    "id": "has_stats",
+                    "include": false,
+                    "label": "Has Stats?",
+                    "value": false
+                }
+            },
+            "unique_id": "source.jaffle_shop.payments.tagged_source"
+        }
+    }
+}

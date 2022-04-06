@@ -1,4 +1,3 @@
-
 const _ = require('underscore');
 const selectorGraph = require('./selector_graph');
 
@@ -9,6 +8,7 @@ var SELECTOR_TYPE = {
     TAG: 'tag',
     SOURCE: 'source',
     EXPOSURE: 'exposure',
+    METRIC: 'metric',
     PATH: 'path',
     PACKAGE: 'package',
     CONFIG: 'config',
@@ -22,6 +22,7 @@ NODE_MATCHERS[SELECTOR_TYPE.FQN] = getNodesByFQN;
 NODE_MATCHERS[SELECTOR_TYPE.TAG] = getNodesByTag;
 NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
 NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
+NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.PACKAGE] = getNodesByPackage;
 NODE_MATCHERS[SELECTOR_TYPE.CONFIG] = getNodesByConfig;
@@ -29,20 +30,35 @@ NODE_MATCHERS[SELECTOR_TYPE.TEST_NAME] = getNodesByTestName;
 NODE_MATCHERS[SELECTOR_TYPE.TEST_TYPE] = getNodesByTestType;
 
 
-function isFQNMatch(node_fqn, node_selector) {
+function isFQNMatch(node_fqn, qualified_name) {
+
+    // if qualified_name matches exactly model name (fqn's leaf), this is a match
+    if (qualified_name === _.last(node_fqn)) {
+        return true;
+    }
+
+    /*
+    * Flatten FQN to allow dots in model names as namespace separators, eg:
+    *
+    *     FQN: ['snowplow', 'pageviews', 'namespace.snowplow_pageviews']
+    *     SELECTOR: ['snowplow', 'pageviews', 'namespace', 'snowplow_pageviews']
+    *
+    * Should match
+    */
+    var node_flat_fqn = node_fqn.reduce((r, i) => r.concat(i.split('.')), [])
+    var node_selector = qualified_name.split(".");
+
+    if (node_flat_fqn.length < node_selector.length) {
+        return false;
+    }
+
     for (var i=0; i<node_selector.length; i++) {
 
         var selector_part = node_selector[i];
-        var is_last = (i == (node_selector.length - 1));
 
-        var ret;
         if (selector_part == SELECTOR_GLOB) {
             return true;
-        } else if (is_last && selector_part == _.last(node_fqn)) {
-            return true;
-        } else if (node_fqn.length <= i) {
-            return false;
-        } else if (node_fqn[i] == selector_part) {
+        } else if (node_flat_fqn[i] == selector_part) {
             // pass
         } else {
             return false;
@@ -54,27 +70,32 @@ function isFQNMatch(node_fqn, node_selector) {
 function getNodesByFQN(elements, qualified_name) {
     var nodes = [];
 
-    var selector_fqn = qualified_name.split(".");
     _.each(elements, function(el) {
         var node = el.data;
         var fqn = node.fqn;
 
-        if (!fqn || node.resource_type == 'source' || node.resource_type == 'exposure') {
+        if (
+          !fqn || 
+          node.resource_type == 'source' || 
+          node.resource_type == 'exposure' || 
+          node.resource_type == 'metric'
+        ) {
             return;
         }
 
         /*
          * Allow fqn selectors that omit the parent package name, eg:
          *
-         *     FQN: ['snowplow', 'page_views', 'snowplow_pageviews']
+         *     FQN: ['snowplow', 'pageviews', 'snowplow_pageviews']
          *     SELECTOR: ['pageviews', 'snowplow_pageviews']
          *
          * Should match
          */
         var unscoped_fqn = _.rest(fqn);
-        if (isFQNMatch(fqn, selector_fqn)) {
+
+        if (isFQNMatch(fqn, qualified_name)) {
             nodes.push(node);
-        } else if (isFQNMatch(unscoped_fqn, selector_fqn)) {
+        } else if (isFQNMatch(unscoped_fqn, qualified_name)) {
             nodes.push(node);
         }
     });
@@ -171,9 +192,11 @@ function getNodesByTestType(elements, test_type) {
 
         if (node.resource_type != 'test') {
             return false;
-        } else if (_.includes(node.tags, 'schema') && test_type == 'schema') {
+        // generic tests have `test_metadata`, singular tests do not
+        // for backwards compatibility, keep supporting old test_type names
+        } else if (node.hasOwnProperty('test_metadata') && ['schema', 'generic'].indexOf(test_type) > -1) {
             nodes.push(node);
-        } else if (_.includes(node.tags, 'data') && test_type == 'data') {
+        } else if (!node.hasOwnProperty('test_metadata') && ['data', 'singular'].indexOf(test_type) > -1) {
             nodes.push(node);
         }
     });
@@ -229,6 +252,27 @@ function getNodesByExposure(elements, exposure) {
         if (selected_exposure_name == '*') {
             nodes.push(node_obj.data);
         } else if (selected_exposure_name == exposure_name) {
+            nodes.push(node_obj.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesByMetric(elements, metric) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'metric') {
+            return;
+        }
+
+        var metric_name = node.name;
+        var selected_metric_name = metric;
+
+        if (selected_metric_name == '*') {
+            nodes.push(node_obj.data);
+        } else if (selected_metric_name == metric_name) {
             nodes.push(node_obj.data);
         }
     })

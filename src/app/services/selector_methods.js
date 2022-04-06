@@ -190,12 +190,7 @@ function selectNodes(dag, pristine, selected_spec) {
 
         var matched_package = _.includes(selected_spec.packages, node.data.package_name);
         var matched_tags = _.intersection(selected_spec.tags, node.data.tags).length > 0;
-        // TODO : This is a special case for data tests :/
-        if (node.data.resource_type == 'test') {
-            var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 1);
-        } else {
-            var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 0);
-        }
+        var matched_untagged = _.includes(selected_spec.tags, null) && (node.data.tags.length == 0);
         var matched_types = _.includes(selected_spec.resource_types, node.data.resource_type);
 
         if (!matched_package || (!matched_tags && !matched_untagged) || !matched_types) {

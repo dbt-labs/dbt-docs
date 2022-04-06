@@ -17,6 +17,8 @@ const templates = {
     analysis: require('./docs/analysis.html'),
     macro: require('./docs/macro.html'),
     exposure: require('./docs/exposure.html'),
+    metric: require('./docs/metric.html'),
+    operation: require('./docs/operation.html'),
 }
 
 angular
@@ -117,8 +119,24 @@ angular
         })
         .state('dbt.exposure', {
             url: 'exposure/:unique_id?section&' + graph_params,
-            controller: 'ReportCtrl',
+            controller: 'ExposureCtrl',
             templateUrl: templates.exposure,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.metric', {
+            url: 'metric/:unique_id?section&' + graph_params,
+            controller: 'MetricCtrl',
+            templateUrl: templates.metric,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.operation', {
+            url: 'operation/:unique_id?section&' + graph_params,
+            controller: 'OperationCtrl',
+            templateUrl: templates.operation,
             params: {
                 unique_id: {type: 'string'}
             },

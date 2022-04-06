@@ -5,6 +5,16 @@ const _ = require('lodash');
 
 import merge from 'deepmerge';
 
+function capitalizeType(type) {
+    var staticCapitalizations = {
+        'ml': "ML",
+    }
+    if (staticCapitalizations.hasOwnProperty(type)) {
+        return staticCapitalizations[type];
+    }
+    return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
 angular
 .module('dbt')
 .factory('project', ['$q', '$http', function($q, $http) {
@@ -21,7 +31,6 @@ angular
         files: {
             manifest: {},
             catalog: {},
-            run_results: {},
         },
         loaded: $q.defer(),
     }
@@ -83,29 +92,6 @@ angular
         return merge(catalog, manifest)
     }
 
-    function incorporate_run_results(project, run_results) {
-        if (!run_results) {
-            return project;
-        }
-
-        _.each(run_results.results, function(result) {
-            var node = result.node;
-
-            if (!node) {
-                return
-            }
-
-            var unique_id = node.unique_id;
-            var injected_sql = node.injected_sql;
-
-            if (project.nodes[unique_id]) {
-                project.nodes[unique_id].injected_sql = node.injected_sql;
-            }
-        });
-
-        return project
-    }
-
     function loadFile(label, path) {
         return $http({
             method: 'GET',
@@ -132,7 +118,6 @@ angular
         var promises = [
             loadFile('manifest', TARGET_PATH + "manifest.json" + cache_bust),
             loadFile('catalog', TARGET_PATH + "catalog.json" + cache_bust),
-            loadFile('run_results', TARGET_PATH + "run_results.json" + cache_bust),
         ]
 
         $q.all(promises).then(function(files) {
@@ -160,22 +145,27 @@ angular
                 node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
+            
+            // Add metrics back into nodes to make site logic work
+            _.each(service.files.manifest.metrics, function(node) {
+                node.label = node.name;
+                service.files.manifest.nodes[node.unique_id] = node;
+            });
 
             var adapter = service.files.manifest.metadata.adapter_type;
             var macros = clean_project_macros(service.files.manifest.macros, adapter);
             service.files.manifest.macros = macros;
 
             var project = incorporate_catalog(service.files.manifest, service.files.catalog);
-            var compiled_project = incorporate_run_results(project, service.files.run_results);
 
 
-            var models = compiled_project.nodes
+            var models = project.nodes
             var model_names = _.keyBy(models, 'name');
 
-            var tests = _.filter(compiled_project.nodes, {resource_type: 'test'})
+            var tests = _.filter(project.nodes, {resource_type: 'test'})
             _.each(tests, function(test) {
 
-                if (test.tags.indexOf('schema') == -1) {
+                if (!test.hasOwnProperty('test_metadata')) {
                     return;
                 }
 
@@ -196,7 +186,7 @@ angular
                     test_info.short = 'U';
                     test_info.label = 'Unique';
                 } else if (test.test_metadata.name == 'relationships') {
-                    var rel_model_name = test.refs[1];
+                    var rel_model_name = test.refs[0];
                     var rel_model = model_names[rel_model_name];
                     if (rel_model && test.test_metadata.kwargs.field) {
                         // FKs get extra fields
@@ -223,7 +213,11 @@ angular
                 var depends_on = test.depends_on.nodes;
                 var test_column = test.column_name || test.test_metadata.kwargs.column_name || test.test_metadata.kwargs.arg;
                 if (depends_on.length && test_column) {
-                    var model = depends_on[0];
+                    if (test.test_metadata.name == 'relationships') {
+                        var model = depends_on[depends_on.length - 1];
+                    } else {
+                        var model = depends_on[0]
+                    }
                     var node = project.nodes[model];
                     var column = _.find(node.columns, function(col, col_name) {
                         return col_name.toLowerCase() == test_column.toLowerCase();
@@ -236,7 +230,7 @@ angular
                 }
             });
 
-            service.project = compiled_project;
+            service.project = project;
 
             // performance hack
             var search_macros = _.filter(service.project.macros, function(macro) {
@@ -244,7 +238,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -273,7 +267,7 @@ angular
         };
         
         let query_segments = query.toLowerCase().split(" ").filter(s => s.length > 0);
-
+      
         for (var i in search_keys) {
             if (!obj[i]) {
                continue;
@@ -281,8 +275,14 @@ angular
                 objects.push({key: i, value: query});
             } else if (search_keys[i] === 'object') {
                 for (var column_name in obj[i]) {
-                    if (query_segments.every(segment => obj[i][column_name]["name"].toLowerCase().indexOf(segment) != -1)) {
-                        objects.push({key: i, value: query});
+                    // there a spark bug where columns are missign from the catalog.  That needs to be fixed
+                    // outside of docs but this if != null check will allow docs to continue to function now
+                    // and also when the bug is fixed.
+                    // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
+                    if (obj[i][column_name]["name"] != null) {
+                        if (query_segments.every(segment => obj[i][column_name]["name"].toLowerCase().indexOf(segment) != -1)) {
+                            objects.push({key: i, value: query});
+                        }
                     }
                 }
             } else if (search_keys[i] === 'array') {
@@ -348,12 +348,12 @@ angular
         service.loaded.promise.then(function() {
             var macros = _.values(service.project.macros);
             var nodes = _.filter(service.project.nodes, function(node) {
-                // only grab custom data tests
-                if (node.resource_type == 'test' && !_.includes(node.tags, 'schema')) {
+                // only grab custom singular tests
+                if (node.resource_type == 'test' && !node.hasOwnProperty('test_metadata')) {
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -364,7 +364,10 @@ angular
             service.tree.sources = buildSourceTree(sources, select);
 
             var exposures = _.values(service.project.exposures);
-            service.tree.exposures = buildReportTree(exposures, select);
+            service.tree.exposures = buildExposureTree(exposures, select);
+            
+            var metrics = _.values(service.project.metrics);
+            service.tree.metrics = buildMetricTree(metrics, select);
 
             cb(service.tree);
         });
@@ -394,6 +397,7 @@ angular
         service.updateSelectedInTree(select, service.tree.database);
         service.updateSelectedInTree(select, service.tree.sources);
         service.updateSelectedInTree(select, service.tree.exposures);
+        service.updateSelectedInTree(select, service.tree.metrics);
 
         return service.tree;
     }
@@ -454,14 +458,14 @@ angular
         return sources
     }
 
-    function buildReportTree(nodes, select) {
+    function buildExposureTree(nodes, select) {
         var exposures = {}
 
         _.each(nodes, function(node) {
             var name = node.name;
 
             var type = node.type || 'Uncategorized';
-            type = type[0].toUpperCase() + type.slice(1);
+            type = capitalizeType(type);
 
             var is_active = node.unique_id == select;
 
@@ -495,6 +499,46 @@ angular
         });
 
         return exposures
+    }
+    
+    function buildMetricTree(nodes, select) {
+        var metrics = {}
+
+        _.each(nodes, function(node) {
+            var name = node.name;
+
+            var project = node.package_name;
+
+            var is_active = node.unique_id == select;
+
+            if (!metrics[project]) {
+                metrics[project] = {
+                    type: "folder",
+                    name: project,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                metrics[project].active = true;
+            }
+
+            metrics[project].items.push({
+                type: 'file',
+                name: name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'metric'
+            })
+        });
+
+        var metrics = _.sortBy(_.values(metrics), 'name');
+
+        _.each(metrics, function(metric) {
+            metrics.items = _.sortBy(metrics.items, 'name');
+        });
+
+        return metrics
     }
 
     function consolidateAdapterMacros(macros, adapter) {
@@ -543,7 +587,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'exposure') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {
@@ -600,7 +644,7 @@ angular
         var databases = {};
         var tree_nodes = _.filter(nodes, function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (!show) { 
+            if (!show) {
                 return false;
             } else if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
                 return true;
