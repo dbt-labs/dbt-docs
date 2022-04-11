@@ -5,6 +5,7 @@
 
 Contributors:
 - [@pgoslatara](https://github.com/pgoslatara) ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
+- [@halvorlu](https://github.com/halvorlu) ([docs#263](https://github.com/dbt-labs/dbt-docs/pull/263))
 
 ## dbt-core 1.0.4 (March 18th, 2022)
 
