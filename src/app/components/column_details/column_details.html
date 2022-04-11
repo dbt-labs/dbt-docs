@@ -32,7 +32,7 @@
                             <span class='text-dark'>{{ column.type }}</p>
                         </td>
                         <td style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap; max-width: 1px;">
-                            <span ng-show="!column.expanded">{{ column.description }}</span>
+                            <span ng-show="!column.expanded">{{ getMergedDescription(column) }}</span>
                         </td>
                         <td>
                             <span class="text-light" ng-show="!column.expanded">
@@ -71,9 +71,9 @@
                                     </div>
                                 </div>
 
-                                <div style="margin-bottom: 15px" ng-if="column.description.length">
+                                <div style="margin-bottom: 15px" ng-if="getMergedDescription(column).length">
                                     <h5>Description</h5>
-                                    <span marked="column.description"></span>
+                                    <span marked="getMergedDescription(column)"></span>
                                 </div>
 
                                 <div ng-show="column.tests && column.tests.length" style="margin-bottom: 15px">
