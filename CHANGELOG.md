@@ -1,7 +1,7 @@
 ## dbt-core 1.1.0 (TBD)
 - Fixed capitalization in UI for exposures of `type: ml` ([#256](https://github.com/dbt-labs/dbt-docs/issues/256))
 - List packages and tags in alphabetical order ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
-- Display column description from database if description is missing from DBT config ([#128](https://github.com/dbt-labs/dbt-docs/issues/128))
+- Display column description from database if description is missing from dbt config ([#128](https://github.com/dbt-labs/dbt-docs/issues/128))
 
 Contributors:
 - [@pgoslatara](https://github.com/pgoslatara) ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
