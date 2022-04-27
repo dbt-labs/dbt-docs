@@ -48,8 +48,8 @@
                     <h6>Description</h6>
                     <div class="panel">
                         <div class="panel-body">
-                            <div ng-if="model.description" class="model-markdown" marked="model.description"></div>
-                            <div ng-if="!model.description">This {{ model.resource_type }} is not currently documented</div>
+                            <div ng-if="descriptionOrComment" class="model-markdown" marked="descriptionOrComment"></div>
+                            <div ng-if="!descriptionOrComment">This {{ model.resource_type }} is not currently documented</div>
                         </div>
                     </div>
                 </div>

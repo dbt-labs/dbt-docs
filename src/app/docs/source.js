@@ -20,6 +20,7 @@ angular
     projectService.ready(function(project) {
         let mod = project.nodes[$scope.model_uid];
         $scope.model = mod;
+        $scope.descriptionOrComment = mod.description || mod.metadata.comment;
         $scope.references = dag_utils.getReferences(project, mod);
         $scope.referencesLength = Object.keys($scope.references).length;
         $scope.parents = dag_utils.getParents(project, mod);
