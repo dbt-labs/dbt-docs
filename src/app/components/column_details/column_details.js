@@ -21,7 +21,7 @@ angular
 
             scope.has_more_info = function(column) {
                 var tests = (column.tests || []);
-                var description = scope.getMergedDescription(column);
+                var description = scope.getDescriptionOrComment(column);
                 var meta = (column.meta || {});
 
                 return tests.length || description.length || !_.isEmpty(meta);
@@ -37,7 +37,7 @@ angular
                 return 'dbt.' + node.resource_type;
             }
 
-            scope.getMergedDescription = function(column) {
+            scope.getDescriptionOrComment = function(column) {
                 // Prefer description from DBT config if present
                 return column.description || column.comment || "";
             }
