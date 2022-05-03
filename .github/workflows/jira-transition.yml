@@ -17,7 +17,7 @@ on:
 
 permissions:
   issues: read
-  
+
 jobs:
   jira-transition:
     uses: dbt-labs/actions/.github/workflows/jira-transition.yml@v1
