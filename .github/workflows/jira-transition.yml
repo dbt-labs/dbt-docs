@@ -19,8 +19,10 @@ permissions:
   issues: read
 
 jobs:
-  call-label-action:
-    uses: dbt-labs/actions/.github/workflows/jira-transition.yml@main
+  jira-transition:
+    uses: dbt-labs/actions/.github/workflows/jira-transition.yml@v1
+    with:
+      project_key: "CT"
     secrets:
       JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
       JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
