@@ -46,6 +46,6 @@
     "webpack-inline-svg-plugin": "^1.1.4"
   },
   "dependencies": {
-    "prismjs": "^1.27.0"
+    "prismjs": "^1.28.0"
   }
 }
