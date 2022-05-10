@@ -49,15 +49,8 @@ angular
             query.push(line);
         });
 
-        var database;
-        if (!model.database) { 
-            database = '' 
-        } else {
-            database = model.database + '.'
-        }
-
-        var rel;
-        rel = database + model.schema + "." + model.identifier;
+        const database = model.database ? model.database + '.' : '';
+        const rel = database + model.schema + "." + model.identifier;
 
         query.push("from " + rel)
         return query.join("\n");
