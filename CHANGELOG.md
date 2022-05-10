@@ -1,6 +1,7 @@
 ## dbt-core 1.1.0 (TBD)
 - Fixed capitalization in UI for exposures of `type: ml` ([#256](https://github.com/dbt-labs/dbt-docs/issues/256))
 - List packages and tags in alphabetical order ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
+- Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
 
 Contributors:
 - [@pgoslatara](https://github.com/pgoslatara) ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
