@@ -10,6 +10,7 @@ var SELECTOR_TYPE = {
     EXPOSURE: 'exposure',
     METRIC: 'metric',
     PATH: 'path',
+    FILE: 'file',
     PACKAGE: 'package',
     CONFIG: 'config',
     TEST_NAME: 'test_name',
@@ -24,6 +25,7 @@ NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
 NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
 NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
+NODE_MATCHERS[SELECTOR_TYPE.FILE] = getNodesByFile;
 NODE_MATCHERS[SELECTOR_TYPE.PACKAGE] = getNodesByPackage;
 NODE_MATCHERS[SELECTOR_TYPE.CONFIG] = getNodesByConfig;
 NODE_MATCHERS[SELECTOR_TYPE.TEST_NAME] = getNodesByTestName;
@@ -125,14 +127,33 @@ function getNodesByPath(elements, path) {
     return nodes;
 }
 
+function getNodesByFile(elements, path) {
+    var nodes = [];
+
+    _.each(elements, function(node) {
+        var path_parts = node.data.original_file_path.split("/");
+        var fname = _.last(path_parts);
+        if (fname == path) {
+            nodes.push(node.data);
+        }
+    })
+    return nodes;
+}
+
 function getNodesByImplicitSelection(elements, selector) {
     var fqn_matched = getNodesByFQN(elements, selector);
     var path_matched = getNodesByPath(elements, selector);
 
+    var file_matched = [];
+    if (selector.toLowerCase().endsWith('.sql')) {
+        file_matched = getNodesByFile(elements, selector);
+    }
+
     var node_ids = _.uniq(
-        _.map(fqn_matched, 'unique_id')
-        .concat(
-            _.map(path_matched, 'unique_id')
+        [].concat(
+            _.map(fqn_matched, 'unique_id'),
+            _.map(path_matched, 'unique_id'),
+            _.map(file_matched, 'unique_id'),
         )
     )
 
