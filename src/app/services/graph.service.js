@@ -191,6 +191,15 @@ angular
                         'background-color': '#ff5688',
                     }
                 },
+                // apply custom colors on top of all defaults, but allow the selected and hidden options below to override this
+                // TODO: How to get the custom color from the dictionary mapped below
+                {
+                    selector: 'node[custom_node_color]',
+                    style: {
+                        'background-color': '#cb998f',
+                    }
+    
+                },
                 {
                     selector: 'node[selected=1]',
                     style: {
@@ -216,6 +225,7 @@ angular
                         'background-opacity': 0.5,
                     }
                 },
+
             ],
             ready: function(e) {
                 console.log("graph ready");
@@ -304,6 +314,11 @@ angular
             if (el.data.docs && el.data.docs.show === false) {
                 el.data['hidden'] = 1;
             }
+
+            if (el.data.meta && el.data.meta.node_color) {
+                el.data['custom_node_color'] = el.data.meta.node_color;
+            }
+            
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
 
