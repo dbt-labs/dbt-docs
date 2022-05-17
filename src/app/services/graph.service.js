@@ -194,9 +194,9 @@ angular
                 // apply custom colors on top of all defaults, but allow the selected and hidden options below to override this
                 // TODO: How to get the custom color from the dictionary mapped below
                 {
-                    selector: 'node[custom_node_color]',
+                    selector: 'node[node_color]',
                     style: {
-                        'background-color': '#cb998f',
+                        'background-color': '#e0115f',
                     }
     
                 },
@@ -315,8 +315,13 @@ angular
                 el.data['hidden'] = 1;
             }
 
+            // TODO: This is a hack to get the node to show up in the graph. Remove in preference of the docs config below
             if (el.data.meta && el.data.meta.node_color) {
-                el.data['custom_node_color'] = el.data.meta.node_color;
+                el.data['node_color'] = el.data.meta.node_color;
+            }
+
+            if (el.data.docs && el.data.docs.node_color) {
+                el.data['node_color'] = el.data.docs.node_color;
             }
             
         });
