@@ -1,9 +1,10 @@
 ## dbt-core 1.2.0 (TBD)
 - [Snyk] Upgrade prismjs from 1.27.0 to 1.28.0 ([#271](https://github.com/dbt-labs/dbt-docs/issues/271))
+- Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
 
 
 Contributors:
-
+- [@b-per](https://github.com/b-per) ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
 
 ## dbt-core 1.1.0 (April 28, 2022)
 - Fixed capitalization in UI for exposures of `type: ml` ([#256](https://github.com/dbt-labs/dbt-docs/issues/256))
