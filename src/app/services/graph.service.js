@@ -196,7 +196,7 @@ angular
                 {
                     selector: 'node[node_color]',
                     style: {
-                        'background-color': '#e0115f',
+                        'background-color': '#000000',
                     }
     
                 },
@@ -320,9 +320,9 @@ angular
                 el.data['node_color'] = el.data.meta.node_color;
             }
 
-            if (el.data.docs && el.data.docs.node_color) {
-                el.data['node_color'] = el.data.docs.node_color;
-            }
+            // if (el.data.docs && el.data.docs.node_color) {
+            //     el.data['node_color'] = el.data.docs.node_color;
+            // }
             
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
