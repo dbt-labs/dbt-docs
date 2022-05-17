@@ -91,6 +91,19 @@ const elements = [
                 name: 'unique'
             }
         }
+    },
+    {
+        data: {
+            id: 8,
+            resource_type: 'test',
+            tags: [],
+            name: 'my_singular_test',
+            original_file_path: 'tests/my_singular_test.sql',
+            package_name: 'my_package',
+            config: {
+                severity: "warn"
+            },
+        }
     }
 ];
 
@@ -352,7 +365,7 @@ test("Test getting nodes by package", () => {
     expect(
         matchByPackage('my_package')
     ).toStrictEqual(
-        [1,2,4,5,6,7]
+        [1,2,4,5,6,7,8]
     )
 
     expect(
@@ -410,6 +423,12 @@ test("Test getting nodes by config", () => {
     ).toStrictEqual(
         [7]
     )
+
+    expect(
+        matchByConfig({config: 'severity', value: 'warn'})
+    ).toStrictEqual(
+        [8]
+    )
 })
 
 
@@ -442,19 +461,19 @@ test("Test getting nodes by test type", () => {
     expect(
         matchByTestType('data')
     ).toStrictEqual(
-        [7]
+        [8]
     )
 
     expect(
         matchByTestType('singular')
     ).toStrictEqual(
-        [7]
+        [8]
     )
 
     expect(
         matchByTestType('schema')
     ).toStrictEqual(
-        []
+        [7]
     )
 
     expect(
