@@ -78,6 +78,7 @@ angular
             },
             elements: [],
             layout: layouts.none,
+            node_color: '#000000',
             style: [
                 {
                     selector: 'edge.vertical',
@@ -194,9 +195,9 @@ angular
                 // apply custom colors on top of all defaults, but allow the selected and hidden options below to override this
                 // TODO: How to get the custom color from the dictionary mapped below
                 {
-                    selector: 'node[node_color]',
+                    selector: 'node[node_color_indicator=1]', //this is correctly mapped to the node_color attribute
                     style: {
-                        'background-color': '#000000',
+                        'background-color': '#000000', //placeholder hex color, this needs to be dynamic
                     }
     
                 },
@@ -229,6 +230,7 @@ angular
             ],
             ready: function(e) {
                 console.log("graph ready");
+                console.log("hello YOU" + 'node[node_color]'); // this does NOT show up in the console logs
             },
         }
     }
@@ -299,7 +301,8 @@ angular
         _.each(service.graph.elements, function(el) {
             el.data['display'] = 'none';
             el.data['selected'] = 0;
-            el.data['hidden'] = 0;
+            el.data['hidden'] = 0; //set to 0 to default to showing
+            el.data['node_color_indicator'] = 0; //If I set a default color, it will override the color set in the service var above and then I have to override the 0 default color again, pretty wasteful
             el.classes = classes;
         });
 
@@ -309,15 +312,21 @@ angular
 
             if (highlight && _.includes(highlight, el.data.unique_id)) {
                 el.data['selected'] = 1;
+                console.log('hello selected node color  ' + el.data['selected']);
             }
 
             if (el.data.docs && el.data.docs.show === false) {
-                el.data['hidden'] = 1;
+                el.data['hidden'] = 1; //set to 1 to set as hidden
             }
+            // TODO: get the hidden nodes to print the color hex and then translate mechanism to node_color
 
             // TODO: This is a hack to get the node to show up in the graph. Remove in preference of the docs config below
             if (el.data.meta && el.data.meta.node_color) {
+                el.data['node_color_indicator'] = 1;
                 el.data['node_color'] = el.data.meta.node_color;
+                console.log('hello node_color  ' + el.data['node_color']);
+                console.log('hello node_color_indicator  ' + el.data['node_color_indicator']);
+                // console.log('hello node_color meta  ' + el.data.meta.node_color); redundant, not needed
             }
 
             // if (el.data.docs && el.data.docs.node_color) {
@@ -326,8 +335,10 @@ angular
             
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
-
+        // console.log('hello node_ids  ' + node_ids);
+        console.log('hello elements ' + JSON.stringify(_.each(elements, function(e) { return e.data.node_color}))); //get the node_color isolated in the console logs
         return node_ids;
+
     }
 
     service.manifest = {};
