@@ -138,18 +138,30 @@ angular
             _.each(service.files.manifest.sources, function(node) {
                 node.label = "" + node.source_name + "." + node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
+                node.color = '#5fb825'
             });
 
             // Add exposures back into nodes to make site logic work
             _.each(service.files.manifest.exposures, function(node) {
                 node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
+                node.color = '#ff694b'
             });
             
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
                 node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
+                node.color = '#ff5688'
+            });
+
+            _.each(service.files.manifest.nodes, function(node) {
+                if (node.docs && node.docs.color) {
+                    node.color = node.docs.color
+                } else if (!node.color) {
+                    var default_color = '#0094b3'
+                    node.color = default_color;
+                }
             });
 
             var adapter = service.files.manifest.metadata.adapter_type;

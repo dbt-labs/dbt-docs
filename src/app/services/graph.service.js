@@ -174,21 +174,9 @@ angular
                     }
                 },
                 {
-                    selector: 'node[resource_type="source"]',
+                    selector: 'node[color]',
                     style: {
-                        'background-color': '#5fb825',
-                    }
-                },
-                {
-                    selector: 'node[resource_type="exposure"]',
-                    style: {
-                        'background-color': '#ff694b',
-                    }
-                },
-                {
-                    selector: 'node[resource_type="metric"]',
-                    style: {
-                        'background-color': '#ff5688',
+                        'background-color': 'data(color)',
                     }
                 },
                 {
