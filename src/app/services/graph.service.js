@@ -78,7 +78,6 @@ angular
             },
             elements: [],
             layout: layouts.none,
-            node_color: '#000000',
             style: [
                 {
                     selector: 'edge.vertical',
@@ -195,9 +194,9 @@ angular
                 // apply custom colors on top of all defaults, but allow the selected and hidden options below to override this
                 // TODO: How to get the custom color from the dictionary mapped below
                 {
-                    selector: 'node[node_color_indicator=1]', //this is correctly mapped to the node_color attribute
+                    selector: 'node[node_color]', 
                     style: {
-                        'background-color': '#000000', //placeholder hex color, this needs to be dynamic
+                        'background-color': 'data(node_color)', 
                     }
     
                 },
@@ -301,8 +300,7 @@ angular
         _.each(service.graph.elements, function(el) {
             el.data['display'] = 'none';
             el.data['selected'] = 0;
-            el.data['hidden'] = 0; //set to 0 to default to showing
-            el.data['node_color_indicator'] = 0; //If I set a default color, it will override the color set in the service var above and then I have to override the 0 default color again, pretty wasteful
+            el.data['hidden'] = 0;
             el.classes = classes;
         });
 
