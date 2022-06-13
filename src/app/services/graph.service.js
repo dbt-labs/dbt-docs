@@ -196,7 +196,6 @@ angular
                     style: {
                         'background-color': 'data(node_color)', 
                     }
-    
                 },
                 {
                     selector: 'node[selected=1]',
@@ -223,7 +222,6 @@ angular
                         'background-opacity': 0.5,
                     }
                 },
-
             ],
             ready: function(e) {
                 console.log("graph ready");
