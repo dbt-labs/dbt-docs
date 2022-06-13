@@ -192,7 +192,6 @@ angular
                     }
                 },
                 // apply custom colors on top of all defaults, but allow the selected and hidden options below to override this
-                // TODO: How to get the custom color from the dictionary mapped below
                 {
                     selector: 'node[node_color]', 
                     style: {
@@ -229,7 +228,6 @@ angular
             ],
             ready: function(e) {
                 console.log("graph ready");
-                console.log("hello YOU" + 'node[node_color]'); // this does NOT show up in the console logs
             },
         }
     }
@@ -316,25 +314,14 @@ angular
             if (el.data.docs && el.data.docs.show === false) {
                 el.data['hidden'] = 1; //set to 1 to set as hidden
             }
-            // TODO: get the hidden nodes to print the color hex and then translate mechanism to node_color
 
-            // TODO: This is a hack to get the node to show up in the graph. Remove in preference of the docs config below
-            if (el.data.meta && el.data.meta.node_color) {
-                el.data['node_color_indicator'] = 1;
-                el.data['node_color'] = el.data.meta.node_color;
-                console.log('hello node_color  ' + el.data['node_color']);
-                console.log('hello node_color_indicator  ' + el.data['node_color_indicator']);
-                // console.log('hello node_color meta  ' + el.data.meta.node_color); redundant, not needed
+            if (el.data.docs && el.data.docs.node_color) {
+                el.data['node_color'] = el.data.docs.node_color;
+                console.log('hello docs node_color  ' + el.data['node_color']);
             }
-
-            // if (el.data.docs && el.data.docs.node_color) {
-            //     el.data['node_color'] = el.data.docs.node_color;
-            // }
             
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
-        // console.log('hello node_ids  ' + node_ids);
-        console.log('hello elements ' + JSON.stringify(_.each(elements, function(e) { return e.data.node_color}))); //get the node_color isolated in the console logs
         return node_ids;
 
     }
