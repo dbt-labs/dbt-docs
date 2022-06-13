@@ -191,7 +191,6 @@ angular
                         'background-color': '#ff5688',
                     }
                 },
-                // apply custom colors on top of all defaults, but allow the selected and hidden options below to override this
                 {
                     selector: 'node[node_color]', 
                     style: {
@@ -308,22 +307,19 @@ angular
 
             if (highlight && _.includes(highlight, el.data.unique_id)) {
                 el.data['selected'] = 1;
-                console.log('hello selected node color  ' + el.data['selected']);
             }
 
             if (el.data.docs && el.data.docs.show === false) {
-                el.data['hidden'] = 1; //set to 1 to set as hidden
+                el.data['hidden'] = 1;
             }
 
             if (el.data.docs && el.data.docs.node_color) {
                 el.data['node_color'] = el.data.docs.node_color;
-                console.log('hello docs node_color  ' + el.data['node_color']);
             }
             
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
         return node_ids;
-
     }
 
     service.manifest = {};
