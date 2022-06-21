@@ -307,14 +307,16 @@ angular
                 el.data['selected'] = 1;
             }
 
-            if (el.data.docs && el.data.docs.show === false) {
+            // a model can be hidden by the configuration under docs or under config.docs
+            if (! ( _.get(el,['data', 'docs','show'],true) && _.get(el,['data','config','docs','show'],true)) ) {
                 el.data['hidden'] = 1;
             }
 
-            if (el.data.docs && el.data.docs.node_color) {
-                el.data['node_color'] = el.data.docs.node_color;
+            var color_config = _.get(el, ['data', 'config', 'docs', 'node_color'])
+            if (color_config) {
+                el.data['node_color'] = color_config;
             }
-            
+
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
         return node_ids;
