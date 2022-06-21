@@ -243,7 +243,8 @@ angular
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
                 // It should not be possible to search for hidden documentation
-                return !obj.docs || obj.docs.show;
+                // and a model can be hidden by the configuration under docs or under config.docs
+                return _.get(obj,['docs','show'],true) && _.get(obj,['config','docs','show'],true);
             });
             service.loaded.resolve();
         });
@@ -585,7 +586,7 @@ angular
         var macros = macros || [];
 
         _.each(nodes.concat(macros), function(node) {
-            var show = _.get(node, ['docs', 'show'], true);
+            var show = _.get(node, ['docs', 'show'], true) && _.get(node, ['config', 'docs', 'show'], true);
             if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
                 // no sources in the model tree, sorry
                 return;
@@ -642,7 +643,7 @@ angular
 
         var databases = {};
         var tree_nodes = _.filter(nodes, function(node) {
-            var show = _.get(node, ['docs', 'show'], true);
+            var show = _.get(node, ['docs', 'show'], true) && _.get(node, ['config', 'docs', 'show'], true);
             if (!show) {
                 return false;
             } else if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
