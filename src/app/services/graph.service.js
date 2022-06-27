@@ -4,6 +4,7 @@ const _ = require('underscore');
 
 const graphlib = require('graphlib');
 const selectorGraph = require('./selector_graph');
+const colorValidation = require('./validate_node_color');
 
 angular
 .module('dbt')
@@ -313,7 +314,7 @@ angular
             }
 
             var color_config = _.get(el, ['data', 'config', 'docs', 'node_color'])
-            if (color_config) {
+            if (color_config && colorValidation.isValidColor(color_config)) {
                 el.data['node_color'] = color_config;
             }
 
