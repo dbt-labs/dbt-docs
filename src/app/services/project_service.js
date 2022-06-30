@@ -148,7 +148,6 @@ angular
             
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
-                node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
 
