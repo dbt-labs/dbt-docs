@@ -2,6 +2,7 @@
 - [Snyk] Upgrade prismjs from 1.27.0 to 1.28.0 ([#271](https://github.com/dbt-labs/dbt-docs/issues/271))
 - Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
 - Run build and tests in CI checks ([docs#274](https://github.com/dbt-labs/dbt-docs/pull/274))
+- Improve metrics DAG viz and documentation page ([docs#285](https://github.com/dbt-labs/dbt-docs/pull/285))
 
 Contributors:
 - [@b-per](https://github.com/b-per) ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
