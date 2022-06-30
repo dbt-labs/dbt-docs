@@ -357,7 +357,7 @@ angular
                 var parent_node = service.manifest.nodes[parent];
                 var child_node = service.manifest.nodes[child];
 
-                if (!_.includes(['model', 'source', 'seed', 'snapshot'], parent_node.resource_type)) {
+                if (!_.includes(['model', 'source', 'seed', 'snapshot', 'metric'], parent_node.resource_type)) {
                     return;
                 } else if (child_node.resource_type == 'test' && child_node.hasOwnProperty('test_metadata')) {
                     return;

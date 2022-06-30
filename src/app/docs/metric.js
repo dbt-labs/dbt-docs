@@ -39,6 +39,10 @@ angular
                 name: "Metric Type",
                 value: metric_type,
             },
+            {
+                name: "Metric name",
+                value: $scope.metric.name
+            }
         ]
 
     })

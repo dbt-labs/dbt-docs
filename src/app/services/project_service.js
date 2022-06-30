@@ -131,6 +131,7 @@ angular
 
             // Set node labels
             _.each(service.files.manifest.nodes, function(node) {
+                // use existing label if defined in manifest (eg. for metrics)
                 node.label = node.name;
             });
 
@@ -148,7 +149,6 @@ angular
             
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
-                node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
 
@@ -264,6 +264,7 @@ angular
             'columns':'object',
             'tags': 'array',
             'arguments': 'array',
+            'label': 'string',
         };
         var search = new RegExp(val, "i")
 
@@ -523,7 +524,7 @@ angular
 
             metrics[project].items.push({
                 type: 'file',
-                name: name,
+                name: node.label,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
