@@ -24,7 +24,7 @@ angular
         $scope.extra_table_fields = [
             {
                 name: "Label",
-                value: $scope.metric.label,
+                value: $scope.metric.metric_label,
             },
             {
                 name: "Type",

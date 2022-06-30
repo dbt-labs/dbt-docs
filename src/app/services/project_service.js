@@ -148,6 +148,9 @@ angular
             
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
+                // node.label is reserved for use in the DAG so redefine the label here so we can access it in metric.js before assinging the value os `node.name` to `node.label`
+                node.metric_label = node.label;
+                node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
 
