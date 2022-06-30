@@ -131,7 +131,6 @@ angular
 
             // Set node labels
             _.each(service.files.manifest.nodes, function(node) {
-                // use existing label if defined in manifest (eg. for metrics)
                 node.label = node.name;
             });
 

@@ -60,7 +60,6 @@ angular
         if (metric.type == 'expression') {
             return metric.sql
         } else {
-            // TODO: include filters!
             let query_parts = [
                 `select ${metric.type}(${metric.sql})` ,
                 `from {{ ${metric.model} }}`,
