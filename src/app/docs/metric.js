@@ -23,5 +23,23 @@ angular
         $scope.parents = dag_utils.getParents(project, metric);
         $scope.parentsLength = $scope.parents.length;
 
+        $scope.versions = {
+            'Definition': codeService.generateMetricSQL($scope.metric)
+        }
+
+        let metric_type;
+        if ($scope.metric.type == 'expression') {
+            metric_type = 'Expression metric';
+        } else {
+            metric_type = 'Aggregate metric';
+        }
+
+        $scope.extra_table_fields = [
+            {
+                name: "Metric Type",
+                value: metric_type,
+            },
+        ]
+
     })
 }]);

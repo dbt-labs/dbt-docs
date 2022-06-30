@@ -56,6 +56,29 @@ angular
         return query.join("\n");
     }
 
+    service.generateMetricSQL = function(metric) {
+        if (metric.type == 'expression') {
+            return metric.sql
+        } else {
+            // TODO: include filters!
+            let query_parts = [
+                `select ${metric.type}(${metric.sql})` ,
+                `from {{ ${metric.model} }}`,
+            ]
+
+            if (metric.filters.length > 0) {
+                let filter_exprs = _.map(metric.filters, (filter) => {
+                    return `${filter.field} ${filter.operator} ${filter.value}`
+                })
+
+                let filters = filter_exprs.join(" AND ")
+                query_parts.push(`where ${filters}`)
+            }
+
+            return query_parts.join("\n")
+        }
+    }
+
     return service;
 
 }]);
