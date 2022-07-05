@@ -27,12 +27,9 @@ angular
             'Definition': codeService.generateMetricSQL($scope.metric)
         }
 
-        let metric_type;
-        if ($scope.metric.type == 'expression') {
-            metric_type = 'Expression metric';
-        } else {
-            metric_type = 'Aggregate metric';
-        }
+        const metric_type =  $scope.metric.type === 'expression'
+            ? 'Expression metric'
+            : 'Aggregate metric';
 
         $scope.extra_table_fields = [
             {
