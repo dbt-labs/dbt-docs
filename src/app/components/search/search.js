@@ -45,6 +45,8 @@ angular
                     return model.source_name + "." + model.name;
                 } else if (model.resource_type == 'macro') {
                     return model.package_name + "." + model.name;
+                } else if (model.resource_type == 'metric') {
+                    return model.label;
                 } else {
                     return model.name;
                 }
@@ -62,7 +64,13 @@ angular
                 _.each(results, function(result){
                     _.each(result.matches, function(match){
                        if(!fileIDs.includes(result.model['unique_id'])){
-                           if((show_names && match.key === "name") || (show_descriptions && match.key === "description") || (show_columns && match.key === "columns") || (show_code && match.key === "raw_sql") || (show_tags && match.key === "tags")){
+                           const nameMatch = show_names && (match.key === "name" || match.key == 'label');
+                           const descriptionMatch = show_descriptions && match.key == "description";
+                           const columnsMatch = show_columns && match.key === "columns";
+                           const codeMatch = show_code && match.key === "raw_sql";
+                           const tagsMatch = show_tags && match.key === "tags";
+
+                           if(nameMatch || descriptionMatch || columnsMatch || codeMatch || tagsMatch) {
                             fileIDs.push(result.model['unique_id']);
                             finalResults.push(result);
                            }

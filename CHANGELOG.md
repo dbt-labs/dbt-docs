@@ -3,6 +3,7 @@
 - Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
 - Run build and tests in CI checks ([docs#274](https://github.com/dbt-labs/dbt-docs/pull/274))
 - Add support for `file:` selector in DAG viz ([docs#273](https://github.com/dbt-labs/dbt-docs/pull/273))
+- Improve metrics DAG viz and documentation page ([docs#285](https://github.com/dbt-labs/dbt-docs/pull/285))
 
 Contributors:
 - [@b-per](https://github.com/b-per) ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
