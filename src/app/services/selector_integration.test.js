@@ -23,7 +23,8 @@ dag.setNode("a", {
     source_name: 'event',
     unique_id: 'a',
     name: 'a',
-    tags: ['pii']
+    tags: ['pii'],
+    original_file_path: "models/schema.yml",
 });
 
 dag.setNode("b", {
@@ -33,6 +34,7 @@ dag.setNode("b", {
     name: 'b',
     fqn: ['my_package', 'b'],
     tags: ['nightly'],
+    original_file_path: "models/b.sql",
 });
 
 dag.setNode("c", {
@@ -42,6 +44,7 @@ dag.setNode("c", {
     name: 'c',
     fqn: ['my_package', 'dir', 'c'],
     tags: ['nightly'],
+    original_file_path: "models/dir/c.sql",
 });
 
 dag.setNode("d", {
@@ -51,6 +54,7 @@ dag.setNode("d", {
     name: 'd',
     fqn: ['my_package', 'dir', 'd'],
     tags: ['daily', 'nightly'],
+    original_file_path: "models/dir/d.sql",
 });
 
 dag.setNode("e", {
@@ -60,6 +64,7 @@ dag.setNode("e", {
     name: 'e',
     fqn: ['my_package', 'dir', 'e'],
     tags: ['nightly'],
+    original_file_path: "models/dir/e.sql",
 });
 
 dag.setNode("f", {
@@ -69,6 +74,7 @@ dag.setNode("f", {
     name: 'f',
     fqn: ['other_package', 'dir', 'f'],
     tags: ['imported'],
+    original_file_path: "models/dir/f.sql",
 });
 
 
@@ -323,6 +329,31 @@ test("Test getting nodes by tag with no edges", () => {
     expect(matched).toStrictEqual({
         matched: ['f'],
         selected: ['f'],
+    })
+})
+
+
+test("Test getting nodes by file name", () => {
+    var matched = matcher.getNodesFromSpec(
+        dag,
+        pristine_nodes,
+        undefined,
+        {
+            select_at: false,
+            select_parents: false,
+            parents_depth: null,
+            children_depth: null,
+            select_children: false,
+            selector_type: 'file',
+            selector_value: 'd.sql',
+            raw: 'd.sql'
+        }
+    )
+    matched.selected = matched.selected.sort()
+
+    expect(matched).toStrictEqual({
+        matched: ['d'],
+        selected: ['d'],
     })
 })
 
