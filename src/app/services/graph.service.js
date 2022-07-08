@@ -309,11 +309,11 @@ angular
             }
 
             // a model can be hidden by the configuration under docs or under config.docs
-            if (! ( _.get(el,['data', 'docs','show'],true) && _.get(el,['data','config','docs','show'],true)) ) {
+            if (! ( _.get(el,['data', 'docs','show'],true) && _.get(el,['data','docs','show'],true)) ) {
                 el.data['hidden'] = 1;
             }
 
-            var color_config = _.get(el, ['data', 'config', 'docs', 'node_color'])
+            var color_config = _.get(el, ['data', 'docs', 'node_color'])
             if (color_config && colorValidation.isValidColor(color_config)) {
                 el.data['node_color'] = color_config;
             }
