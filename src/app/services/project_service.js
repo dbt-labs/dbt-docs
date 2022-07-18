@@ -266,7 +266,7 @@ angular
             'arguments': 'array',
         };
         
-        let query_segments = query.toLowerCase().split(" ").filter(s => s.length > 0);
+        let query_segments = _.words(query.toLowerCase());
       
         for (var i in search_keys) {
             if (!obj[i]) {

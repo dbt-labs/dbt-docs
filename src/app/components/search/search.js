@@ -82,7 +82,7 @@ angular
                     let modified = text.replace(/\s+/g, ' '); 
                     //choose the first word in the search as the anchor for shortening. 
                     //Escaping in case the first token is "*" or another reserved regex character
-                    let first_token = escapeRegExp(splitQuery(scope.query)[0]); 
+                    let first_token = escapeRegExp(getQueryTokens(scope.query)[0]); 
                     let indexOfInstance = modified.search(new RegExp(first_token));
                     let startIndex = (indexOfInstance - 75) < 0 ? 0 : indexOfInstance - 75;
                     let endIndex = (indexOfInstance + 75) > modified.length ? modified.length : indexOfInstance + 75;
@@ -98,7 +98,7 @@ angular
                 }
                 //wrap each word in a capturing group with a pipe between them, to allow any of the matches to highlight
                 //e.g. "hello WORLD" changes to "(hello)|(world)"
-                let query_segments = splitQuery(scope.query);
+                let query_segments = getQueryTokens(scope.query);
                 let escaped_segments = query_segments.map(segment => escapeRegExp(segment));
                 let highlight_words = "(" + escaped_segments.join(")|(") + ")"; 
                 return $sce.trustAsHtml(text.replace(new RegExp(highlight_words, 'gi'), '<span class="search-result-match">$&</span>'));
@@ -113,7 +113,7 @@ angular
 
             scope.columnFilter = function(columns) {
                 var matches = [];
-                let query_segments = splitQuery(scope.query);
+                let query_segments = getQueryTokens(scope.query);
 
                 for (var column in columns) {
                     if (query_segments.every(segment => column.toLowerCase().indexOf(segment) != -1)) {
@@ -132,8 +132,8 @@ angular
                 return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
             }
 
-            function splitQuery(query){
-                return query.toLowerCase().split(" ").filter(s => s.length > 0);
+            function getQueryTokens(query){
+                return _.words(query.toLowerCase());
             }
         }
     }
