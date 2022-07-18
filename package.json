@@ -2,7 +2,7 @@
   "scripts": {
     "test": "jest src/app/services",
     "watch": "jest --watch src/app/services",
-    "start": "npx webpack-dev-server --disable-host-check"
+    "start": "npx webpack serve"
   },
   "devDependencies": {
     "angular": "^1.7.9",
@@ -40,8 +40,8 @@
     "svg-url-loader": "^2.3.2",
     "underscore": "^1.13.4",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.1.11",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^4.9.3",
     "webpack-inline-svg-plugin": "^1.1.4"
   },
   "dependencies": {
