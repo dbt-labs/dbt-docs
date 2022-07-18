@@ -17,7 +17,7 @@
     "base64-inline-loader": "^1.1.1",
     "bootstrap": "3",
     "css-loader": "^1.0.0",
-    "cytoscape": "https://github.com/fishtown-analytics/cytoscape.js.git#feature/cubic-bezier-edges",
+    "cytoscape": "https://github.com/dbt-labs/cytoscape.js.git#feature/cubic-bezier-edges",
     "cytoscape-context-menus": "3.0.5",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-expand-collapse": "^3.1.1",
@@ -34,7 +34,6 @@
     "jquery": "^3.5.1",
     "md5": "^2.2.1",
     "ngtemplate-loader": "^2.0.1",
-    "node-sass": "^4.9.2",
     "prism-themes": "^1.4.0",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
@@ -46,6 +45,6 @@
     "webpack-inline-svg-plugin": "^1.1.4"
   },
   "dependencies": {
-    "prismjs": "^1.27.0"
+    "prismjs": "^1.28.0"
   }
 }

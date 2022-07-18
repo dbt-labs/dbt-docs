@@ -1,5 +1,15 @@
 
-## dbt-core 1.1.0 (TBD)
+## dbt-core 1.2.0 (TBD)
+- [Snyk] Upgrade prismjs from 1.27.0 to 1.28.0 ([#271](https://github.com/dbt-labs/dbt-docs/issues/271))
+- Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
+- Run build and tests in CI checks ([docs#274](https://github.com/dbt-labs/dbt-docs/pull/274))
+- Add support for `file:` selector in DAG viz ([docs#273](https://github.com/dbt-labs/dbt-docs/pull/273))
+- Improve metrics DAG viz and documentation page ([docs#285](https://github.com/dbt-labs/dbt-docs/pull/285))
+
+Contributors:
+- [@b-per](https://github.com/b-per) ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
+
+## dbt-core 1.1.0 (April 28, 2022)
 - Fixed capitalization in UI for exposures of `type: ml` ([#256](https://github.com/dbt-labs/dbt-docs/issues/256))
 - List packages and tags in alphabetical order ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
 - Searches no longer require perfect matches, and instead consider each word individually. `my model` or `model my` will now find `my_model`, without the need for underscores ([docs#143](https://github.com/fishtown-analytics/dbt-docs/issues/143) [docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
@@ -32,7 +42,7 @@ Contributors:
 
 - Fix docs site crash if `relationships` test has one dependency instead of two ([docs#207](https://github.com/dbt-labs/dbt-docs/issues/207), ([docs#208](https://github.com/dbt-labs/dbt-docs/issues/208)))
 
-## dbt 0.20.0 (July 12, 2021
+## dbt 0.20.0 (July 12, 2021)
 
 - Update dbt logo and links ([docs#197](https://github.com/fishtown-analytics/dbt-docs/issues/197))
 

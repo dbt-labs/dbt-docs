@@ -148,7 +148,6 @@ angular
             
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
-                node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
 
@@ -264,6 +263,7 @@ angular
             'columns':'object',
             'tags': 'array',
             'arguments': 'array',
+            'label': 'string',
         };
         
         let query_segments = _.words(query.toLowerCase());
@@ -524,7 +524,7 @@ angular
 
             metrics[project].items.push({
                 type: 'file',
-                name: name,
+                name: node.label,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,

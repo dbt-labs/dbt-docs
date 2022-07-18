@@ -49,9 +49,33 @@ angular
             query.push(line);
         });
 
-        var rel = [model.database, model.schema, model.identifier || model.alias || model.name].join(".");
+        const database = model.database ? model.database + '.' : '';
+        const rel = database + model.schema + "." + model.identifier;
+
         query.push("from " + rel)
         return query.join("\n");
+    }
+
+    service.generateMetricSQL = function(metric) {
+        if (metric.type == 'expression') {
+            return metric.sql;
+        }
+
+        const queryParts = [
+            `select ${metric.type}(${metric.sql})` ,
+            `from {{ ${metric.model} }}`,
+        ];
+
+        if (metric.filters.length > 0) {
+            const filterExprs = metric.filters.map(filter => (
+                `${filter.field} ${filter.operator} ${filter.value}`
+            ));
+
+            const filters = filterExprs.join(' AND ');
+            queryParts.push(`where ${filters}`);
+        }
+
+        return queryParts.join('\n');
     }
 
     return service;
