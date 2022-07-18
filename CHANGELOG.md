@@ -1,4 +1,12 @@
-## dbt-core 1.2.0 (TBD)
+## dbt-core 1.3.0 (TBD)
+-  Update dependency inline-source from ^6.1.5 to ^7.2.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+-  Update dependency jest from ^26.2.2 to ^28.1.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+-  Update dependency underscore from ^1.9.0 to ^1.13.4 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+-  Update dependency webpack-cli from ^3.3.12 to ^4.7.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+-  Update dependency webpack-dev-server from ^3.1.11 to ^4.9.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+
+
+## dbt-core 1.2.0 (July 11, 2022)
 - [Snyk] Upgrade prismjs from 1.27.0 to 1.28.0 ([#271](https://github.com/dbt-labs/dbt-docs/issues/271))
 - Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
 - Run build and tests in CI checks ([docs#274](https://github.com/dbt-labs/dbt-docs/pull/274))
