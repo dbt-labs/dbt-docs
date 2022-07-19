@@ -309,7 +309,7 @@ angular
             }
 
             // a model can be hidden by the configuration under docs or under config.docs
-            if (! ( _.get(el,['data', 'docs','show'],true) && _.get(el,['data','config','docs','show'],true)) ) {
+            if (! ( _.get(el,['data', 'docs','show'],true)) ) {
                 el.data['hidden'] = 1;
             }
 

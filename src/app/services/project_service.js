@@ -586,7 +586,7 @@ angular
         var macros = macros || [];
 
         _.each(nodes.concat(macros), function(node) {
-            var show = _.get(node, ['docs', 'show'], true) && _.get(node, ['config', 'docs', 'show'], true);
+            var show = _.get(node, ['docs', 'show'], true);
             if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
                 // no sources in the model tree, sorry
                 return;
@@ -643,7 +643,7 @@ angular
 
         var databases = {};
         var tree_nodes = _.filter(nodes, function(node) {
-            var show = _.get(node, ['docs', 'show'], true) && _.get(node, ['config', 'docs', 'show'], true);
+            var show = _.get(node, ['docs', 'show'], true);
             if (!show) {
                 return false;
             } else if (_.indexOf(['source', 'snapshot', 'seed'], node.resource_type) != -1) {
