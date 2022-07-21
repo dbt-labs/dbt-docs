@@ -66,7 +66,6 @@ angular
     });
 
     $scope.onSearchKeypress = function(e) {
-        console.log(e);
         if (e.key == 'Escape') {
             $scope.clearSearch();
             e.preventDefault();

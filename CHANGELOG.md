@@ -1,3 +1,4 @@
+
 ## dbt-core 1.2.0 (TBD)
 - [Snyk] Upgrade prismjs from 1.27.0 to 1.28.0 ([#271](https://github.com/dbt-labs/dbt-docs/issues/271))
 - Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
@@ -11,9 +12,11 @@ Contributors:
 ## dbt-core 1.1.0 (April 28, 2022)
 - Fixed capitalization in UI for exposures of `type: ml` ([#256](https://github.com/dbt-labs/dbt-docs/issues/256))
 - List packages and tags in alphabetical order ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
+- Searches no longer require perfect matches, and instead consider each word individually. `my model` or `model my` will now find `my_model`, without the need for underscores ([docs#143](https://github.com/fishtown-analytics/dbt-docs/issues/143) [docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
 
 Contributors:
 - [@pgoslatara](https://github.com/pgoslatara) ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
+- [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/dbt-labs/dbt-docs/pull/145))
 
 ## dbt-core 1.0.4 (March 18th, 2022)
 
@@ -72,6 +75,7 @@ Contributors:
 Contributors:
 - [@Mr-Nobody99](https://github.com/Mr-Nobody99) ([docs#138](https://github.com/fishtown-analytics/dbt-docs/pull/138))
 - [@jplynch77](https://github.com/jplynch77) ([docs#139](https://github.com/fishtown-analytics/dbt-docs/pull/139))
+- [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
 
 ## dbt 0.18.1 (October 13, 2020)
 - Add Exposure nodes ([docs#135](https://github.com/fishtown-analytics/dbt-docs/issues/135), [docs#136](https://github.com/fishtown-analytics/dbt-docs/pull/136), [docs#137](https://github.com/fishtown-analytics/dbt-docs/pull/137))
