@@ -1,12 +1,16 @@
 ## dbt-core 1.3.0 (TBD)
--  Update dependency inline-source from ^6.1.5 to ^7.2.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
--  Update dependency jest from ^26.2.2 to ^28.1.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
--  Update dependency underscore from ^1.9.0 to ^1.13.4 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
--  Update dependency webpack-cli from ^3.3.12 to ^4.7.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
--  Update dependency webpack-dev-server from ^3.1.11 to ^4.9.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+- Update dependency inline-source from ^6.1.5 to ^7.2.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+- Update dependency jest from ^26.2.2 to ^28.1.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+- Update dependency underscore from ^1.9.0 to ^1.13.4 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+- Update dependency webpack-cli from ^3.3.12 to ^4.7.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+- Update dependency webpack-dev-server from ^3.1.11 to ^4.9.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
+- Searches no longer require perfect matches, and instead consider each word individually. `my model` or `model my` will now find `my_model`, without the need for underscores ([docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
 
+Contributors:
+- [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/dbt-labs/dbt-docs/pull/145))
 
-## dbt-core 1.2.0 (July 11, 2022)
+## dbt-core 1.2.0 (July 26, 2022)
+
 - [Snyk] Upgrade prismjs from 1.27.0 to 1.28.0 ([#271](https://github.com/dbt-labs/dbt-docs/issues/271))
 - Fixed sample SQL Code for sources when no database is defined ([docs#272](https://github.com/dbt-labs/dbt-docs/pull/272))
 - Run build and tests in CI checks ([docs#274](https://github.com/dbt-labs/dbt-docs/pull/274))
@@ -22,6 +26,7 @@ Contributors:
 
 Contributors:
 - [@pgoslatara](https://github.com/pgoslatara) ([docs#235](https://github.com/dbt-labs/dbt-docs/pull/235))
+- [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/dbt-labs/dbt-docs/pull/145))
 
 ## dbt-core 1.0.4 (March 18th, 2022)
 
@@ -80,6 +85,7 @@ Contributors:
 Contributors:
 - [@Mr-Nobody99](https://github.com/Mr-Nobody99) ([docs#138](https://github.com/fishtown-analytics/dbt-docs/pull/138))
 - [@jplynch77](https://github.com/jplynch77) ([docs#139](https://github.com/fishtown-analytics/dbt-docs/pull/139))
+- [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
 
 ## dbt 0.18.1 (October 13, 2020)
 - Add Exposure nodes ([docs#135](https://github.com/fishtown-analytics/dbt-docs/issues/135), [docs#136](https://github.com/fishtown-analytics/dbt-docs/pull/136), [docs#137](https://github.com/fishtown-analytics/dbt-docs/pull/137))
