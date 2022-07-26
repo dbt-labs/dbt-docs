@@ -259,7 +259,7 @@ angular
         var search_keys = {
             'name':'string',
             'description':'string',
-            'raw_sql':'string',
+            'raw_code':'string',
             'columns':'object',
             'tags': 'array',
             'arguments': 'array',

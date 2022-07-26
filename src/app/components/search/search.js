@@ -67,7 +67,7 @@ angular
                            const nameMatch = show_names && (match.key === "name" || match.key == 'label');
                            const descriptionMatch = show_descriptions && match.key == "description";
                            const columnsMatch = show_columns && match.key === "columns";
-                           const codeMatch = show_code && match.key === "raw_sql";
+                           const codeMatch = show_code && match.key === "raw_code";
                            const tagsMatch = show_tags && match.key === "tags";
 
                            if(nameMatch || descriptionMatch || columnsMatch || codeMatch || tagsMatch) {

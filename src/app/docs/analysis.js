@@ -29,8 +29,8 @@ angular
         $scope.parentsLength = Object.keys($scope.parents).length;
 
         $scope.versions = {
-            'Source': $scope.model.raw_sql,
-            'Compiled': $scope.model.compiled_sql
+            'Source': $scope.model.raw_code,
+            'Compiled': $scope.model.compiled_code
         }
     })
 }]);
