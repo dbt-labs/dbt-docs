@@ -6,11 +6,9 @@ const $ = require('jquery');
 const css = require("./code_block.css")
 
 function getLanguageClass(language) {
-    if (language == 'python') {
-        return 'language-python';
-    } else {
-        return 'language-sql';
-    }
+    return language === 'python'
+        ? 'language-python'
+        : 'language-sql';
 }
 
 angular
