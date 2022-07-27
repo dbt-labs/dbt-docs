@@ -34,7 +34,7 @@ angular
         $scope.referencesLength = Object.keys($scope.references).length;
         $scope.parents = dag_utils.getParents(project, mod);
         $scope.parentsLength = Object.keys($scope.parents).length;
-        var default_compiled = '\n-- compiled SQL not found for this model\n';
+        var default_compiled = '\n-- compiled code not found for this model\n';
         $scope.versions = {
             'Source': $scope.model.raw_code,
             'Compiled': $scope.model.compiled_code || default_compiled
