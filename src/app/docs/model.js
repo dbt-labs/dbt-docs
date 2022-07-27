@@ -30,14 +30,18 @@ angular
     projectService.ready(function(project) {
         let mod = project.nodes[$scope.model_uid];
         $scope.model = mod;
+        // how to dynamically assign ng-class in code_block.html based on this scope variable?
+        // $scope.language = "language-" + (mod.language || "sql");
         $scope.references = dag_utils.getReferences(project, mod);
         $scope.referencesLength = Object.keys($scope.references).length;
         $scope.parents = dag_utils.getParents(project, mod);
         $scope.parentsLength = Object.keys($scope.parents).length;
-        var default_compiled = '\n-- compiled SQL not found for this model\n';
+        $scope.language = mod.language;
+
+        const default_compiled = '\n-- compiled code not found for this model\n';
         $scope.versions = {
-            'Source': $scope.model.raw_sql,
-            'Compiled': $scope.model.compiled_sql || default_compiled
+            'Source': $scope.model.raw_code,
+            'Compiled': $scope.model.compiled_code || default_compiled
         }
 
         setTimeout(function() {
