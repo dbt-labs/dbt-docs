@@ -26,7 +26,7 @@ angular
         $scope.parentsLength = Object.keys($scope.parents).length;
         $scope.language = mod.language;
 
-        var default_compiled = '\n-- compiled SQL not found for this model\n';
+        var default_compiled = '\n-- compiled code not found for this model\n';
         $scope.versions = {
             'Source': $scope.model.raw_sql,
             'Compiled': $scope.model.compiled_sql || default_compiled
