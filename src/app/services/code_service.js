@@ -6,6 +6,7 @@ import Prism from 'prismjs';
 window.Prism = Prism;
 
 import 'prismjs/components/prism-sql';
+import 'prismjs/components/prism-python';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
 import 'prism-themes/themes/prism-ghcolors.css';
@@ -19,8 +20,11 @@ angular
     // big hack
     service.copied = false;
 
-    service.highlight = function(sql) {
-        var highlighted = Prism.highlight(sql, Prism.languages.sql, 'sql')
+    service.highlight = function(code) {
+        // this doesn't seem to have any effect?
+        // Prism seems to choose which language to use based on the
+        // class name in code_block.html: language-sql or language-python
+        var highlighted = Prism.highlight(code, Prism.languages.sql, 'sql')
         return $sce.trustAsHtml(highlighted);
     }
 
