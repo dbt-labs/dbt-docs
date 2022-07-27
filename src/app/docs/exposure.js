@@ -22,6 +22,7 @@ angular
         $scope.exposure = exposure;
         $scope.parents = dag_utils.getParents(project, exposure);
         $scope.parentsLength = $scope.parents.length;
+        $scope.language = exposure.language;
 
         $scope.extra_table_fields = [
             {
