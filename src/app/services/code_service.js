@@ -20,11 +20,13 @@ angular
     // big hack
     service.copied = false;
 
-    service.highlight = function(code) {
-        // this doesn't seem to have any effect?
-        // Prism seems to choose which language to use based on the
-        // class name in code_block.html: language-sql or language-python
-        var highlighted = Prism.highlight(code, Prism.languages.sql, 'sql')
+    service.highlight = function(code, language = 'sql') {
+        if (language == 'sql') {
+            var highlighted = Prism.highlight(code, Prism.languages.sql, 'sql')
+        }
+        else if (language == 'python') {
+            var highlighted = Prism.highlight(code, Prism.languages.python, 'python')
+        }
         return $sce.trustAsHtml(highlighted);
     }
 

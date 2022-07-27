@@ -33,10 +33,12 @@ angular
                 scope.selected_version = name;
                 scope.source = scope.versions[name] || '';
 
-                const sql = scope.source.trim();
-                scope.highlighted = codeService.highlight(sql);
+                const code = scope.source.trim();
+                scope.highlighted = codeService.highlight(code, scope.language);
 
                 $timeout(function() {
+                    // for good measure, also use Prism's built-in mechanism to identify and
+                    // highlight all `code` elements based on their `language-xxxx` class
                     Prism.highlightAll();
                 })
             }
