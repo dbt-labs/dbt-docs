@@ -5,6 +5,14 @@ const $ = require('jquery');
 
 const css = require("./code_block.css")
 
+function getLanguageClass(language) {
+    if (language == 'python') {
+        return 'language-python';
+    } else {
+        return 'language-sql';
+    }
+}
+
 angular
 .module('dbt')
 .directive('codeBlock', ['code', '$timeout', function(codeService, $timeout) {
@@ -12,21 +20,25 @@ angular
         scope: {
             versions: '=',
             default: '<',
+            language: '=',
         },
         restrict: 'E',
         templateUrl: template,
         link: function(scope, element) {
             scope.selected_version = scope.default;
+            scope.language_class = getLanguageClass(scope.language);
             scope.source = null;
 
             scope.setSelected = function(name) {
                 scope.selected_version = name;
                 scope.source = scope.versions[name] || '';
 
-                const sql = scope.source.trim();
-                scope.highlighted = codeService.highlight(sql);
+                const code = scope.source.trim();
+                scope.highlighted = codeService.highlight(code, scope.language);
 
                 $timeout(function() {
+                    // for good measure, also use Prism's built-in mechanism to identify and
+                    // highlight all `code` elements based on their `language-xxxx` class
                     Prism.highlightAll();
                 })
             }
@@ -45,6 +57,12 @@ angular
                     })
                 }, 1000);
             }
+
+            scope.$watch('language', function(nv, ov) {
+                if (nv && nv != ov) {
+                    scope.language_class = getLanguageClass(nv);
+                }
+            }, true)
 
             scope.$watch('versions', function(nv, ov) {
                 if (nv) {

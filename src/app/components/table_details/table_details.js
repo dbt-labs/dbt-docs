@@ -108,6 +108,10 @@ angular
                         value: model.package_name
                     },
                     {
+                        name: "Language",
+                        value: model.language
+                    },
+                    {
                         name: "Relation",
                         value: relation
                     },
