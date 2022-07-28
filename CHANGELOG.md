@@ -5,6 +5,7 @@
 - Update dependency webpack-cli from ^3.3.12 to ^4.7.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
 - Update dependency webpack-dev-server from ^3.1.11 to ^4.9.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
 - Searches no longer require perfect matches, and instead consider each word individually. `my model` or `model my` will now find `my_model`, without the need for underscores ([docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
+- Support the renaming of SQL to code happening in dbt-core ([#292](https://github.com/dbt-labs/dbt-docs/issues/292))
 
 Contributors:
 - [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/dbt-labs/dbt-docs/pull/145))
