@@ -308,12 +308,14 @@ angular
                 el.data['selected'] = 1;
             }
 
-            // a model can be hidden by the configuration under docs or under config.docs
+            // models can be hidden if docs.show === false
             if (! ( _.get(el,['data', 'docs','show'],true)) ) {
                 el.data['hidden'] = 1;
             }
 
-            var color_config = _.get(el, ['data', 'config', 'docs', 'node_color'])
+            // models can be shown in a different color if docs.node_color is set
+            // we also validate that the color is either a valid hex color or a valid color name
+            var color_config = _.get(el, ['data', 'docs', 'node_color'])
             if (color_config && colorValidation.isValidColor(color_config)) {
                 el.data['node_color'] = color_config;
             }
