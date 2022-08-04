@@ -66,7 +66,6 @@ angular
     });
 
     $scope.onSearchKeypress = function(e) {
-        console.log(e);
         if (e.key == 'Escape') {
             $scope.clearSearch();
             e.preventDefault();
@@ -156,7 +155,7 @@ angular
             "name": 10,
             "tags": 5,
             "description": 3,
-            "raw_sql": 2,
+            "raw_code": 2,
             "columns": 1
         };
         _.each(results, function(result){

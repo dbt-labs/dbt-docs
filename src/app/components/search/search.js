@@ -45,6 +45,8 @@ angular
                     return model.source_name + "." + model.name;
                 } else if (model.resource_type == 'macro') {
                     return model.package_name + "." + model.name;
+                } else if (model.resource_type == 'metric') {
+                    return model.label;
                 } else {
                     return model.name;
                 }
@@ -62,7 +64,13 @@ angular
                 _.each(results, function(result){
                     _.each(result.matches, function(match){
                        if(!fileIDs.includes(result.model['unique_id'])){
-                           if((show_names && match.key === "name") || (show_descriptions && match.key === "description") || (show_columns && match.key === "columns") || (show_code && match.key === "raw_sql") || (show_tags && match.key === "tags")){
+                           const nameMatch = show_names && (match.key === "name" || match.key == 'label');
+                           const descriptionMatch = show_descriptions && match.key == "description";
+                           const columnsMatch = show_columns && match.key === "columns";
+                           const codeMatch = show_code && match.key === "raw_code";
+                           const tagsMatch = show_tags && match.key === "tags";
+
+                           if(nameMatch || descriptionMatch || columnsMatch || codeMatch || tagsMatch) {
                             fileIDs.push(result.model['unique_id']);
                             finalResults.push(result);
                            }
@@ -78,11 +86,14 @@ angular
             });
 
             scope.shorten = function(text) {
-                if(text != null && text.length > 0){  
+                if(text != null && text.trim().length > 0 && scope.query != null && scope.query.trim().length > 0){  
                     let modified = text.replace(/\s+/g, ' '); 
-                    let indexOfInstance = modified.search(scope.query);
-                    let startIndex = (indexOfInstance - 75) < 0? 0: indexOfInstance - 75;
-                    let endIndex = (indexOfInstance + 75) > modified.length? modified.length: indexOfInstance + 75;
+                    //choose the first word in the search as the anchor for shortening. 
+                    //Escaping in case the first token is "*" or another reserved regex character
+                    let first_token = escapeRegExp(getQueryTokens(scope.query)[0]); 
+                    let indexOfInstance = modified.search(new RegExp(first_token));
+                    let startIndex = (indexOfInstance - 75) < 0 ? 0 : indexOfInstance - 75;
+                    let endIndex = (indexOfInstance + 75) > modified.length ? modified.length : indexOfInstance + 75;
                     let shortened = "..." + modified.substring(startIndex, endIndex) + "...";
                     return shortened;
                  }
@@ -93,7 +104,12 @@ angular
                 if (!scope.query || !text) {
                     return $sce.trustAsHtml(text);
                 }
-                return $sce.trustAsHtml(text.replace(new RegExp(scope.query, 'gi'), '<span class="search-result-match">$&</span>'));
+                //wrap each word in a capturing group with a pipe between them, to allow any of the matches to highlight
+                //e.g. "hello WORLD" changes to "(hello)|(world)"
+                let query_segments = getQueryTokens(scope.query);
+                let escaped_segments = query_segments.map(segment => escapeRegExp(segment));
+                let highlight_words = "(" + escaped_segments.join(")|(") + ")"; 
+                return $sce.trustAsHtml(text.replace(new RegExp(highlight_words, 'gi'), '<span class="search-result-match">$&</span>'));
             }
 
             scope.$watch("query", function(nv, ov) {
@@ -105,8 +121,10 @@ angular
 
             scope.columnFilter = function(columns) {
                 var matches = [];
+                let query_segments = getQueryTokens(scope.query);
+
                 for (var column in columns) {
-                    if (column.toLowerCase().indexOf(scope.query.toLowerCase()) != -1) {
+                    if (query_segments.every(segment => column.toLowerCase().indexOf(segment) != -1)) {
                         matches.push(column);
                     }
                 }
@@ -114,7 +132,16 @@ angular
             }
 
             scope.limitColumns = function(id) {
-                return scope.limit_columns[id] !== undefined? scope.limit_columns[id] : 3;
+                return scope.limit_columns[id] !== undefined ? scope.limit_columns[id] : 3;
+            }
+
+            //from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+            function escapeRegExp(string) {
+                return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+            }
+
+            function getQueryTokens(query){
+                return _.words(query.toLowerCase());
             }
         }
     }

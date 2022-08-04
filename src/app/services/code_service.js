@@ -6,6 +6,7 @@ import Prism from 'prismjs';
 window.Prism = Prism;
 
 import 'prismjs/components/prism-sql';
+import 'prismjs/components/prism-python';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
 import 'prism-themes/themes/prism-ghcolors.css';
@@ -19,8 +20,13 @@ angular
     // big hack
     service.copied = false;
 
-    service.highlight = function(sql) {
-        var highlighted = Prism.highlight(sql, Prism.languages.sql, 'sql')
+    service.highlight = function(code, language = 'sql') {
+        if (language == 'sql') {
+            var highlighted = Prism.highlight(code, Prism.languages.sql, 'sql')
+        }
+        else if (language == 'python') {
+            var highlighted = Prism.highlight(code, Prism.languages.python, 'python')
+        }
         return $sce.trustAsHtml(highlighted);
     }
 
@@ -49,9 +55,33 @@ angular
             query.push(line);
         });
 
-        var rel = [model.database, model.schema, model.identifier || model.alias || model.name].join(".");
+        const database = model.database ? model.database + '.' : '';
+        const rel = database + model.schema + "." + model.identifier;
+
         query.push("from " + rel)
         return query.join("\n");
+    }
+
+    service.generateMetricSQL = function(metric) {
+        if (metric.type == 'expression') {
+            return metric.sql;
+        }
+
+        const queryParts = [
+            `select ${metric.type}(${metric.sql})` ,
+            `from {{ ${metric.model} }}`,
+        ];
+
+        if (metric.filters.length > 0) {
+            const filterExprs = metric.filters.map(filter => (
+                `${filter.field} ${filter.operator} ${filter.value}`
+            ));
+
+            const filters = filterExprs.join(' AND ');
+            queryParts.push(`where ${filters}`);
+        }
+
+        return queryParts.join('\n');
     }
 
     return service;

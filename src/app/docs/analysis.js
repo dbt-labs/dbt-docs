@@ -27,10 +27,11 @@ angular
         $scope.referencesLength = Object.keys($scope.references).length;
         $scope.parents = dag_utils.getParents(project, mod);
         $scope.parentsLength = Object.keys($scope.parents).length;
+        $scope.language = mod.language;
 
         $scope.versions = {
-            'Source': $scope.model.raw_sql,
-            'Compiled': $scope.model.compiled_sql
+            'Source': $scope.model.raw_code,
+            'Compiled': $scope.model.compiled_code
         }
     })
 }]);

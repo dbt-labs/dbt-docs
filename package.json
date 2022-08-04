@@ -2,7 +2,7 @@
   "scripts": {
     "test": "jest src/app/services",
     "watch": "jest --watch src/app/services",
-    "start": "npx webpack-dev-server --disable-host-check"
+    "start": "npx webpack serve"
   },
   "devDependencies": {
     "angular": "^1.7.9",
@@ -17,7 +17,7 @@
     "base64-inline-loader": "^1.1.1",
     "bootstrap": "3",
     "css-loader": "^1.0.0",
-    "cytoscape": "https://github.com/fishtown-analytics/cytoscape.js.git#feature/cubic-bezier-edges",
+    "cytoscape": "https://github.com/dbt-labs/cytoscape.js.git#feature/cubic-bezier-edges",
     "cytoscape-context-menus": "3.0.5",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-expand-collapse": "^3.1.1",
@@ -29,23 +29,22 @@
     "html-webpack-inline-svg-plugin": "^1.2.4",
     "html-webpack-plugin": "^3.2.0",
     "html5-boilerplate": "^5.3.0",
-    "inline-source": "^6.1.5",
-    "jest": "^26.2.2",
+    "inline-source": "^7.2.0",
+    "jest": "^28.1.3",
     "jquery": "^3.5.1",
     "md5": "^2.2.1",
     "ngtemplate-loader": "^2.0.1",
-    "node-sass": "^4.9.2",
     "prism-themes": "^1.4.0",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "svg-url-loader": "^2.3.2",
-    "underscore": "^1.9.0",
+    "underscore": "^1.13.4",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.1.11",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^4.9.3",
     "webpack-inline-svg-plugin": "^1.1.4"
   },
   "dependencies": {
-    "prismjs": "^1.27.0"
+    "prismjs": "^1.28.0"
   }
 }

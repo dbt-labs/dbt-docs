@@ -13,7 +13,12 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   devServer: {
-    contentBase: "./src",
+    client: {
+      overlay: false,
+    },
+    static: {
+      directory: path.resolve(__dirname, "src"),
+    },
   },
   plugins: [
     new webpack.DefinePlugin({

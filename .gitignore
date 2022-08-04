@@ -9,3 +9,4 @@ env/
 .tmp/
 dist/
 .sass-cache/
+env*
