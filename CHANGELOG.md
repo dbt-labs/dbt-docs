@@ -6,9 +6,11 @@
 - Update dependency webpack-dev-server from ^3.1.11 to ^4.9.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
 - Searches no longer require perfect matches, and instead consider each word individually. `my model` or `model my` will now find `my_model`, without the need for underscores ([docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
 - Support the renaming of SQL to code happening in dbt-core ([#292](https://github.com/dbt-labs/dbt-docs/issues/292))
+- Leverages `docs.node_color` from `dbt-core` to color nodes in the DAG ([#281](https://github.com/dbt-labs/dbt-docs/pull/281))
 
 Contributors:
 - [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/dbt-labs/dbt-docs/pull/145))
+- [@matt-winkler](https://github.com/matt-winkler) [@sungchun12](https://github.com/sungchun12) [@b-per](https://github.com/b-per) ([#281](https://github.com/dbt-labs/dbt-docs/pull/281))
 
 ## dbt-core 1.2.0 (July 26, 2022)
 
