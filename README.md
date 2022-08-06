@@ -35,7 +35,22 @@ After cloning this repository, run:
 git submodule update --init --recursive
 ```
 
-You'll also need to install bundler if you don't already have it:
+Ensure you have a sufficient ssh key in `~/.ssh`. npm installs some deps from Github
+
+To build the container 
+```bash
+$ make build
+```
+
+npm installs some dependances from Github using SSH. SSH prompts the user to verify the authenticity 
+of the host (Github recomends HTTPS access) which hangs then fails since the install task is daemonized.
+This adds Github as a known host.
+
+```bash
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+```
+
+Install bundler:
 ```bash
 gem install bundler
 bundle install

@@ -1,4 +1,5 @@
 
+IMAGE := dbt-dev-image:1.0
 .PHONY: clean dist dev
 
 dev:
@@ -25,3 +26,16 @@ dist-ci: clean submodule test
 
 clean:
 	rm -rf dist/
+
+build:
+	@echo "Building image..."
+	@docker build -t ${IMAGE} -f Dockerfile .
+	@echo "Building image and opening shell..."
+	@docker run -it \
+    	-p 8080:8080 \
+    	-w /app \
+		-v ${PWD}:/app \
+		-v ~/.aws/:/root/.aws \
+		-v ~/.ssh/:/root/.ssh \
+		-v ~/.gitconfig:/etc/gitconfig \
+		${IMAGE} /bin/bash
