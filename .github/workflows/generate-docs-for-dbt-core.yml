@@ -182,7 +182,7 @@ jobs:
         run: |
           git status
       
-      - uses: Remove changie yaml files
+      - name: Remove changie yaml files
         id: rm_yml
         run: |
           find . -name '.changes/unreleased/*.yml' -delete
