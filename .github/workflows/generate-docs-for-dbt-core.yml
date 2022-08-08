@@ -1,0 +1,210 @@
+# **what?**
+# Generate the new index.html for dbt-core and more over all associated changelog files.
+# Cleans up all changelog files once they are committed to dbt-core.
+
+# **why?**
+# Automate the process of generating the new index.html and bringing in changelog entries.
+
+# **when?**
+# This will run when called in manually.  It may eventually be folded into the release process for dbt-core.
+
+
+name: Generate Updated Docs for dbt-core
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  set_variables:
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{steps.set.outputs.BRANCH_NAME}}
+      index_artifact_name: ${{steps.set.outputs.INDEX_ARTIFACT_NAME}}
+      changie_artifact_name: ${{steps.set.outputs.CHANGIE_ARTIFACT_NAME}}
+      pr_title: ${{steps.set.outputs.PR_TITLE}}
+      pr_body: ${{steps.set.outputs.PR_BODY}}
+
+    steps:
+      - name: Set variables
+        id: set
+        run: |
+          echo "::set-output name=BRANCH_NAME::dbt-docs/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID"
+          echo "::set-output name=INDEX_ARTIFACT_NAME::index_file"
+          echo "::set-output name=CHANGIE_ARTIFACT_NAME::changie_yamls"
+          echo "::set-output name=PR_TITLE::Add most recent dbt-docs changes"
+          echo "::set-output name=PR_BODY::Auto generated changes from `generate-docs-for-dbt-core.yml` workflow`"
+
+      - name: Print variables
+        id: print_variables
+        run: |
+          echo "Branch name:           $BRANCH_NAME"
+          echo "Index Artifact Name:   $INDEX_ARTIFACT_NAME"
+          echo "Changie Artifact Name: $CHANGIE_ARTIFACT_NAME"
+
+  build_index:
+    needs: [set_variables]
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout dbt-docs repo
+        uses: actions/checkout@v3
+        with:
+          path: main
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+
+      - name: install bundler
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: build the css files required for webpack
+        run: |
+          cd styles
+          bundle exec jekyll build
+          cd -
+
+      - name: build the index.html file
+        run:
+          npm install
+          npx webpack
+
+      - name: upload index.html artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.set_variables.outputs.index_artifact_name}}
+          path: |
+            dist/index.html
+          if-no-files-found: error
+          retention-days: 15
+
+      - name: upload changelog artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.set_variables.outputs.changie_artifact_name}}
+          path: |
+            .changes/unreleaded/*.yml
+          if-no-files-found: error
+          retention-days: 15
+
+  # create branch on dbt-core
+  create_dbt_core_branch:
+    needs: [set_variables, build_index]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          repository: dbt-labs/dbt-core
+          ref: main
+          # token: PAT?
+ 
+      - name: Create branch
+        run: |
+          git checkout -b ${{needs.set_variables.outputs.branch_name}}
+          git push -u origin ${{needs.set_variables.outputs.branch_name}}
+      
+      - name: Check current branch
+        run: |
+          git status
+
+  commit_dbt_core:
+    needs: [set_variables, create_dbt_core_branch]
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Check out the dbt-core branch
+        uses: actions/checkout@v3
+        with:
+          repository: dbt-labs/dbt-core
+          ref: ${{ needs.set_variables.outputs.branch_name }}
+          # token: PAT?
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{needs.set_variables.outputs.index_artifact_name}}
+          path: "core/dbt/include"
+      
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{needs.set_variables.outputs.changie_artifact_name}}
+          path: ".changes/unreleased"
+
+      - name: Print branch status
+        run: |
+          git status
+
+      - name: Commit & Push changes
+        run: |
+          git config user.name 'Github Build Bot'
+          git config user.email 'buildbot@fishtownanalytics.com'
+          git pull
+          git add .
+          git commit -m "Add new index.html and changelog yaml files for dbt-docs"
+          git push
+
+      - name: Create Pull Request
+        run:
+          gh pr create --title ${{ needs.set_variables.outputs.pr_title }} \
+                       --body ${{ needs.set_variables.outputs.pr_body }} \
+                       --base main \
+                       --head ${{ needs.set_variables.outputs.branch_name } \
+                       --label dbt-docs
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}  # pretty sure this needs to be a scoped down PAT
+
+  clean_up_changie:
+    needs: [set_variables, commit_dbt_core]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dbt-docs repo
+        uses: actions/checkout@v3
+        with:
+          path: main
+      
+      - name: Create branch
+        run: |
+          git checkout -b ${{needs.set_variables.outputs.branch_name}}
+          git push -u origin ${{needs.set_variables.outputs.branch_name}}
+      
+      - name: Check current branch
+        run: |
+          git status
+      
+      - uses: Remove changie yaml files
+        id: rm_yml
+        run: |
+          find . -name '.changes/unreleased/*.yml' -delete
+
+      - name: Print branch status
+        run: |
+          git status
+
+      - name: Commit & Push changes
+        run: |
+          git config user.name 'Github Build Bot'
+          git config user.email 'buildbot@fishtownanalytics.com'
+          git pull
+          git add .
+          git commit -m "Delete changie files that were moved to dbt-core for release"
+          git push
+
+      - name: Create Pull Request
+        run:
+          gh pr create --title "Remove moved changie yml files" \
+                       --body ${{ needs.set_variables.outputs.pr_body }} \
+                       --base main \
+                       --head ${{ needs.set_variables.outputs.branch_name }
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
