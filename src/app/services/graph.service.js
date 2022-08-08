@@ -4,6 +4,7 @@ const _ = require('underscore');
 
 const graphlib = require('graphlib');
 const selectorGraph = require('./selector_graph');
+const colorValidation = require('./validate_node_color');
 
 angular
 .module('dbt')
@@ -192,6 +193,12 @@ angular
                     }
                 },
                 {
+                    selector: 'node[node_color]', 
+                    style: {
+                        'background-color': 'data(node_color)', 
+                    }
+                },
+                {
                     selector: 'node[selected=1]',
                     style: {
                         'background-color': '#bd6bb6',
@@ -301,12 +308,20 @@ angular
                 el.data['selected'] = 1;
             }
 
-            if (el.data.docs && el.data.docs.show === false) {
+            // models can be hidden if docs.show === false
+            if (! ( _.get(el,['data', 'docs','show'],true)) ) {
                 el.data['hidden'] = 1;
             }
+
+            // models can be shown in a different color if docs.node_color is set
+            // we also validate that the color is either a valid hex color or a valid color name
+            var color_config = _.get(el, ['data', 'docs', 'node_color'])
+            if (color_config && colorValidation.isValidColor(color_config)) {
+                el.data['node_color'] = color_config;
+            }
+
         });
         service.graph.elements = _.filter(elements, function(e) { return e.data.display == 'element'});
-
         return node_ids;
     }
 
