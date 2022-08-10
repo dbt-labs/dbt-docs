@@ -158,7 +158,7 @@ jobs:
           gh pr create --title ${{ needs.set_variables.outputs.pr_title }} \
                        --body ${{ needs.set_variables.outputs.pr_body }} \
                        --base main \
-                       --head ${{ needs.set_variables.outputs.branch_name } \
+                       --head ${{ needs.set_variables.outputs.branch_name }} \
                        --label dbt-docs
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}  # pretty sure this needs to be a scoped down PAT
