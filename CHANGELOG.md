@@ -1,16 +1,4 @@
-## dbt-core 1.3.0 (TBD)
-- Update dependency inline-source from ^6.1.5 to ^7.2.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
-- Update dependency jest from ^26.2.2 to ^28.1.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
-- Update dependency underscore from ^1.9.0 to ^1.13.4 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
-- Update dependency webpack-cli from ^3.3.12 to ^4.7.0 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
-- Update dependency webpack-dev-server from ^3.1.11 to ^4.9.3 ([#291](https://github.com/dbt-labs/dbt-docs/issues/291))
-- Searches no longer require perfect matches, and instead consider each word individually. `my model` or `model my` will now find `my_model`, without the need for underscores ([docs#145](https://github.com/fishtown-analytics/dbt-docs/pull/145))
-- Support the renaming of SQL to code happening in dbt-core ([#292](https://github.com/dbt-labs/dbt-docs/issues/292))
-- Leverages `docs.node_color` from `dbt-core` to color nodes in the DAG ([#281](https://github.com/dbt-labs/dbt-docs/pull/281))
-
-Contributors:
-- [@joellabes](https://github.com/joellabes) ([docs#145](https://github.com/dbt-labs/dbt-docs/pull/145))
-- [@matt-winkler](https://github.com/matt-winkler) [@sungchun12](https://github.com/sungchun12) [@b-per](https://github.com/b-per) ([#281](https://github.com/dbt-labs/dbt-docs/pull/281))
+As of version 1.3.0 of `dbt-core` all CHANGELOG entries are generated with [changie](https://changie.dev) and can be viewed on the [dbt-core CHANGELOG](https://github.com/dbt-labs/dbt-core/blob/main/CHANGELOG.md).
 
 ## dbt-core 1.2.0 (July 26, 2022)
 
