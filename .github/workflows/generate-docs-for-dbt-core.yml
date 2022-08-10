@@ -26,11 +26,11 @@ jobs:
   set_variables:
     runs-on: ubuntu-latest
     outputs:
-      branch_name: ${{steps.set.outputs.BRANCH_NAME}}
-      index_artifact_name: ${{steps.set.outputs.INDEX_ARTIFACT_NAME}}
-      changie_artifact_name: ${{steps.set.outputs.CHANGIE_ARTIFACT_NAME}}
-      pr_title: ${{steps.set.outputs.PR_TITLE}}
-      pr_body: ${{steps.set.outputs.PR_BODY}}
+      branch_name: ${{ steps.set.outputs.BRANCH_NAME }}
+      index_artifact_name: ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}
+      changie_artifact_name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}
+      pr_title: ${{ steps.set.outputs.PR_TITLE }}
+      pr_body: ${{ steps.set.outputs.PR_BODY }}
 
     steps:
       - name: Set variables
@@ -80,7 +80,7 @@ jobs:
       - name: upload index.html artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{needs.set_variables.outputs.index_artifact_name}}
+          name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: |
             dist/index.html
           if-no-files-found: error
@@ -89,7 +89,7 @@ jobs:
       - name: upload changelog artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{needs.set_variables.outputs.changie_artifact_name}}
+          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: |
             .changes/unreleaded/*.yml
           if-no-files-found: error
@@ -110,8 +110,8 @@ jobs:
  
       - name: Create branch
         run: |
-          git checkout -b ${{needs.set_variables.outputs.branch_name}}
-          git push -u origin ${{needs.set_variables.outputs.branch_name}}
+          git checkout -b ${{ needs.set_variables.outputs.branch_name }}
+          git push -u origin ${{ needs.set_variables.outputs.branch_name} }
       
       - name: Check current branch
         run: |
@@ -175,8 +175,8 @@ jobs:
       
       - name: Create branch
         run: |
-          git checkout -b ${{needs.set_variables.outputs.branch_name}}
-          git push -u origin ${{needs.set_variables.outputs.branch_name}}
+          git checkout -b ${{ needs.set_variables.outputs.branch_name }}
+          git push -u origin ${{ needs.set_variables.outputs.branch_name }}
       
       - name: Check current branch
         run: |
@@ -205,6 +205,6 @@ jobs:
           gh pr create --title "Remove moved changie yml files" \
                        --body ${{ needs.set_variables.outputs.pr_body }} \
                        --base main \
-                       --head ${{ needs.set_variables.outputs.branch_name }
+                       --head ${{ needs.set_variables.outputs.branch_name }}
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
