@@ -36,11 +36,11 @@ jobs:
       - name: Set variables
         id: set
         run: |
-          echo "::set-output name=BRANCH_NAME::dbt-docs/generate_index__$GITHUB_RUN_ID"
+          echo "::set-output name=BRANCH_NAME::dbt-docs-release/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID"
           echo "::set-output name=INDEX_ARTIFACT_NAME::index_file"
           echo "::set-output name=CHANGIE_ARTIFACT_NAME::changie_yamls"
           echo "::set-output name=PR_TITLE::Add most recent dbt-docs changes"
-          echo "::set-output name=PR_BODY::Auto generated changes from `generate-docs-for-dbt-core.yml` workflow`"
+          echo "::set-output name=PR_BODY::Auto generated changes from `generate-docs-for-dbt-core.yml` workflow"
 
       - name: Print variables
         id: print_variables
