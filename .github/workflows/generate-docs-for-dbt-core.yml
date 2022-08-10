@@ -111,7 +111,7 @@ jobs:
       - name: Create branch
         run: |
           git checkout -b ${{ needs.set_variables.outputs.branch_name }}
-          git push -u origin ${{ needs.set_variables.outputs.branch_name} }
+          git push -u origin ${{ needs.set_variables.outputs.branch_name} }}
       
       - name: Check current branch
         run: |
@@ -132,12 +132,12 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: ${{needs.set_variables.outputs.index_artifact_name}}
+          name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
       - uses: actions/download-artifact@v3
         with:
-          name: ${{needs.set_variables.outputs.changie_artifact_name}}
+          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: ".changes/unreleased"
 
       - name: Print branch status
