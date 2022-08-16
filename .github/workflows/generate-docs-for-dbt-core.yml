@@ -55,8 +55,6 @@ jobs:
     steps:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
-        with:
-          path: main
 
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -66,6 +64,10 @@ jobs:
         with:
           ruby-version: '2.7.5'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: "DEBUG"
+        run: |
+          ls -al
 
       - name: build the css files required for webpack
         run: |
