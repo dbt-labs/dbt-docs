@@ -67,11 +67,14 @@ jobs:
           ruby-version: '2.7.5'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
+      - name: build the css files required for webpack
+        run: |
+          cd styles
+          bundle exec jekyll build
+          cd -
+      
       - name: Download the package and dependencies
         run: npm install
-
-      - name: DEBUG
-        run: npm list html-webpack-plugin
       
       - name: build the index.html file
         run: npx webpack
