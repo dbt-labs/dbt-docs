@@ -68,26 +68,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Download the package and dependencies
-        run: npm install
-
-      - name: DEBUGGING 1
-        run: |
-          ls -al
-
-      - name: DEBUGGING 2
-        run: |
-          ls src/assets/css
-
-      - name: DEBUGGING 4
-        run: |
-          ls -al src/assets
-
-      - name: DEBUGGING 3
-        run: |
-          cd src/assets/css
-          ls - al
-          cd -
-
+        run: npm install --no-optional
 
       - name: build the index.html file
         run: npx webpack
