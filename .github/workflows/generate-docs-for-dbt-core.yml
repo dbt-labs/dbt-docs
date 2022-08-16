@@ -45,9 +45,11 @@ jobs:
       - name: Print variables
         id: print_variables
         run: |
-          echo "Branch name:           $BRANCH_NAME"
-          echo "Index Artifact Name:   $INDEX_ARTIFACT_NAME"
-          echo "Changie Artifact Name: $CHANGIE_ARTIFACT_NAME"
+          echo "Branch name:           ${{ steps.set.outputs.BRANCH_NAME }}"
+          echo "Index Artifact Name:   ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}"
+          echo "Changie Artifact Name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}"
+          echo "PR Title:              ${{ steps.set.outputs.PR_TITLE }}"
+          echo "PR Body:               ${{ steps.set.outputs.PR_BODY }}"
 
   build_index:
     needs: [set_variables]
@@ -55,6 +57,9 @@ jobs:
     steps:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
+
+      - name: Update submodules
+        run: git submodule update --init --recursive 
 
       - name: Use Node.js v14.18.2
         uses: actions/setup-node@v3
@@ -75,9 +80,6 @@ jobs:
 
       - name: Download the package and dependencies
         run: npm install
-
-      - name: DEBUG
-        run: npm list angular
 
       - name: build the index.html file
         run: npx webpack
