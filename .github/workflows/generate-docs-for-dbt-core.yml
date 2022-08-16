@@ -67,19 +67,17 @@ jobs:
           ruby-version: '2.7.5'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - name: build the css files required for webpack
-        run: |
-          cd styles
-          bundle exec jekyll build
-          cd -
+      - name: Download the package and dependencies
+        run: npm install
 
-      - name: install
-        run:
-          npm install
+      - name: DEBUGGING
+        run: |
+          ls -al
+          ls src/assets/css
+
 
       - name: build the index.html file
-        run:
-          npx webpack
+        run: npx webpack
 
       - name: upload index.html artifact
         uses: actions/upload-artifact@v3
