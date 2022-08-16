@@ -70,10 +70,19 @@ jobs:
       - name: Download the package and dependencies
         run: npm install
 
-      - name: DEBUGGING
+      - name: DEBUGGING 1
         run: |
           ls -al
+
+      - name: DEBUGGING 2
+        run: |
           ls src/assets/css
+
+      - name: DEBUGGING 3
+        run: |
+          cd src/assets/css
+          ls - al
+          cd -
 
 
       - name: build the index.html file
