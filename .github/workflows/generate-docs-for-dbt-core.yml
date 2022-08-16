@@ -58,16 +58,14 @@ jobs:
 
       - name: Use Node.js
         uses: actions/setup-node@v3
+        with:
+          node-version: 14.18.2
 
       - name: Setup Ruby 2.7.5
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.7.5'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-      - name: "DEBUG"
-        run: |
-          ls -al
 
       - name: build the css files required for webpack
         run: |
