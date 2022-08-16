@@ -72,10 +72,13 @@ jobs:
           cd styles
           bundle exec jekyll build
           cd -
-      
+
       - name: Download the package and dependencies
         run: npm install
-      
+
+      - name: DEBUG
+        run: npm list angular
+
       - name: build the index.html file
         run: npx webpack
 
