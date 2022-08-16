@@ -61,6 +61,11 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
 
+      - name: Setup Ruby 2.7.5
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7.5
+
       - name: install bundler
         run: |
           gem install bundler
@@ -72,9 +77,12 @@ jobs:
           bundle exec jekyll build
           cd -
 
-      - name: build the index.html file
+      - name: install
         run:
           npm install
+
+      - name: build the index.html file
+        run:
           npx webpack
 
       - name: upload index.html artifact
