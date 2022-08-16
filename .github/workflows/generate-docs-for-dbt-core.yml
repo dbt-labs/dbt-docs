@@ -98,7 +98,7 @@ jobs:
         with:
           name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: |
-            .changes/unreleaded/*.yml
+            .changes/unreleased/*.yml
           if-no-files-found: error
           retention-days: 15
 
