@@ -56,20 +56,23 @@ jobs:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
 
-      - name: Use Node.js
+      - name: Use Node.js v14.18.2
         uses: actions/setup-node@v3
         with:
           node-version: 14.18.2
 
-      - name: Setup Ruby 2.7.5
+      - name: Use Ruby v2.7.5
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.7.5'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Download the package and dependencies
-        run: npm install --no-optional
+        run: npm install
 
+      - name: DEBUG
+        run: npm list webpack
+      
       - name: build the index.html file
         run: npx webpack
 
