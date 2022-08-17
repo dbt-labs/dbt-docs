@@ -164,7 +164,7 @@ jobs:
           git push
 
       - name: Create Pull Request
-        run:
+        run: |
           gh pr create --title "${{ needs.set_variables.outputs.pr_title }}" \
                        --body "${{ needs.set_variables.outputs.pr_body }}" \
                        --base main \
@@ -211,7 +211,7 @@ jobs:
           git push
 
       - name: Create Pull Request
-        run:
+        run: |
           gh pr create --title "Remove moved changie yml files" \
                        --body ${{ needs.set_variables.outputs.pr_body }} \
                        --base main \
