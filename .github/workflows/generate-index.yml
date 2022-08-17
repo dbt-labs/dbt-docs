@@ -1,12 +1,11 @@
 # **what?**
-# Generate the new index.html for dbt-core and more over all associated changelog files.
-# Cleans up all changelog files once they are committed to dbt-core.
+# Generate the new index.html for dbt-core as a GitHub artifact
 
 # **why?**
-# Automate the process of generating the new index.html and bringing in changelog entries.
+# Automate the process of generating the new index.html so no local setup is required
 
 # **when?**
-# This will run when called in manually.  It may eventually be folded into the release process for dbt-core.
+# This will run when called in manually or as part of the workflow to generate a new index file for release.
 
 
 name: Generate Updated Docs for dbt-core
