@@ -196,7 +196,7 @@ jobs:
 
       - name: DEBUGGING
         run: |
-          ls - R
+          ls -R
 
       - name: Remove changie yaml files
         id: rm_yml
@@ -205,7 +205,7 @@ jobs:
 
       - name: DEBUGGING MORE
         run: |
-          ls - R
+          ls -R
 
       - name: Print branch status
         run: |
