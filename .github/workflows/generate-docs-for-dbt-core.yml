@@ -144,6 +144,10 @@ jobs:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
+      - name: Print branch status
+        run: |
+          git status
+
       - name: Download changelog artifact(s)
         uses: actions/download-artifact@v3
         with:
@@ -181,7 +185,7 @@ jobs:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
         with:
-          path: main
+          ref: main
       
       - name: Create branch
         run: |
