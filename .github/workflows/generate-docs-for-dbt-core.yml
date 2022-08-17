@@ -165,8 +165,8 @@ jobs:
 
       - name: Create Pull Request
         run:
-          gh pr create --title "${{ needs.set_variables.outputs.pr_title }}"" \
-                       --body "${{ needs.set_variables.outputs.pr_body }}"" \
+          gh pr create --title "${{ needs.set_variables.outputs.pr_title }}" \
+                       --body "${{ needs.set_variables.outputs.pr_body }}" \
                        --base main \
                        --head ${{ needs.set_variables.outputs.branch_name }} \
                        --label dbt-docs
