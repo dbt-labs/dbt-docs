@@ -19,7 +19,7 @@ defaults:
     shell: bash
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -143,9 +143,6 @@ jobs:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
-      - name: Display structure of downloaded files
-        run: ls -R
-
       - name: Download changelog artifact(s)
         uses: actions/download-artifact@v3
         with:
@@ -156,6 +153,8 @@ jobs:
         run: |
           git status
 
+      # note that if nothing has changed with the repo, the index file won't be
+      # committed since there are no changes, even if there are changelogs.
       - name: Commit & Push changes
         run: |
           git config user.name 'Github Build Bot'
@@ -183,6 +182,7 @@ jobs:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
         with:
+          repository: dbt-labs/dbt-docs # redundant but calling it out for clarity
           ref: main
       
       - name: Create branch
