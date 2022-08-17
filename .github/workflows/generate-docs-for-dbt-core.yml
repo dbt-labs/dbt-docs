@@ -19,8 +19,8 @@ defaults:
     shell: bash
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: write # adds new commits
+  pull-requests: write # opens new PRs
 
 jobs:
   set_variables:
@@ -161,7 +161,7 @@ jobs:
           git config user.email 'buildbot@fishtownanalytics.com'
           git pull
           git add .
-          git commit -m "Add new index.html and changelog yaml files for dbt-docs"
+          git commit -m "Add new index.html and changelog yaml files from dbt-docs"
           git push
 
       - name: Create Pull Request
@@ -184,6 +184,16 @@ jobs:
         with:
           repository: dbt-labs/dbt-docs # redundant but calling it out for clarity
       
+      # if there are no changie files to delete the job fails because the PR has 0
+      # changes, so catch it here for clarity.
+      - name: Check for changed changie yaml files
+        id: changie_check
+        run: |
+          if [[ -z $(find ./.changes/unreleased -type f -name "*.yaml") ]] then
+            echo No changie yaml files to delete.  This is unexpected.
+            exit 1
+          fi
+
       - name: Create branch
         run: |
           git checkout -b ${{ needs.set_variables.outputs.branch_name }}
@@ -193,29 +203,17 @@ jobs:
         run: |
           git status
 
-      - name: DEBUGGING
-        run: |
-          ls -R
-
       - name: Remove changie yaml files
         id: rm_yml
         run: |
           find ./.changes/unreleased -type f -name "*.yaml" -delete
-
-      - name: DEBUGGING MORE
-        run: |
-          ls -R
-
-      - name: Print branch status
-        run: |
-          git status
 
       - name: Commit & Push changes
         run: |
           git config user.name 'Github Build Bot'
           git config user.email 'buildbot@fishtownanalytics.com'
           git pull
-          git add .
+          git add .changes/unreleased
           git commit -m "Delete changie files that were moved to dbt-core for release"
           git push
 
