@@ -100,7 +100,6 @@ jobs:
           if-no-files-found: error
           retention-days: 15
 
-
   gather_changelogs:
     needs: [set_variables]
     runs-on: ubuntu-latest
@@ -118,47 +117,35 @@ jobs:
           if-no-files-found: error
           retention-days: 15
 
-  # create branch on dbt-core
   create_dbt_core_branch:
     needs: [set_variables, build_index]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository code
+      - name: Check out dbt-core main branch
         uses: actions/checkout@v3
         with:
           repository: dbt-labs/dbt-core
           ref: main
-          # token: PAT?
+          token: ${{ secrets.FISHTOWN_BOT_PAT }}
  
       - name: Create branch
         run: |
           git checkout -b ${{ needs.set_variables.outputs.branch_name }}
           git push -u origin ${{ needs.set_variables.outputs.branch_name }}
       
-      - name: Check current branch
+      - name: Print branch status
         run: |
           git status
 
-  commit_dbt_core:
-    needs: [set_variables, build_index, create_dbt_core_branch]
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Check out the dbt-core branch
-        uses: actions/checkout@v3
-        with:
-          repository: dbt-labs/dbt-core
-          ref: ${{ needs.set_variables.outputs.branch_name }}
-          # token: PAT?
-
-      - uses: actions/download-artifact@v3
+      - name: Download index artifact
+        uses: actions/download-artifact@v3
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
-      - uses: actions/download-artifact@v3
+      - name: Download changelog artifact(s)
+        uses: actions/download-artifact@v3
         with:
           name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: ".changes/unreleased"
@@ -184,7 +171,7 @@ jobs:
                        --head ${{ needs.set_variables.outputs.branch_name }} \
                        --label dbt-docs
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}  # pretty sure this needs to be a scoped down PAT
+          GITHUB_TOKEN: ${{ secrets.FISHTOWN_BOT_PAT }}
 
   clean_up_changie:
     needs: [set_variables, commit_dbt_core]
