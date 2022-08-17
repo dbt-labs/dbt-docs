@@ -143,10 +143,8 @@ jobs:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
-      - name: Move index file and print branch status
-        run: |
-          mv -f core/dbt/include/dist/index.html core/dbt/include/index.html
-          git status
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Download changelog artifact(s)
         uses: actions/download-artifact@v3
@@ -217,7 +215,7 @@ jobs:
       - name: Create Pull Request
         run: |
           gh pr create --title "Remove moved changie yml files" \
-                       --body ${{ needs.set_variables.outputs.pr_body }} \
+                       --body "${{ needs.set_variables.outputs.pr_body }}" \
                        --base main \
                        --head ${{ needs.set_variables.outputs.branch_name }}
         env:
