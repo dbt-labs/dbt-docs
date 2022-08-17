@@ -52,6 +52,7 @@ jobs:
           echo "PR Body:               ${{ steps.set.outputs.PR_BODY }}"
 
   build_index:
+    needs: [set_variables]
     runs-on: ubuntu-latest
 
     steps:
