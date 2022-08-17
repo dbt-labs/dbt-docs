@@ -223,5 +223,6 @@ jobs:
                        --body "${{ needs.set_variables.outputs.pr_body }}" \
                        --base main \
                        --head ${{ needs.set_variables.outputs.branch_name }}
+                       --label "Skip Changelog"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
