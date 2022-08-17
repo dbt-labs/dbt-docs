@@ -193,11 +193,19 @@ jobs:
       - name: Check current branch
         run: |
           git status
-      
+
+      - name: DEBUGGING
+        run: |
+          ls - R
+
       - name: Remove changie yaml files
         id: rm_yml
         run: |
           find ./.changes/unreleased -type f -name "*.yaml" -delete
+
+      - name: DEBUGGING MORE
+        run: |
+          ls - R
 
       - name: Print branch status
         run: |
