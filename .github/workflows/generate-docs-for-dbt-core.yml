@@ -27,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       branch_name: ${{ steps.set.outputs.BRANCH_NAME }}
-      index_artifact_name: ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}
       changie_artifact_name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}
       pr_title: ${{ steps.set.outputs.PR_TITLE }}
       pr_body: ${{ steps.set.outputs.PR_BODY }}
@@ -37,7 +36,6 @@ jobs:
         id: set
         run: |
           echo "::set-output name=BRANCH_NAME::dbt-docs-release/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID"
-          echo "::set-output name=INDEX_ARTIFACT_NAME::index_file"
           echo "::set-output name=CHANGIE_ARTIFACT_NAME::changie_yamls"
           echo "::set-output name=PR_TITLE::Add most recent dbt-docs changes"
           echo "::set-output name=PR_BODY::Auto generated changes from `generate-docs-for-dbt-core.yml` workflow"
@@ -46,7 +44,6 @@ jobs:
         id: print_variables
         run: |
           echo "Branch name:           ${{ steps.set.outputs.BRANCH_NAME }}"
-          echo "Index Artifact Name:   ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}"
           echo "Changie Artifact Name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}"
           echo "PR Title:              ${{ steps.set.outputs.PR_TITLE }}"
           echo "PR Body:               ${{ steps.set.outputs.PR_BODY }}"
@@ -54,44 +51,16 @@ jobs:
   build_index:
     needs: [set_variables]
     runs-on: ubuntu-latest
+    outputs:
+      index_artifact_name: ${{ steps.generate_index.outputs.index_artifact_name }}
+
     steps:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
 
-      - name: Update submodules
-        run: git submodule update --init --recursive 
-
-      - name: Use Node.js v14.18.2
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14.18.2
-
-      - name: Use Ruby v2.7.5
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7.5'
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-      - name: build the css files required for webpack
-        run: |
-          cd styles
-          bundle exec jekyll build
-          cd -
-
-      - name: Download the package and dependencies
-        run: npm install
-
-      - name: build the index.html file
-        run: npx webpack
-
-      - name: upload index.html artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ needs.set_variables.outputs.index_artifact_name }}
-          path: |
-            dist/index.html
-          if-no-files-found: error
-          retention-days: 15
+      - name: Generate Index
+        id: generate_index
+        uses: ./.github/workflows/generate-index
 
       - name: upload changelog artifacts
         uses: actions/upload-artifact@v3
@@ -125,7 +94,7 @@ jobs:
           git status
 
   commit_dbt_core:
-    needs: [set_variables, create_dbt_core_branch]
+    needs: [set_variables, build_index, create_dbt_core_branch]
     runs-on: ubuntu-latest
 
     steps:
@@ -139,7 +108,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ needs.set_variables.outputs.index_artifact_name }}
+          name: ${{ needs.build_index.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
       - uses: actions/download-artifact@v3
@@ -192,7 +161,7 @@ jobs:
       - name: Remove changie yaml files
         id: rm_yml
         run: |
-          find . -name '.changes/unreleased/*.yml' -delete
+          find . -name '.changes/unreleased/*.yaml' -delete
 
       - name: Print branch status
         run: |
