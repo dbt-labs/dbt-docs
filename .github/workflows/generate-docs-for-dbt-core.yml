@@ -117,7 +117,7 @@ jobs:
           if-no-files-found: error
           retention-days: 15
 
-  create_dbt_core_branch:
+  commit_dbt_core:
     needs: [set_variables, build_index]
     runs-on: ubuntu-latest
 
