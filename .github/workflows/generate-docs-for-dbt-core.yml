@@ -95,8 +95,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
-          path: |
-            dist/index.html
+          path: dist/index.html
           if-no-files-found: error
           retention-days: 15
 
@@ -144,8 +143,9 @@ jobs:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
-      - name: Print branch status
+      - name: Move index file and print branch status
         run: |
+          mv -f core/dbt/include/dist/index.html core/dbt/include/index.html
           git status
 
       - name: Download changelog artifact(s)
