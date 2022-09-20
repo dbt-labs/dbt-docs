@@ -142,7 +142,6 @@ angular
 
             // Add exposures back into nodes to make site logic work
             _.each(service.files.manifest.exposures, function(node) {
-                node.label = node.name;
                 service.files.manifest.nodes[node.unique_id] = node;
             });
             
@@ -482,7 +481,7 @@ angular
 
             exposures[type].items.push({
                 type: 'file',
-                name: name,
+                name: node.label,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
