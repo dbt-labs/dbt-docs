@@ -142,7 +142,12 @@ angular
 
             // Add exposures back into nodes to make site logic work
             _.each(service.files.manifest.exposures, function(node) {
-                node.label = node.name;
+                // Since label is a new field for exposures we don't want to 
+                // immediately make docs unusable because the label is empty.
+                // This will default the label to be the name when not filled.
+                if (!node.label){
+                    node.label = node.name;
+                }
                 service.files.manifest.nodes[node.unique_id] = node;
             });
             
@@ -482,7 +487,7 @@ angular
 
             exposures[type].items.push({
                 type: 'file',
-                name: name,
+                name: node.label,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
