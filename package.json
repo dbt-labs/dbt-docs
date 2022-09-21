@@ -16,7 +16,7 @@
     "babel-preset-react": "^6.24.1",
     "base64-inline-loader": "^1.1.1",
     "bootstrap": "3",
-    "css-loader": "^1.0.0",
+    "css-loader": "^6.7.1",
     "cytoscape": "https://github.com/dbt-labs/cytoscape.js.git#feature/cubic-bezier-edges",
     "cytoscape-context-menus": "3.0.5",
     "cytoscape-dagre": "^2.2.1",
