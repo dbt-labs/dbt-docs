@@ -8,7 +8,7 @@
 # This will run when called in manually or as part of the workflow to generate a new index file for release.
 
 
-name: Generate Updated Docs for dbt-core
+name: Generate Index file for testing
 
 on:
   workflow_dispatch:

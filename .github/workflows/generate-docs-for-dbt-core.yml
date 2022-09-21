@@ -189,8 +189,8 @@ jobs:
       - name: Check for changed changie yaml files
         id: changie_check
         run: |
-          if [[ -z $(find ./.changes/unreleased -type f -name "*.yaml") ]] then
-            echo No changie yaml files to delete.  This is unexpected.
+          if [[ -z $(find ./.changes/unreleased -type f -name "*.yaml") ]]; then
+            echo "No changie yaml files to delete.  This is unexpected."
             exit 1
           fi
 
