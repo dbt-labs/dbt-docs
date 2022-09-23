@@ -28,8 +28,8 @@ angular
 
         var default_compiled = '\n-- compiled code not found for this model\n';
         $scope.versions = {
-            'Source': $scope.model.raw_sql,
-            'Compiled': $scope.model.compiled_sql || default_compiled
+            'Source': $scope.model.raw_code,
+            'Compiled': $scope.model.compiled_code || default_compiled
         }
 
         setTimeout(function() {
