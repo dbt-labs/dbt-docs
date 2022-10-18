@@ -193,9 +193,15 @@ angular
                     }
                 },
                 {
-                    selector: 'node[node_color]', 
+                    selector: 'node[language="python"]',
                     style: {
-                        'background-color': 'data(node_color)', 
+                        'background-color': '#e3ad06',
+                    }
+                },
+                {
+                    selector: 'node[node_color]',
+                    style: {
+                        'background-color': 'data(node_color)',
                     }
                 },
                 {
