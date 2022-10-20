@@ -195,7 +195,7 @@ angular
                 {
                     selector: 'node[language="python"]',
                     style: {
-                        'background-color': '#e3ad06',
+                        'background-color': '#6a5acd',
                     }
                 },
                 {
