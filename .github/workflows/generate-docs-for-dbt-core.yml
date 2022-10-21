@@ -13,6 +13,11 @@ name: Generate Updated Docs for dbt-core
 
 on:
   workflow_dispatch:
+    inputs:
+      no_changelog:
+        description: 'No changelog expected (will error if changelog yaml is found)'
+        type: boolean
+        required: false
 
 defaults:
   run:
@@ -36,31 +41,57 @@ jobs:
       - name: Set variables
         id: set
         run: |
-          echo "::set-output name=BRANCH_NAME::dbt-docs-release/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID"
-          echo "::set-output name=INDEX_ARTIFACT_NAME::index_file"
-          echo "::set-output name=CHANGIE_ARTIFACT_NAME::changie_yamls"
-          echo "::set-output name=PR_TITLE::Add most recent dbt-docs changes"
-          echo "::set-output name=PR_BODY::Auto generated changes from generate-docs-for-dbt-core.yml workflow"
+          echo "BRANCH_NAME=dbt-docs-release/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+          echo "INDEX_ARTIFACT_NAME=index_file" >> $GITHUB_OUTPUT
+          echo "CHANGIE_ARTIFACT_NAME=changie_yamls" >> $GITHUB_OUTPUT
+          echo "PR_TITLE=Add most recent dbt-docs changes" >> $GITHUB_OUTPUT
+          echo "PR_BODY=Auto generated changes from generate-docs-for-dbt-core.yml workflow" >> $GITHUB_OUTPUT
 
       - name: Print variables
         id: print_variables
         run: |
+          echo "no_changelog input     ${{ inputs.no_changelog }}"
           echo "Branch name:           ${{ steps.set.outputs.BRANCH_NAME }}"
           echo "Index Artifact Name:   ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}"
           echo "Changie Artifact Name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}"
           echo "PR Title:              ${{ steps.set.outputs.PR_TITLE }}"
           echo "PR Body:               ${{ steps.set.outputs.PR_BODY }}"
 
-  build_index:
+  gather_changelogs:
     needs: [set_variables]
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout dbt-docs repo
+        uses: actions/checkout@v3
 
-      # TODO: switch this out for a reusable workflow so it can be called independantly.  Can't do it now since it has to be in main.
-      # - name: Generate Index
-      #   id: generate_index
-      #   uses: ./.github/workflows/generate-index.yml@main
+      - name: upload changelog artifacts
+        id: retrieve_changelogs
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
+          path: |
+            .changes/unreleased/*.yaml
+          if-no-files-found: error
+          retention-days: 15
+      
+      - name: Fail if no changelogs found, but were expected
+        if: steps.retrieve_changelogs.outcome == 'failure' && inputs.no_changelog == false
+        run: |
+          echo "Changelog yaml files were not found, but the no_changelog input was set to false"
+          exit 1
+      
+      - name: Fail if changelogs are found, but none were expected
+        if: steps.retrieve_changelogs.outcome == 'success' && inputs.no_changelog == true
+        run: |
+          echo "Changelog yaml files were found, but the no_changelog input was set to true"
+          exit 1
+
+  build_index:
+    needs: [set_variables, gather_changelogs]
+    runs-on: ubuntu-latest
+
+    steps:
 
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
@@ -96,23 +127,6 @@ jobs:
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: dist/index.html
-          if-no-files-found: error
-          retention-days: 15
-
-  gather_changelogs:
-    needs: [set_variables]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout dbt-docs repo
-        uses: actions/checkout@v3
-
-      - name: upload changelog artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
-          path: |
-            .changes/unreleased/*.yaml
           if-no-files-found: error
           retention-days: 15
 
@@ -176,6 +190,7 @@ jobs:
 
   clean_up_changie:
     needs: [set_variables, commit_dbt_core]
+    if: ${{ inputs.no_changelog }} == false
     runs-on: ubuntu-latest
 
     steps:
