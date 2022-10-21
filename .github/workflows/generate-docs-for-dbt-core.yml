@@ -186,6 +186,7 @@ jobs:
 
   clean_up_changie:
     needs: [set_variables, commit_dbt_core]
+    if: ${{ inputs.no_changelog }} == false
     runs-on: ubuntu-latest
 
     steps:
