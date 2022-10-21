@@ -119,15 +119,15 @@ jobs:
           retention-days: 15
       
       - name: Fail when no changelogs found, but were expected
-        if: steps.retrieve_changelogs.outcome == 'failure' && inputs.no_changelog == true
+        if: steps.retrieve_changelogs.outcome == 'failure' && inputs.no_changelog == false
         run: exit 1
       
       - name: Fail when changelogs are found, but none were expected
-        if: steps.retrieve_changelogs.outcome == 'success' && inputs.no_changelog == false
+        if: steps.retrieve_changelogs.outcome == 'success' && inputs.no_changelog == true
         run: exit 1
 
   commit_dbt_core:
-    needs: [set_variables, build_index]
+    needs: [set_variables, build_index, gather_changelogs]
     runs-on: ubuntu-latest
 
     steps:
@@ -185,7 +185,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.FISHTOWN_BOT_PAT }}
 
   clean_up_changie:
-    needs: [set_variables, commit_dbt_core]
+    needs: [set_variables, commit_dbt_core, gather_changelogs]
     if: ${{ inputs.no_changelog }} == false
     runs-on: ubuntu-latest
 
