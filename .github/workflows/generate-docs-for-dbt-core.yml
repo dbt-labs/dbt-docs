@@ -50,6 +50,7 @@ jobs:
       - name: Print variables
         id: print_variables
         run: |
+          echo "no_changelog input     ${{ inputs.no_changelog }}"
           echo "Branch name:           ${{ steps.set.outputs.BRANCH_NAME }}"
           echo "Index Artifact Name:   ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}"
           echo "Changie Artifact Name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}"
@@ -116,14 +117,13 @@ jobs:
             .changes/unreleased/*.yaml
           if-no-files-found: error
           retention-days: 15
-        continue-on-error: true
       
       - name: Fail when no changelogs found, but were expected
-        if: ${{ failure() }} && ${{ inputs.no_changelog }} == true
+        if: steps.retrieve_changelogs.outcome == 'failure' && inputs.no_changelog == true
         run: exit 1
       
       - name: Fail when changelogs are found, but none were expected
-        if: ${{ success() }} && ${{ inputs.no_changelog }} == false
+        if: steps.retrieve_changelogs.outcome == 'success' && inputs.no_changelog == false
         run: exit 1
 
   commit_dbt_core:
