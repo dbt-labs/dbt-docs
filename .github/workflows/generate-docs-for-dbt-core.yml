@@ -57,8 +57,38 @@ jobs:
           echo "PR Title:              ${{ steps.set.outputs.PR_TITLE }}"
           echo "PR Body:               ${{ steps.set.outputs.PR_BODY }}"
 
-  build_index:
+  gather_changelogs:
     needs: [set_variables]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dbt-docs repo
+        uses: actions/checkout@v3
+
+      - name: upload changelog artifacts
+        id: retrieve_changelogs
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
+          path: |
+            .changes/unreleased/*.yaml
+          if-no-files-found: error
+          retention-days: 15
+      
+      - name: Fail if no changelogs found, but were expected
+        if: steps.retrieve_changelogs.outcome == 'failure' && inputs.no_changelog == false
+        run: |
+          echo "Changelog yaml files were not found, but the no_changelog input was set to false"
+          exit 1
+      
+      - name: Fail if changelogs are found, but none were expected
+        if: steps.retrieve_changelogs.outcome == 'success' && inputs.no_changelog == true
+        run: |
+          echo "Changelog yaml files were found, but the no_changelog input was set to true"
+          exit 1
+
+  build_index:
+    needs: [set_variables, gather_changelogs]
     runs-on: ubuntu-latest
 
     steps:
@@ -100,34 +130,8 @@ jobs:
           if-no-files-found: error
           retention-days: 15
 
-  gather_changelogs:
-    needs: [set_variables]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout dbt-docs repo
-        uses: actions/checkout@v3
-
-      - name: upload changelog artifacts
-        id: retrieve_changelogs
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
-          path: |
-            .changes/unreleased/*.yaml
-          if-no-files-found: error
-          retention-days: 15
-      
-      - name: Fail when no changelogs found, but were expected
-        if: steps.retrieve_changelogs.outcome == 'failure' && inputs.no_changelog == false
-        run: exit 1
-      
-      - name: Fail when changelogs are found, but none were expected
-        if: steps.retrieve_changelogs.outcome == 'success' && inputs.no_changelog == true
-        run: exit 1
-
   commit_dbt_core:
-    needs: [set_variables, build_index, gather_changelogs]
+    needs: [set_variables, build_index]
     runs-on: ubuntu-latest
 
     steps:
@@ -185,7 +189,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.FISHTOWN_BOT_PAT }}
 
   clean_up_changie:
-    needs: [set_variables, commit_dbt_core, gather_changelogs]
+    needs: [set_variables, commit_dbt_core]
     if: ${{ inputs.no_changelog }} == false
     runs-on: ubuntu-latest
 
