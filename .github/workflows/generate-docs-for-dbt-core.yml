@@ -13,6 +13,11 @@ name: Generate Updated Docs for dbt-core
 
 on:
   workflow_dispatch:
+    inputs:
+      no_changelog:
+        description: 'No changelog expected (will error if changelog yaml is found)'
+        type: boolean
+        required: false
 
 defaults:
   run:
@@ -36,11 +41,11 @@ jobs:
       - name: Set variables
         id: set
         run: |
-          echo "::set-output name=BRANCH_NAME::dbt-docs-release/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID"
-          echo "::set-output name=INDEX_ARTIFACT_NAME::index_file"
-          echo "::set-output name=CHANGIE_ARTIFACT_NAME::changie_yamls"
-          echo "::set-output name=PR_TITLE::Add most recent dbt-docs changes"
-          echo "::set-output name=PR_BODY::Auto generated changes from generate-docs-for-dbt-core.yml workflow"
+          echo "BRANCH_NAME=dbt-docs-release/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+          echo "INDEX_ARTIFACT_NAME=index_file" >> $GITHUB_OUTPUT
+          echo "CHANGIE_ARTIFACT_NAME=changie_yamls" >> $GITHUB_OUTPUT
+          echo "PR_TITLE=Add most recent dbt-docs changes" >> $GITHUB_OUTPUT
+          echo "PR_BODY=Auto generated changes from generate-docs-for-dbt-core.yml workflow" >> $GITHUB_OUTPUT
 
       - name: Print variables
         id: print_variables
@@ -56,11 +61,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      # TODO: switch this out for a reusable workflow so it can be called independantly.  Can't do it now since it has to be in main.
-      # - name: Generate Index
-      #   id: generate_index
-      #   uses: ./.github/workflows/generate-index.yml@main
 
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
@@ -108,6 +108,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: upload changelog artifacts
+        id: retrieve_changelogs
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.set_variables.outputs.changie_artifact_name }}
@@ -115,6 +116,15 @@ jobs:
             .changes/unreleased/*.yaml
           if-no-files-found: error
           retention-days: 15
+        continue-on-error: true
+      
+      - name: Fail when no changelogs found, but were expected
+        if: ${{ failure() }} && ${{ inputs.no_changelog }} == true
+        run: exit 1
+      
+      - name: Fail when changelogs are found, but none were expected
+        if: ${{ success() }} && ${{ inputs.no_changelog }} == false
+        run: exit 1
 
   commit_dbt_core:
     needs: [set_variables, build_index]

@@ -36,7 +36,7 @@ jobs:
       - name: Set variables
         id: set
         run: |
-          echo "::set-output name=INDEX_ARTIFACT_NAME::index_file"
+          echo "INDEX_ARTIFACT_NAME=index_file" >> $GITHUB_OUTPUT
 
       - name: Print variables
         id: print_variables
