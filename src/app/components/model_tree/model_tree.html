@@ -8,7 +8,7 @@
     <ul>
         <li>
             <a ui-sref="dbt.overview()" class="menu-link menu-main">
-                Overview
+                Accueil
             </a>
         </li>
 
@@ -17,10 +17,19 @@
                 <div class="switch ">
                     <span
                        class="switch-label btn btn-sm"
+                       ng-class="{active: (nav_selected == 'sources')}"
+                       ng-click="nav_selected = 'sources'">
+                        <!-- <svg class="icn menu-icon-on"><use xlink:href="#icn-dir-on"></use></svg> -->
+                        Sources
+                    </span>
+                </div>
+                <div class="switch ">
+                    <span
+                       class="switch-label btn btn-sm"
                        ng-class="{active: (nav_selected == 'project')}"
                        ng-click="nav_selected = 'project'">
-                        <svg class="icn menu-icon-on"><use xlink:href="#icn-dir-on"></use></svg>
-                        Project
+                        <!-- <svg class="icn menu-icon-on"><use xlink:href="#icn-dir-on"></use></svg> -->
+                        Business Intelligence
                     </span>
                 </div>
                 <div class="switch">
@@ -28,17 +37,17 @@
                        class="switch-label btn btn-sm"
                        ng-class="{active: (nav_selected == 'database')}"
                        ng-click="nav_selected = 'database'">
-                        <svg class="icn menu-icon-on"><use xlink:href="#icn-tree-on"></use></svg>
-                        Database
+                        <!-- <svg class="icn menu-icon-on"><use xlink:href="#icn-tree-on"></use></svg> -->
+                        DataWarehouse
                     </span>
                 </div>
             </div>
         </li>
 
         <li>
-            <div class="menu" ng-show="nav_selected == 'project'">
+            <div class="menu" ng-show="nav_selected == 'sources'">
                 <div ng-show="tree.sources.length > 0">
-                    <strong>Sources</strong>
+                    <!-- <strong>Sources</strong> -->
                     <ul style="display: block">
                         <model-tree-line
                             item="item"
@@ -47,9 +56,12 @@
                     </ul>
                     <br />
                 </div>
-
+            </div>
+        </li>
+        <li>
+            <div class="menu" ng-show="nav_selected == 'project'">
                 <div ng-show="tree.exposures.length > 0">
-                    <strong>Exposures</strong>
+                    <strong>Consommateurs de Données</strong>
                     <ul style="display: block">
                         <model-tree-line
                             item="item"
@@ -60,7 +72,7 @@
                 </div>
                 
                 <div ng-show="tree.metrics.length > 0">
-                    <strong>Metrics</strong>
+                    <strong>Métriques</strong>
                     <ul style="display: block">
                         <model-tree-line
                             item="item"
@@ -70,19 +82,19 @@
                     <br />
                 </div>
 
-                <strong>Projects</strong>
+                <!-- <strong>Projects</strong>
                 <ul>
                     <model-tree-line
                         item="item"
                         resource-type="model"
                         ng-repeat="item in tree.project"></model-tree-line>
-                </ul>
+                </ul> -->
             </div>
         </li>
 
         <li>
             <div class="menu" ng-show="nav_selected == 'database'">
-                <strong>Tables and Views</strong>
+                <!-- <strong>Données</strong> -->
                 <ul>
                     <model-tree-line
                         item="item"

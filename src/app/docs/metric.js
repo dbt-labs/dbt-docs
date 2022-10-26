@@ -33,11 +33,11 @@ angular
 
         $scope.extra_table_fields = [
             {
-                name: "Metric Type",
+                name: "Type",
                 value: metric_type,
             },
             {
-                name: "Metric name",
+                name: "Nom",
                 value: $scope.metric.name
             }
         ]

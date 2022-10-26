@@ -14,14 +14,14 @@
         <div class="app-frame app-pad">
             <h1>
                 <span class="break">{{ query }}</span>
-                <small><span>{{ results.length }}</span> search results</small>
+                <small><span>{{ results.length }}</span> résultat(s)</small>
             </h1>
             <input type="checkbox" id="name" ng-model="checkboxStatus.show_names" ng-click="filterResults(results, checkboxStatus)" style = "margin-left:10px;margin-right:5px">
-            <label for="name" style="margin-right:25px">Name</label> 
+            <label for="name" style="margin-right:25px">Nom</label> 
             <input type="checkbox" id="desc" ng-model="checkboxStatus.show_descriptions" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
             <label for="desc" style="margin-right:25px;">Description</label> 
             <input type="checkbox" id="column" ng-model="checkboxStatus.show_columns" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
-            <label for="column" style="margin-right:25px;">Column</label> 
+            <label for="column" style="margin-right:25px;">Colonne</label> 
             <input type="checkbox" id="code" ng-model="checkboxStatus.show_code" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
             <label for="code" style="margin-right:15px;">SQL</label>
             <input type="checkbox" id="code" ng-model="checkboxStatus.show_tags" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
@@ -55,7 +55,7 @@
                         </span>
                         <a
                             ng-show="columnFilter(result.model.columns).length > max_results_columns && !limit_columns[result.model.unique_id]"
-                            ng-click="$event.stopPropagation(); limit_columns[result.model.unique_id] = 100">Show {{ columnFilter(result.model.columns).length - max_results_columns }} more</a>
+                            ng-click="$event.stopPropagation(); limit_columns[result.model.unique_id] = 100">Afficher les {{ columnFilter(result.model.columns).length - max_results_columns }} résultats</a>
                         </div>
                         <div class="sub-results" ng-show="query.length > 0">
                         <span>
@@ -72,7 +72,7 @@
                 </div>
                 <a
                     ng-show="results.length >= max_results && !show_all"
-                    ng-click="show_all = true">Show {{ results.length - max_results }} more</a>
+                    ng-click="show_all = true">Afficher les {{ results.length - max_results }} résultats</a>
             </div>
         </div>
     </div>

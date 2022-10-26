@@ -96,7 +96,7 @@ angular
 
                 var stats = [
                     {
-                        name: "Owner",
+                        name: "Responsable",
                         value: metadata.owner
                     },
                     {
@@ -107,12 +107,12 @@ angular
                         name: "Package",
                         value: model.package_name
                     },
+                    // {
+                    //     name: "Language",
+                    //     value: model.language
+                    // },
                     {
-                        name: "Language",
-                        value: model.language
-                    },
-                    {
-                        name: "Relation",
+                        name: "Nom complet",
                         value: relation
                     },
                 ]

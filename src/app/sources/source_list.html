@@ -27,7 +27,7 @@
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
-                <li ui-sref-active='active'><a ui-sref="dbt.source_list({'#': 'details'})">Details</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.source_list({'#': 'details'})">Détails</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.source_list({'#': 'description'})">Description</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.source_list({'#': 'sources'})">Sources</a></li>
             </ul>
@@ -47,7 +47,7 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div ng-if="model.source_description" class="model-markdown" marked="model.source_description"></div>
-                            <div ng-if="!model.source_description">This {{ model.resource_type }} is not currently documented</div>
+                            <div ng-if="!model.source_description">Non documenté</div>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
             <section class="section">
                 <div class="section-target" id="sources"></div>
                 <div class="section-content">
-                    <h6>Source Tables</h6>
+                    <h6>Tables sources</h6>
                     <div class="panel">
                         <div class="panel-body">
                             <div class="table-responsive" style="max-height: 800px; overflow-y: scroll;" ng-if="!_.isEmpty(model.sources)">
@@ -67,8 +67,8 @@
                                             <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Source</th>
                                             <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Table</th>
                                             <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
-                                            <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Link</th>
-                                            <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>More?</th>
+                                            <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Lien</th>
+                                            <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>Plus?</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -90,7 +90,7 @@
                                                 <span ng-show="!column.expanded">{{ source.description }}</span>
                                             </td>
                                             <td>
-                                                <a ui-sref="dbt.source({unique_id: source.unique_id})">View docs</a>
+                                                <a ui-sref="dbt.source({unique_id: source.unique_id})">Voir documentation</a>
                                             </td>
                                             <td class='text-center'>
                                                 <span class='text-light' ng-show="has_more_info(source)">

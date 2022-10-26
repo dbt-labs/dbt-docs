@@ -1,7 +1,7 @@
 <div class="panel">
     <div class="panel-body">
         <div ng-if="_.isEmpty(model.columns)">
-            Column information is not available for this seed
+            Pas d'information disponible
         </div>
         <div class="table-responsive"
              style="max-height: 800px; overflow-y: scroll;"
@@ -9,11 +9,11 @@
             <table class="table table-borderless table-hover">
                 <thead>
                     <tr>
-                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Column</th>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Colonne</th>
                         <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Type</th>
                         <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
                         <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Tests</th>
-                        <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>More?</th>
+                        <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>Plus?</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,7 +77,7 @@
                                 </div>
 
                                 <div ng-show="column.tests && column.tests.length" style="margin-bottom: 15px">
-                                    <h5>Generic Tests</h5>
+                                    <h5>Tests Génériques</h5>
                                     <ul class="list-unstyled" style="margin-top: 2px">
                                         <li ng-repeat="test in column.tests" ng-switch on="test.short" class='text-light'>
                                             <span ng-switch-when="F">
@@ -89,9 +89,9 @@
                                                     </a> on <code>{{ test.fk_field }}</code>
                                                 </span>
                                             </span>
-                                            <span ng-switch-when="P">Primary Key</span>
+                                            <span ng-switch-when="P">Clé Primaire</span>
                                             <span ng-switch-when="U">Unique</span>
-                                            <span ng-switch-when="N">Not Null</span>
+                                            <span ng-switch-when="N">Non Null</span>
                                             <span ng-switch-default>{{ test.label }}</span>
                                         </li>
                                     </ul>

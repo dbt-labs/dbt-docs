@@ -20,7 +20,7 @@
                                 <dd ng-if="model.tags.length > 0" class="detail-value">
                                     <span ng-repeat="tag in model.tags"><code><a ng-click=queryTag(tag)>{{ tag }}</a></code>&nbsp;</span>
                                 </dd>
-                                <dd ng-if="model.tags.length == 0" class="detail-value">untagged</dd>
+                                <dd ng-if="model.tags.length == 0" class="detail-value">Pas de tag</dd>
                             </dl>
                             <dl class="detail"
                                 ng-repeat="item in details">

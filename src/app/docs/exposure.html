@@ -22,10 +22,10 @@
 
                 <h1>
                     <span class="break">{{ exposure.name }}</span>
-                    <small>exposure</small>
+                    <small>consommateur (exposure)</small>
 
                     <div class='pull-right' ng-show="exposure.url">
-                        <a class='btn text-white btn-primary btn-sm' ng-href="{{ exposure.url }}" target="_blank">View this exposure</a>
+                        <a class='btn text-white btn-primary btn-sm' ng-href="{{ exposure.url }}" target="_blank">Ouvrir</a>
                     </div>
 
                     <div class='clearfix'></div>
@@ -35,9 +35,9 @@
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
-                <li ui-sref-active='active'><a ui-sref="dbt.exposure({'#': 'details'})">Details</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.exposure({'#': 'details'})">Détails</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.exposure({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.exposure({'#': 'depends_on'})">Depends On</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.exposure({'#': 'depends_on'})">Dépend de</a></li>
             </ul>
         </div>
     </div>
@@ -56,7 +56,7 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div ng-if="exposure.description" class="model-markdown" marked="exposure.description"></div>
-                            <div ng-if="!exposure.description">This {{ exposure.resource_type }} is not currently documented</div>
+                            <div ng-if="!exposure.description">Non documenté</div>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
             <section class="section" ng-show = "parentsLength != 0">
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
-                    <h6>Depends On</h6>
+                    <h6>Dépend de</h6>
                     <reference-list references="parents" node="exposure" />
                 </div>
             </section>

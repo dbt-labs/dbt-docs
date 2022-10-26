@@ -143,7 +143,7 @@ angular
             menuItems: [
                 {
                     id: 'jump',
-                    content: 'Refocus on Node',
+                    content: 'Centrer sur l\'élément',
                     selector: 'node',
                     tooltipText: 'Focus on the lineage for this node',
                     onClickFunction: function(event) {
@@ -155,7 +155,7 @@ angular
                 },
                 {
                     id: 'docs',
-                    content: 'View documentation',
+                    content: 'Voir documentation',
                     selector: 'node',
                     tooltipText: 'Jump to the documentation for this node',
                     onClickFunction: function(event) {
@@ -168,7 +168,7 @@ angular
                 },
                 {
                     id: 'hide-before-here',
-                    content: 'Hide this and parents',
+                    content: 'Cacher l\'élément et ses parents',
                     selector: 'node',
                     onClickFunction: function(event) {
                         var target = event.target || event.cyTarget
@@ -184,7 +184,7 @@ angular
                 },
                 {
                     id: 'hide-after-here',
-                    content: 'Hide this and children',
+                    content: 'Cacher l\'élément et ses enfants',
                     selector: 'node',
                     onClickFunction: function(event) {
                         var target = event.target || event.cyTarget
@@ -200,7 +200,7 @@ angular
                 },
                 {
                     id: 'export-png',
-                    content: 'Export PNG',
+                    content: 'Exporter',
                     selector: 'node',
                     coreAsWell: true,
                     onClickFunction: function(event) {

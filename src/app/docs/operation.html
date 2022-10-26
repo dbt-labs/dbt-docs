@@ -21,14 +21,14 @@
             <div class="app-frame app-pad app-flush-bottom">
                 <h1>
                     <span class="break">{{ model.name }}</span>
-                    <small>operation</small>
+                    <small>Operation</small>
                 </h1>
             </div>
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.operation({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.operation({'#': 'depends_on'})">Depends On</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.operation({'#': 'depends_on'})">Dépend de</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.operation({'#': 'code'})">SQL</a></li>
             </ul>
         </div>
@@ -42,7 +42,7 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div ng-if="model.description" class="model-markdown" marked="model.description"></div>
-                            <div ng-if="!model.description">This {{ model.resource_type }} is not currently documented</div>
+                            <div ng-if="!model.description">Non documenté</div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
             <section class="section" ng-show = "parentsLength != 0">
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
-                    <h6>Depends On</h6>
+                    <h6>Dépend de</h6>
                     <reference-list references="parents" node="model" />
                 </div>
             </section>
