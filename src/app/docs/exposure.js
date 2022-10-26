@@ -37,6 +37,10 @@ angular
                 name: "Owner email",
                 value: $scope.exposure.owner.email,
             },
+            {
+                name: "Exposure name",
+                value: $scope.exposure.name,
+            },
         ]
     })
 }]);

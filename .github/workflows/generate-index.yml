@@ -1,0 +1,86 @@
+# **what?**
+# Generate the new index.html for dbt-core as a GitHub artifact
+
+# **why?**
+# Automate the process of generating the new index.html so no local setup is required
+
+# **when?**
+# This will run when called in manually or as part of the workflow to generate a new index file for release.
+
+
+name: Generate Index file for testing
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      index_artifact_name:
+        description: The name of the index.html artifact
+        value: ${{ jobs.set_variables.outputs.index_artifact_name }}
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  set_variables:
+    runs-on: ubuntu-latest
+    outputs:
+      index_artifact_name: ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}
+
+    steps:
+      - name: Set variables
+        id: set
+        run: |
+          echo "INDEX_ARTIFACT_NAME=index_file" >> $GITHUB_OUTPUT
+
+      - name: Print variables
+        id: print_variables
+        run: |
+          echo "Index Artifact Name:   ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}"
+
+  build_index:
+    needs: [set_variables]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dbt-docs repo
+        uses: actions/checkout@v3
+
+      - name: Update submodules
+        run: git submodule update --init --recursive 
+
+      - name: Use Node.js v14.18.2
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.18.2
+
+      - name: Use Ruby v2.7.5
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.5'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: build the css files required for webpack
+        run: |
+          cd styles
+          bundle exec jekyll build
+          cd -
+
+      - name: Download the package and dependencies
+        run: npm install
+
+      - name: build the index.html file
+        run: npx webpack
+
+      - name: upload index.html artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ needs.set_variables.outputs.index_artifact_name }}
+          path: |
+            dist/index.html
+          if-no-files-found: error
+          retention-days: 15

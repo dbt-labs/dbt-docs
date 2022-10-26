@@ -13,58 +13,102 @@ name: Generate Updated Docs for dbt-core
 
 on:
   workflow_dispatch:
+    inputs:
+      no_changelog:
+        description: 'No changelog expected (will error if changelog yaml is found)'
+        type: boolean
+        required: false
 
 defaults:
   run:
     shell: bash
 
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write # adds new commits
+  pull-requests: write # opens new PRs
 
 jobs:
   set_variables:
     runs-on: ubuntu-latest
     outputs:
-      branch_name: ${{steps.set.outputs.BRANCH_NAME}}
-      index_artifact_name: ${{steps.set.outputs.INDEX_ARTIFACT_NAME}}
-      changie_artifact_name: ${{steps.set.outputs.CHANGIE_ARTIFACT_NAME}}
-      pr_title: ${{steps.set.outputs.PR_TITLE}}
-      pr_body: ${{steps.set.outputs.PR_BODY}}
+      branch_name: ${{ steps.set.outputs.BRANCH_NAME }}
+      index_artifact_name: ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}
+      changie_artifact_name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}
+      pr_title: ${{ steps.set.outputs.PR_TITLE }}
+      pr_body: ${{ steps.set.outputs.PR_BODY }}
 
     steps:
       - name: Set variables
         id: set
         run: |
-          echo "::set-output name=BRANCH_NAME::dbt-docs/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID"
-          echo "::set-output name=INDEX_ARTIFACT_NAME::index_file"
-          echo "::set-output name=CHANGIE_ARTIFACT_NAME::changie_yamls"
-          echo "::set-output name=PR_TITLE::Add most recent dbt-docs changes"
-          echo "::set-output name=PR_BODY::Auto generated changes from `generate-docs-for-dbt-core.yml` workflow`"
+          echo "BRANCH_NAME=dbt-docs-release/$(date +%Y%m%d-%H%M%S)_$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+          echo "INDEX_ARTIFACT_NAME=index_file" >> $GITHUB_OUTPUT
+          echo "CHANGIE_ARTIFACT_NAME=changie_yamls" >> $GITHUB_OUTPUT
+          echo "PR_TITLE=Add most recent dbt-docs changes" >> $GITHUB_OUTPUT
+          echo "PR_BODY=Auto generated changes from generate-docs-for-dbt-core.yml workflow" >> $GITHUB_OUTPUT
 
       - name: Print variables
         id: print_variables
         run: |
-          echo "Branch name:           $BRANCH_NAME"
-          echo "Index Artifact Name:   $INDEX_ARTIFACT_NAME"
-          echo "Changie Artifact Name: $CHANGIE_ARTIFACT_NAME"
+          echo "no_changelog input     ${{ inputs.no_changelog }}"
+          echo "Branch name:           ${{ steps.set.outputs.BRANCH_NAME }}"
+          echo "Index Artifact Name:   ${{ steps.set.outputs.INDEX_ARTIFACT_NAME }}"
+          echo "Changie Artifact Name: ${{ steps.set.outputs.CHANGIE_ARTIFACT_NAME }}"
+          echo "PR Title:              ${{ steps.set.outputs.PR_TITLE }}"
+          echo "PR Body:               ${{ steps.set.outputs.PR_BODY }}"
 
-  build_index:
+  gather_changelogs:
     needs: [set_variables]
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
+
+      - name: upload changelog artifacts
+        id: retrieve_changelogs
+        uses: actions/upload-artifact@v3
         with:
-          path: main
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-
-      - name: install bundler
+          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
+          path: |
+            .changes/unreleased/*.yaml
+          if-no-files-found: error
+          retention-days: 15
+      
+      - name: Fail if no changelogs found, but were expected
+        if: steps.retrieve_changelogs.outcome == 'failure' && inputs.no_changelog == false
         run: |
-          gem install bundler
-          bundle install
+          echo "Changelog yaml files were not found, but the no_changelog input was set to false"
+          exit 1
+      
+      - name: Fail if changelogs are found, but none were expected
+        if: steps.retrieve_changelogs.outcome == 'success' && inputs.no_changelog == true
+        run: |
+          echo "Changelog yaml files were found, but the no_changelog input was set to true"
+          exit 1
+
+  build_index:
+    needs: [set_variables, gather_changelogs]
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout dbt-docs repo
+        uses: actions/checkout@v3
+
+      - name: Update submodules
+        run: git submodule update --init --recursive 
+
+      - name: Use Node.js v14.18.2
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.18.2
+
+      - name: Use Ruby v2.7.5
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.5'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: build the css files required for webpack
         run: |
@@ -72,139 +116,128 @@ jobs:
           bundle exec jekyll build
           cd -
 
+      - name: Download the package and dependencies
+        run: npm install
+
       - name: build the index.html file
-        run:
-          npm install
-          npx webpack
+        run: npx webpack
 
       - name: upload index.html artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{needs.set_variables.outputs.index_artifact_name}}
-          path: |
-            dist/index.html
+          name: ${{ needs.set_variables.outputs.index_artifact_name }}
+          path: dist/index.html
           if-no-files-found: error
           retention-days: 15
 
-      - name: upload changelog artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{needs.set_variables.outputs.changie_artifact_name}}
-          path: |
-            .changes/unreleaded/*.yml
-          if-no-files-found: error
-          retention-days: 15
-
-  # create branch on dbt-core
-  create_dbt_core_branch:
+  commit_dbt_core:
     needs: [set_variables, build_index]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository code
+      - name: Check out dbt-core main branch
         uses: actions/checkout@v3
         with:
           repository: dbt-labs/dbt-core
           ref: main
-          # token: PAT?
+          token: ${{ secrets.FISHTOWN_BOT_PAT }}
  
       - name: Create branch
         run: |
-          git checkout -b ${{needs.set_variables.outputs.branch_name}}
-          git push -u origin ${{needs.set_variables.outputs.branch_name}}
+          git checkout -b ${{ needs.set_variables.outputs.branch_name }}
+          git push -u origin ${{ needs.set_variables.outputs.branch_name }}
       
-      - name: Check current branch
+      - name: Print branch status
         run: |
           git status
 
-  commit_dbt_core:
-    needs: [set_variables, create_dbt_core_branch]
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Check out the dbt-core branch
-        uses: actions/checkout@v3
+      - name: Download index artifact
+        uses: actions/download-artifact@v3
         with:
-          repository: dbt-labs/dbt-core
-          ref: ${{ needs.set_variables.outputs.branch_name }}
-          # token: PAT?
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: ${{needs.set_variables.outputs.index_artifact_name}}
+          name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
-      - uses: actions/download-artifact@v3
+      - name: Download changelog artifact(s)
+        uses: actions/download-artifact@v3
         with:
-          name: ${{needs.set_variables.outputs.changie_artifact_name}}
+          name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: ".changes/unreleased"
 
       - name: Print branch status
         run: |
           git status
 
+      # note that if nothing has changed with the repo, the index file won't be
+      # committed since there are no changes, even if there are changelogs.
       - name: Commit & Push changes
         run: |
           git config user.name 'Github Build Bot'
           git config user.email 'buildbot@fishtownanalytics.com'
           git pull
           git add .
-          git commit -m "Add new index.html and changelog yaml files for dbt-docs"
+          git commit -m "Add new index.html and changelog yaml files from dbt-docs"
           git push
 
       - name: Create Pull Request
-        run:
-          gh pr create --title ${{ needs.set_variables.outputs.pr_title }} \
-                       --body ${{ needs.set_variables.outputs.pr_body }} \
+        run: |
+          gh pr create --title "${{ needs.set_variables.outputs.pr_title }}" \
+                       --body "${{ needs.set_variables.outputs.pr_body }}" \
                        --base main \
-                       --head ${{ needs.set_variables.outputs.branch_name } \
+                       --head ${{ needs.set_variables.outputs.branch_name }} \
                        --label dbt-docs
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}  # pretty sure this needs to be a scoped down PAT
+          GITHUB_TOKEN: ${{ secrets.FISHTOWN_BOT_PAT }}
 
   clean_up_changie:
     needs: [set_variables, commit_dbt_core]
+    if: ${{ inputs.no_changelog }} == false
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout dbt-docs repo
         uses: actions/checkout@v3
         with:
-          path: main
+          repository: dbt-labs/dbt-docs # redundant but calling it out for clarity
       
+      # if there are no changie files to delete the job fails because the PR has 0
+      # changes, so catch it here for clarity.
+      - name: Check for changed changie yaml files
+        id: changie_check
+        run: |
+          if [[ -z $(find ./.changes/unreleased -type f -name "*.yaml") ]]; then
+            echo "No changie yaml files to delete.  This is unexpected."
+            exit 1
+          fi
+
       - name: Create branch
         run: |
-          git checkout -b ${{needs.set_variables.outputs.branch_name}}
-          git push -u origin ${{needs.set_variables.outputs.branch_name}}
+          git checkout -b ${{ needs.set_variables.outputs.branch_name }}
+          git push -u origin ${{ needs.set_variables.outputs.branch_name }}
       
       - name: Check current branch
         run: |
           git status
-      
+
       - name: Remove changie yaml files
         id: rm_yml
         run: |
-          find . -name '.changes/unreleased/*.yml' -delete
-
-      - name: Print branch status
-        run: |
-          git status
+          find ./.changes/unreleased -type f -name "*.yaml" -delete
 
       - name: Commit & Push changes
         run: |
           git config user.name 'Github Build Bot'
           git config user.email 'buildbot@fishtownanalytics.com'
           git pull
-          git add .
+          git add .changes/unreleased
           git commit -m "Delete changie files that were moved to dbt-core for release"
           git push
 
       - name: Create Pull Request
-        run:
+        run: |
           gh pr create --title "Remove moved changie yml files" \
-                       --body ${{ needs.set_variables.outputs.pr_body }} \
+                       --body "${{ needs.set_variables.outputs.pr_body }}" \
                        --base main \
-                       --head ${{ needs.set_variables.outputs.branch_name }
+                       --head ${{ needs.set_variables.outputs.branch_name }} \
+                       --label "Skip Changelog"
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
