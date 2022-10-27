@@ -15,12 +15,12 @@ on:
   issues:
     types: [closed, deleted, reopened]
 
-permissions:
-  issues: read
+# no special access is needed
+permissions: read-all
 
 jobs:
-  jira-transition:
-    uses: dbt-labs/actions/.github/workflows/jira-transition.yml@v1
+  call-transition-action:
+    uses: dbt-labs/actions/.github/workflows/jira-transition.yml@main
     with:
       project_key: "CT"
     secrets:
