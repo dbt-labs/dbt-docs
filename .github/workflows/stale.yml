@@ -9,6 +9,4 @@ permissions:
 
 jobs:
   stale:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: dbt-labs/actions/.github/workflows/stale-bot-matrix.yml@main
+    uses: dbt-labs/actions/.github/workflows/stale-bot-matrix.yml@main
