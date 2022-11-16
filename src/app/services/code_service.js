@@ -64,7 +64,7 @@ angular
 
     service.generateMetricSQL = function(metric) {
         if (metric.calculation_method == 'derived') {
-            return metric.expression;
+            return "-- derived\n" + metric.expression;
         }
 
         const queryParts = [
