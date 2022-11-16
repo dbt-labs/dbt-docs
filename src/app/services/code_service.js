@@ -63,12 +63,12 @@ angular
     }
 
     service.generateMetricSQL = function(metric) {
-        if (metric.type == 'expression') {
-            return metric.sql;
+        if (metric.calculation_method == 'derived') {
+            return metric.expression;
         }
 
         const queryParts = [
-            `select ${metric.type}(${metric.sql})` ,
+            `select ${metric.calculation_method}(${metric.expression})` ,
             `from {{ ${metric.model} }}`,
         ];
 
