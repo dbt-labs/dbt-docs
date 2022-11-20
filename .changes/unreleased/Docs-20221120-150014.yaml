@@ -1,0 +1,7 @@
+kind: Docs
+body: Adds "View documentation in new tab" option in the DAG view
+time: 2022-11-20T15:00:14.068702-07:00
+custom:
+  Author: datadisciple
+  Issue: "348"
+  PR: "349"
