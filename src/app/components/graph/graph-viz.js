@@ -167,6 +167,19 @@ angular
                     show: true,
                 },
                 {
+                    id: 'docs-new-tab',
+                    content: 'View documentation in new tab',
+                    selector: 'node',
+                    tooltipText: 'Open the documentation for this node in a new browser tab',
+                    onClickFunction: function(event) {
+                        var target = event.target || event.cyTarget
+                        var unique_id = target.id();
+                        var url = $state.href('dbt.' + target.data('resource_type'), {unique_id: unique_id}, {absolute: true, inherit: false});
+                        window.open(url, '_blank');
+                    },
+                    show: true,
+                },
+                {
                     id: 'hide-before-here',
                     content: 'Hide this and parents',
                     selector: 'node',
