@@ -1,0 +1,56 @@
+name: dbt-docs CD
+
+on:
+  pull_request: 
+    types:
+      - closed 
+    branches:
+      - main
+  
+jobs:
+  deploy_dbt_docs:
+    name: 'Release dbt-docs'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Git Checkout'
+        uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.5' # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: |
+          git clone https://github.com/dbt-labs/dbt-docs.git
+          cp -R ./dbt-docs/ui ./ui
+          cp -R ./dbt-docs/styles ./styles
+          cp -R ./dbt-docs/.git ./.git
+          rm -rf ./dbt-docs
+          git submodule update --init --recursive
+          gem install bundler
+          bundle install
+          cd styles
+          bundle exec jekyll build
+          cd -
+          npm install
+
+      - name: Build website
+        run: npx webpack
+      
+      - name: 'Create release'
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: dbt-docs
+          generate_release_notes: true
+          files: ./src/**
+
+      - name: 'Publish release'
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
+      
