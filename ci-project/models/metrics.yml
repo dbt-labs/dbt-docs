@@ -5,8 +5,16 @@ metrics:
   - name: count_orders
     model: ref('fct_orders')
     label: "Number of orders"
-    type: count
-    sql: "*"
+    calculation_method: count
+    expression: "*"
+    timestamp: order_date
+    time_grains: [day, week, month, year]
+
+  - name: count_active_customers
+    model: ref('fct_orders')
+    label: "Number of customers with orders"
+    calculation_method: count_distinct
+    expression: "customer_id"
     timestamp: order_date
     time_grains: [day, week, month, year]
 
@@ -14,7 +22,16 @@ metrics:
     model: ref('dim_customers')
     description: Customer lifetime value, cohorted by first order date
     label: "Number of orders"
-    type: sum
-    sql: customer_lifetime_value
+    calculation_method: sum
+    expression: customer_lifetime_value
     timestamp: first_order
     time_grains: [week, month, year]
+
+  - name: orders_per_customer
+    label: Average Orders Per Customer
+    description: "The average number of orders received per customer"
+    calculation_method: derived
+    expression: "{{ metric('count_orders') }} / {{ metric('count_active_customers') }}"
+    timestamp: order_date
+    time_grains: [day, week, month, quarter, year]
+    dimensions: [status]
