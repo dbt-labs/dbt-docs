@@ -1,4 +1,4 @@
-name: dbt-docs CD
+name: 'dbt-docs CD'
 
 on:
   pull_request: 
@@ -14,29 +14,41 @@ jobs:
     steps:
       - name: 'Git Checkout'
         uses: actions/checkout@v3
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7.5' # Not needed with a .ruby-version file
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - uses: actions/setup-node@v3
+        
+      # - name: Install dependencies
+      #   run: |
+      #     git clone https://github.com/dbt-labs/dbt-docs.git
+      #     cp -R ./dbt-docs/ui ./ui
+      #     cp -R ./dbt-docs/styles ./styles
+      #     cp -R ./dbt-docs/.git ./.git
+      #     rm -rf ./dbt-docs
+      #     git submodule update --init --recursive
+      #     gem install bundler
+      #     bundle install
+      #     cd styles
+      #     bundle exec jekyll build
+      
+      - name: 'Setup Node.js v14.18.2'
+        uses: actions/setup-node@v3
         with:
           node-version: 14.18.2
-      - name: Install dependencies
+
+      - name: 'Setup Ruby v2.7.5'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.5'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: 'Build the css files required for webpack'
         run: |
-          git clone https://github.com/dbt-labs/dbt-docs.git
-          cp -R ./dbt-docs/ui ./ui
-          cp -R ./dbt-docs/styles ./styles
-          cp -R ./dbt-docs/.git ./.git
-          rm -rf ./dbt-docs
-          git submodule update --init --recursive
-          gem install bundler
-          bundle install
           cd styles
           bundle exec jekyll build
           cd -
-          npm install
+      
+      - name: 'Download the package and dependencies'
+        run: npm install
 
-      - name: Build website
+      - name: 'Build website'
         run: npx webpack
       
       - name: 'Create release'
@@ -45,7 +57,7 @@ jobs:
         with:
           name: dbt-docs
           generate_release_notes: true
-          files: ./src/**
+          files: dist/index.html
 
       - name: 'Publish release'
         uses: eregon/publish-release@v1
