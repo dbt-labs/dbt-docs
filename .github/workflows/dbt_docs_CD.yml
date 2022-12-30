@@ -20,7 +20,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 14.18.2
       - name: Install dependencies
         run: |
           git clone https://github.com/dbt-labs/dbt-docs.git
