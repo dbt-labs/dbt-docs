@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  dbt_docs:
+    image: brocolidata/dbt_docs
+    container_name: dbt_docs
+    volumes:
+      - ./ci-project:/src/ci-project
+      - ./data:/src/data
+      - ./src:/src/src
+      - ./scripts:/src/scripts
+      - ./Gemfile:/src/Gemfile
+      - ./Gemfile.lock:/src/Gemfile.lock
+      - ./Makefile:/src/Makefile
+      - ./package-lock.json:/src/package-lock.json
+      - ./package.json:/src/package.json
+      - ./webpack.config.js:/src/webpack.config.js
+    ports:
+      - 8081:8080
+    working_dir: /src
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t

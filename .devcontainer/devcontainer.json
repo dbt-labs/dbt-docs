@@ -1,0 +1,10 @@
+{
+  "name": "dbt docs development environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dbt_docs",
+  "workspaceFolder": "/src",
+  "shutdownAction": "stopCompose",
+  "extensions": [
+	"Fivetran.dbt-language-server"
+  ]
+}
