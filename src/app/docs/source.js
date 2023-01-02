@@ -31,7 +31,7 @@ angular
 
         $scope.extra_table_fields = [
             {
-                name: "Loader",
+                name: "Intégré via",
                 value: $scope.model.loader
             },
             {
