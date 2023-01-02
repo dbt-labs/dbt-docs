@@ -46,7 +46,7 @@
             <a
                 class="btn btn-info btn-pill btn-lg btn-icon btn-shadow"
                 data-toggle="tooltip"
-                title="View Lineage Graph"
+                title="Voir le Graph de Lignée des Données"
                 ng-click="onLauncherClick()">
                 <svg class="icn icn-md"><use xlink:href="#icn-flow"></use></svg>
             </a>
@@ -56,7 +56,7 @@
                 <div class="launcher-header">
                     <div class="launcher-cell">
                         <h6>
-                            Lineage Graph
+                            Graph de Lignée des Données
                         </h6>
                     </div>
                     <div class="launcher-actions">
@@ -66,7 +66,7 @@
                             data-large
                             class="btn btn-text btn-lg btn-icon btn-shadow"
                             data-toggle="tooltip"
-                            title="View Fullscreen">
+                            title="Voir en plein écran">
                                 <svg class="icn icn-md"><use xlink:href="#icn-expand"></use></svg>
                         </a>
                         <a
@@ -74,7 +74,7 @@
                             ng-show="graphService.orientation == 'fullscreen' && selectorService.getViewNode()"
                             class="btn btn-text btn-lg btn-icon btn-shadow"
                             data-toggle="tooltip"
-                            title="View Fullscreen">
+                            title="Voir en plein écran">
                                 <svg class="icn icn-md"><use xlink:href="#icn-contract"></use></svg>
                         </a>
                     </div>
@@ -116,7 +116,7 @@
                                             class="dropdown-menu"
                                             ng-show="isVisible('resource_types')">
                                             <li ng-click="onSelectAll('resource_types', !allSelected, $event)">
-                                                <strong class="text-dark">Select All</strong>
+                                                <strong class="text-dark">Tout sélectionner</strong>
                                                 <span ng-show="allSelected">
                                                     <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                                                 </span>
@@ -131,7 +131,7 @@
                                                 </span>
                                             </li>
                                         </ul>
-                                        <div class="field-label">resources</div>
+                                        <div class="field-label">ressources</div>
                                     </div>
                                 </label>
                                 <label class="field">
@@ -151,7 +151,7 @@
                                             class="dropdown-menu"
                                             ng-show="isVisible('packages')">
                                             <li ng-click="onSelectAll('packages', !allSelected, $event)">
-                                                <strong class="text-dark">Select All</strong>
+                                                <strong class="text-dark">Tout Sélectionner</strong>
                                                 <span ng-show="allSelected">
                                                     <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                                                 </span>
@@ -195,7 +195,7 @@
                                                 class='text-dark'
                                                 ng-repeat="item in selectorService.options.tags"
                                                 ng-click="onItemSelect('tags', item, $event)">
-                                                <span ng-if='item == null'>untagged</span>
+                                                <span ng-if='item == null'>Pas de tag</span>
                                                 <span ng-if='item != null'>{{ item }}</span>
                                                 <span ng-show="isSelected('tags', item)">
                                                     <svg class="checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
@@ -224,7 +224,7 @@
                                            id="submit-graph-selection"
                                            class="field-input form-control input-dark"
                                            ng-class="{'dirty-submit': selectorService.isDirty()}"
-                                           value="Update Graph" />
+                                           value="Mettre à Jour le Graph" />
                                     <div class="field-label text-center" style="width: 100%"></div>
                                 </label>
                                 <label class="field" style="flex: 0 0 80px">
@@ -243,7 +243,7 @@
                             ng-click="closeGraph()"
                             class="btn btn-text btn-lg btn-icon btn-shadow"
                             data-toggle="tooltip"
-                            title="Close Graph"><svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
+                            title="Fermer le Graph"><svg class="icn icn-md"><use xlink:href="#icn-close"></use></svg>
                         </button>
                     </div>
                 </div>

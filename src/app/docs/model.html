@@ -22,7 +22,7 @@
                 <h1 ng-if="model.docs.show === false">
                     <small class='text-bold text-right'>
                         <i data-icon="eye"></i>
-                        This model is hidden
+                        Ce modèle est caché
                     </small>
                 </h1>
                 <h1>
@@ -33,12 +33,12 @@
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
-                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'details'})">Details</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'details'})">Détails</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'columns'})">Columns</a></li>
-                <li ui-sref-active='active' ng-show = "referencesLength != 0"><a ui-sref="dbt.model({'#': 'referenced_by'})">Referenced By</a></li>
-                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.model({'#': 'depends_on'})">Depends On</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'code'})">Code</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'columns'})">Colonnes</a></li>
+                <li ui-sref-active='active' ng-show = "referencesLength != 0"><a ui-sref="dbt.model({'#': 'referenced_by'})">Référencé par</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.model({'#': 'depends_on'})">Dépend de</a></li>
+                <!-- <li ui-sref-active='active'><a ui-sref="dbt.model({'#': 'code'})">Code</a></li> -->
             </ul>
         </div>
     </div>
@@ -56,7 +56,7 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div ng-if="model.description" class="model-markdown" marked="model.description"></div>
-                            <div ng-if="!model.description">This {{ model.resource_type }} is not currently documented</div>
+                            <div ng-if="!model.description">Non documenté</div>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
             <section class="section">
                 <div class="section-target" id="columns"></div>
                 <div class="section-content">
-                    <h6>Columns</h6>
+                    <h6>Colonnes</h6>
                     <column-details model="model" />
                 </div>
             </section>
@@ -73,7 +73,7 @@
             <section class="section" ng-show = "referencesLength != 0">
                 <div class="section-target" id="referenced_by"></div>
                 <div class="section-content">
-                    <h6>Referenced By</h6>
+                    <h6>Référencé par</h6>
                     <reference-list references="references" node="model" />
                 </div>
             </section>
@@ -81,17 +81,26 @@
             <section class="section" ng-show = "parentsLength != 0">
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
-                    <h6>Depends On</h6>
+                    <h6>Dépend de</h6>
                     <reference-list references="parents" node="model" />
                 </div>
             </section>
-
-            <section class="section">
+            
+            <details>
+                <summary><h6>Afficher/Masquer le Code</h6></summary>
+                <section class="section">
+                    <div class="section-target" id="code"></div>
+                    <div class="section-content">
+                        <code-block versions="versions" default="default_version" language="language"></code-block>
+                    </div>
+                </section>
+            </details>
+            <!-- <section class="section">
                 <div class="section-target" id="code"></div>
                 <div class="section-content">
                     <code-block versions="versions" default="default_version" language="language"></code-block>
                 </div>
-            </section>
+            </section> -->
         </div>
     </div>
 </div>
