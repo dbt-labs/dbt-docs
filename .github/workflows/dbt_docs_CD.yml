@@ -24,11 +24,6 @@ jobs:
         run: |
           git submodule update --init --recursive
           ls
-          
-      - name: debug
-        run: |
-          cd  ${{ github.workspace }}/src/assets/css
-          ls
       
       - name: 'Setup Node.js v14.18.2'
         uses: actions/setup-node@v3
