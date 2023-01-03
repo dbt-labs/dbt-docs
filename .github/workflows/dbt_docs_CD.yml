@@ -14,7 +14,7 @@ defaults:
 jobs:
   deploy_dbt_docs:
     name: 'Release dbt-docs'
-    if: startsWith(github.head_ref, 'generate/v')
+    if: startsWith(github.base_ref, 'generate/v')
     runs-on: ubuntu-latest
     steps:
 
@@ -24,8 +24,10 @@ jobs:
       - name: 'Split branch name'
         id: get_tag_version        
         env:
-          BRANCH: ${{ github.ref_name }}
-        run: echo "RELEASE_VERSION=${BRANCH##generate/}"  >> $GITHUB_ENV
+          BRANCH: ${{ github.base_ref }}
+        run: |
+          echo "RELEASE_VERSION=${BRANCH##generate/}"  >> $GITHUB_ENV
+          echo ${{ env.RELEASE_VERSION }}
         
         
       - name: 'Install submodules'
