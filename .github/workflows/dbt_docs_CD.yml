@@ -12,7 +12,7 @@ defaults:
     shell: bash
   
 jobs:
-  deploy_dbt_docs:
+  release_data_catalog:
     name: 'Release dbt-docs'
     if: startsWith(github.base_ref, 'generate/v')
     runs-on: ubuntu-latest
