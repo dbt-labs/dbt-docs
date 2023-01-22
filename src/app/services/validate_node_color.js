@@ -142,9 +142,10 @@ const colorSet = new Set([
     'yellow',
     'yellowgreen',
   ]);
-  
-  
-  export function isValidColor(color) {
+
+
+  // TODO: handle export in jest
+  function isValidColor(color) {
     if (!color) return false; // empty string, null, undefined
   
     const serialized = color.trim().toLowerCase();
@@ -155,3 +156,5 @@ const colorSet = new Set([
     
     return Boolean(isHex) || isColor;
   }
+
+  module.exports = { isValidColor };

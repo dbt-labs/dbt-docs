@@ -6,6 +6,8 @@ const graphlib = require('graphlib');
 const selectorGraph = require('./selector_graph');
 const colorValidation = require('./validate_node_color');
 
+const MIN_GROUP = 1;
+
 angular
 .module('dbt')
 .factory('graph', [
@@ -175,6 +177,14 @@ angular
                     }
                 },
                 {
+                    selector: 'node.group',
+                    style: {
+                        'content': 'data(label)',
+                        'text-valign': 'top',
+                        'text-halign': 'center',
+                    }
+                },
+                {
                     selector: 'node[resource_type="source"]',
                     style: {
                         'background-color': '#5fb825',
@@ -230,9 +240,6 @@ angular
                     }
                 },
             ],
-            ready: function(e) {
-                console.log("graph ready");
-            },
         }
     }
 
@@ -285,8 +292,51 @@ angular
         return res
     }
 
-    function setNodes(node_ids, highlight, classes) {
+    // TODO: make sure no grouping on init
+    function getGroup(grouping, node) {
+      if (grouping == undefined || grouping.length == 0) {
+        return undefined;
+      }
+      if (grouping[0].type == 'data') {
+        if (grouping[0].value == 'path') {
+          return `path: ${node.data.path}`;
+        };
+        if (grouping[0].value == 'type') {
+          return `type: ${node.data.resource_type}`;
+        };
+      };
+      // find the first tag on the node from the selected tags
+      var tag = _.first(_.intersection(node.data.tags, _.map(grouping, function(group) { return group.value })));
+      if (tag != undefined) {
+        return `tag: ${tag}`
+      };
+    };
+
+    function setNodes(node_ids, highlight, grouping, classes) {
         var nodes = _.map(node_ids, function(id) { return service.graph.pristine.nodes[id] });
+
+        if (grouping) {
+            var groupIds = _.map(nodes, _.partial(getGroup, grouping));
+            var groupCount = _.countBy(groupIds, function(groupId) { return groupId });
+            var groupNodes = _.map(
+                _.uniq(_.filter(
+                    groupIds,
+                    function(groupId) {
+                        return groupId !== undefined && groupCount[groupId] >= MIN_GROUP
+                    })),
+                function(groupId) { return {
+                    group: "nodes",
+                    data: {
+                      id: groupId,
+                      label: groupId,
+                      // TODO: is this overloaded?
+                      is_group: "true",
+                    },
+                }});
+            // ensure group nodes come first: https://github.com/cytoscape/cytoscape.js-dagre/issues/61
+            nodes = groupNodes.concat(nodes);
+        };
+
         var edges = [];
         _.flatten(_.each(node_ids, function(id) {
             var node_edges = service.graph.pristine.edges[id]
@@ -309,6 +359,16 @@ angular
         _.each(elements, function(el) {
             el.data['display'] = 'element';
             el.classes = classes;
+            if (grouping && groupCount[getGroup(grouping, el)] >= MIN_GROUP) {
+              var group = getGroup(grouping, el);
+              if (groupCount[group] >= MIN_GROUP) {
+                // TODO: is parent safe to reuse?
+                el.data['parent'] = getGroup(grouping, el);
+              };
+            };
+            if (el.data['is_group'] === "true") {
+                el.classes += ' group';
+            };
 
             if (highlight && _.includes(highlight, el.data.unique_id)) {
                 el.data['selected'] = 1;
@@ -364,7 +424,6 @@ angular
             var node_obj = {
                 group: "nodes",
                 data: _.assign(node, {
-                    parent: node.package_name,
                     id: node.unique_id,
                     is_group: 'false'
                 })
@@ -432,7 +491,7 @@ angular
         var selected = selectorService.selectNodes(dag, pristine, selected_spec);
         var highlight_nodes = should_highlight ? selected.matched : [];
 
-        return setNodes(selected.selected, highlight_nodes, classes);
+        return setNodes(selected.selected, highlight_nodes, selected_spec.grouping, classes);
     }
 
     service.hideGraph = function() {

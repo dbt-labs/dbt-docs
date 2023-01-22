@@ -22,6 +22,7 @@ angular
             'exposure',
             'metric'
         ],
+        grouping: [],
         depth: 1,
     };
 
@@ -37,6 +38,10 @@ angular
             packages: [],
             tags: [null],
             resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric'],
+            grouping: [
+                {type: 'data', value: 'path'},
+                {type: 'data', value: 'type'}
+            ]
         }
     };
 
@@ -46,6 +51,15 @@ angular
             initial_selector[attr] = value;
             service.selection.clean[attr] = value;
             service.selection.dirty[attr] = value;
+            if (attr == 'tags') {
+                var tagGroupings = _.map(_.filter(value, function(val) { return val !== null }), function(tag) {
+                        return {
+                            'type': 'tag',
+                            'value': tag,
+                            }
+                        });
+                service.options['grouping'] = service.options['grouping'].concat(tagGroupings);
+            }
         });
 
     }
@@ -119,7 +133,7 @@ angular
     }
 
     service.isDirty = function() {
-        var keys = ['include', 'exclude', 'packages', 'tags', 'resource_types']
+        var keys = ['include', 'exclude', 'packages', 'tags', 'resource_types', 'grouping']
         var res = _.isEqual(service.selection.clean, service.selection.dirty);
         return !res
     }

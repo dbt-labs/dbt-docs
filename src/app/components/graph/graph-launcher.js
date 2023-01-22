@@ -31,6 +31,9 @@ angular
                 },
                 resource_types: {
                     visible: false,
+                },
+                grouping: {
+                    visible: false,
                 }
             };
 
@@ -87,7 +90,7 @@ angular
                 } else {
                     dirty[form] = [];
                 }
-                
+
                 scope.allSelected = !scope.allSelected;
                 e.preventDefault();
             }
@@ -98,6 +101,25 @@ angular
                     dirty[form] = _.without(dirty[form], item);
                 } else {
                     dirty[form] = _.union(dirty[form], [item]);
+                }
+
+                e.preventDefault();
+            }
+
+            scope.onGroupingSelect = function(item, e) {
+                var dirty = selectorService.selection.dirty;
+                if (scope.isSelected('grouping', item)) {
+                    dirty['grouping'] = _.without(dirty['grouping'], item);
+                } else {
+                    // data types are mutually exclusive with tags and each other
+                    if (item.type == "data") {
+                      dirty['grouping'] = [item]
+                    } else {
+                      dirty['grouping'] = _.filter(
+                        _.union(dirty['grouping'], [item]),
+                        function(item) { return item.type == "tag" }
+                      )
+                    }
                 }
 
                 e.preventDefault();
@@ -130,7 +152,7 @@ angular
                 if (model.length == 0) {
                     return "None selected";
                 } else if (model.length == 1) {
-                    return model[0] || fallback_string;
+                    return (model[0] != null && model[0].value) || model[0] || fallback_string;A
                 } else if (model.length == all.length) {
                     return "All selected";
                 } else {
