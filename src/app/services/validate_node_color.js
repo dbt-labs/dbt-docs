@@ -144,16 +144,15 @@ const colorSet = new Set([
   ]);
 
 
-  // TODO: handle export in jest
   function isValidColor(color) {
     if (!color) return false; // empty string, null, undefined
-  
+
     const serialized = color.trim().toLowerCase();
     if (serialized === '') return false; // only spaces
-  
+
     const isHex = serialized.match(/^#([A-Fa-f0-9]{3}){1,2}$/);
     const isColor = colorSet.has(serialized);
-    
+
     return Boolean(isHex) || isColor;
   }
 
