@@ -40,7 +40,8 @@ angular
             resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric'],
             grouping: [
                 {type: 'data', value: 'path'},
-                {type: 'data', value: 'type'}
+                {type: 'data', value: 'type'},
+                {type: 'data', value: 'database'},
             ]
         }
     };

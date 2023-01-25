@@ -304,6 +304,9 @@ angular
         if (grouping[0].value == 'type') {
           return `type: ${node.data.resource_type}`;
         };
+        if (grouping[0].value == 'database' && node.data.database !== undefined) {
+          return `database: ${node.data.database}`;
+        };
       };
       // find the first tag on the node from the selected tags
       var tag = _.first(_.intersection(node.data.tags, _.map(grouping, function(group) { return group.value })));
