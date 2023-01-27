@@ -6,6 +6,8 @@ const template = require('./graph-viz.html');
 const _ = require('underscore');
 const $ = require('jquery');
 const cytoscape = require('cytoscape');
+const svg = require('cytoscape-svg');
+cytoscape.use(svg);
 
 const cytoscape_ctx_menu = require('cytoscape-context-menus');
 cytoscape_ctx_menu(cytoscape, $);
@@ -140,84 +142,113 @@ angular
 
         // initialize ctx menu plugin
         var contextMenu = cy.contextMenus({
-            menuItems: [
-                {
-                    id: 'jump',
-                    content: 'Refocus on Node',
-                    selector: 'node',
-                    tooltipText: 'Focus on the lineage for this node',
-                    onClickFunction: function(event) {
-                        var target = event.target || event.cyTarget
-                        var unique_id = target.id();
-                        $state.go('dbt.' + target.data('resource_type'), {unique_id: unique_id});
-                    },
-                    show: true,
-                },
-                {
-                    id: 'docs',
-                    content: 'View documentation',
-                    selector: 'node',
-                    tooltipText: 'Jump to the documentation for this node',
-                    onClickFunction: function(event) {
-                        var target = event.target || event.cyTarget
-                        var unique_id = target.id();
-                        $state.go('dbt.' + target.data('resource_type'), {unique_id: unique_id});
-                        graph.hideGraph();
-                    },
-                    show: true,
-                },
-                {
-                    id: 'hide-before-here',
-                    content: 'Hide this and parents',
-                    selector: 'node',
-                    onClickFunction: function(event) {
-                        var target = event.target || event.cyTarget
-                        var unique_id = target.id();
+          menuItems: [
+            {
+              id: "jump",
+              content: "Refocus on Node",
+              selector: "node",
+              tooltipText: "Focus on the lineage for this node",
+              onClickFunction: function (event) {
+                var target = event.target || event.cyTarget;
+                var unique_id = target.id();
+                $state.go("dbt." + target.data("resource_type"), {
+                  unique_id: unique_id,
+                });
+              },
+              show: true,
+            },
+            {
+              id: "docs",
+              content: "View documentation",
+              selector: "node",
+              tooltipText: "Jump to the documentation for this node",
+              onClickFunction: function (event) {
+                var target = event.target || event.cyTarget;
+                var unique_id = target.id();
+                $state.go("dbt." + target.data("resource_type"), {
+                  unique_id: unique_id,
+                });
+                graph.hideGraph();
+              },
+              show: true,
+            },
+            {
+              id: "hide-before-here",
+              content: "Hide this and parents",
+              selector: "node",
+              onClickFunction: function (event) {
+                var target = event.target || event.cyTarget;
+                var unique_id = target.id();
 
-                        var node = project.node(unique_id);
-                        if (node) {
-                            var spec = selectorService.excludeNode(node, {parents: true});
-                            graph.updateGraph(spec)
-                        }
-                    },
-                    show: true,
-                },
-                {
-                    id: 'hide-after-here',
-                    content: 'Hide this and children',
-                    selector: 'node',
-                    onClickFunction: function(event) {
-                        var target = event.target || event.cyTarget
-                        var unique_id = target.id();
+                var node = project.node(unique_id);
+                if (node) {
+                  var spec = selectorService.excludeNode(node, {
+                    parents: true,
+                  });
+                  graph.updateGraph(spec);
+                }
+              },
+              show: true,
+            },
+            {
+              id: "hide-after-here",
+              content: "Hide this and children",
+              selector: "node",
+              onClickFunction: function (event) {
+                var target = event.target || event.cyTarget;
+                var unique_id = target.id();
 
-                        var node = project.node(unique_id);
-                        if (node) {
-                            var spec = selectorService.excludeNode(node, {children: true});
-                            graph.updateGraph(spec)
-                        }
-                    },
-                    show: true,
-                },
-                {
-                    id: 'export-png',
-                    content: 'Export PNG',
-                    selector: 'node',
-                    coreAsWell: true,
-                    onClickFunction: function(event) {
-                        var options = {
-                            bg: '#005e7a'
-                        };
-                        var png64 = cy.png(options);
-                        var link = document.createElement('a');
-                        link.download = 'dbt-dag.png';  // sets the filename for the download
-                        link.href = png64;
-                        link.click();
-                    },
-                    show: true,
-                },
-            ],
-            menuItemClasses: ['graph-node-context-menu-item'],
-            contextMenuClasses: ['graph-node-context-menu']
+                var node = project.node(unique_id);
+                if (node) {
+                  var spec = selectorService.excludeNode(node, {
+                    children: true,
+                  });
+                  graph.updateGraph(spec);
+                }
+              },
+              show: true,
+            },
+            {
+              id: "export-png",
+              content: "Export PNG",
+              selector: "node",
+              coreAsWell: true,
+              onClickFunction: function (event) {
+                var options = {
+                  bg: "#005e7a",
+                };
+                var png64 = cy.png(options);
+                var link = document.createElement("a");
+                link.download = "dbt-dag.png"; // sets the filename for the download
+                link.href = png64;
+                link.click();
+              },
+              show: true,
+            },
+            {
+              id: "export-svg",
+              content: "Export SVG",
+              selector: "node",
+              coreAsWell: true,
+              onClickFunction: function (event) {
+                var options = {
+                  bg: "#005e7a",
+                };
+                var svg64 = cy.svg(options);
+                var svgBlob = new Blob([svg64], {
+                  type: "image/svg+xml;charset=utf-8",
+                });
+                var svgUrl = URL.createObjectURL(svgBlob);
+                var link = document.createElement("a");
+                link.download = "dbt-dag.svg"; // sets the filename for the download
+                link.href = svgUrl;
+                link.click();
+              },
+              show: true,
+            },
+          ],
+          menuItemClasses: ["graph-node-context-menu-item"],
+          contextMenuClasses: ["graph-node-context-menu"],
         });
 
     }
