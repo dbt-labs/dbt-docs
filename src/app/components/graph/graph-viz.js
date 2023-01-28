@@ -244,7 +244,7 @@ angular
                 link.href = svgUrl;
                 link.click();
               },
-              show: true,
+              show:true,
             },
           ],
           menuItemClasses: ["graph-node-context-menu-item"],
