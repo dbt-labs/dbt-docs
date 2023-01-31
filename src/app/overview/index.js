@@ -15,7 +15,7 @@ angular
                 : null;
             
             // default;
-            var selected_overview = project.docs["dbt.__overview__"];
+            var selected_overview = project.docs["doc.dbt.__overview__"];
             var overviews = _.filter(project.docs, {name: '__overview__'});
             _.each(overviews, function (overview) {
                 if (overview.package_name != 'dbt') {
