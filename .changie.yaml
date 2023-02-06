@@ -8,11 +8,6 @@ custom:
   type: string
   minLength: 3
 - key: Issue
-  label: GitHub Issue Number
+  label: GitHub Issue Number (separated by a single space if multiple)
   type: string
   minLength: 2
-- key: PR
-  label: GitHub Pull Request Number
-  type: string
-  minLength: 2
-
