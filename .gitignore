@@ -10,3 +10,4 @@ env/
 dist/
 .sass-cache/
 env*
+.venv/

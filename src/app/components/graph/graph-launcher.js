@@ -151,10 +151,12 @@ angular
 
                 if (node && node.resource_type == 'source') {
                     var nodes = graph.showFullGraph('source:' + node.source_name + "." + node.name);
-                } else if (node && node.resource_type == 'exposure') {
-                    var nodes = graph.showFullGraph('exposure:' + node.name);
+                } else if (node && node.resource_type == 'entity') {
+                    var nodes = graph.showFullGraph('entity:' + node.name);
                 } else if (node && node.resource_type == 'metric') {
                     var nodes = graph.showFullGraph('metric:' + node.name);
+                } else if (node && node.resource_type == 'exposure') {
+                    var nodes = graph.showFullGraph('exposure:' + node.name);
                 } else {
                     var nodes = graph.showFullGraph(node_name);
                 }
@@ -170,6 +172,8 @@ angular
                     var nodes = graph.showVerticalGraph('exposure:' + node.name, true);
                 } else if (node && node.resource_type == 'metric') {
                     var nodes = graph.showVerticalGraph('metric:' + node.name, true);
+                } else if (node && node.resource_type == 'entity') {
+                    var nodes = graph.showVerticalGraph('entity:' + node.name, true);
                 } else {
                     var nodes = graph.showVerticalGraph(node.name, true);
                 }

@@ -70,6 +70,17 @@
                     <br />
                 </div>
 
+                <div ng-show="tree.entities.length > 0">
+                    <strong>Entities</strong>
+                    <ul style="display: block">
+                        <model-tree-line
+                            item="item"
+                            resource-type="entity"
+                            ng-repeat="item in tree.entities"></model-tree-line>
+                    </ul>
+                    <br />
+                </div>
+
                 <strong>Projects</strong>
                 <ul>
                     <model-tree-line

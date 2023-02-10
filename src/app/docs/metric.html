@@ -21,7 +21,7 @@
             <div class="app-frame app-pad app-flush-bottom">
 
                 <h1>
-                    <span class="break">{{ metric.label }}</span>
+                    <span class="break">{{ metric.name }}</span>
                     <small>metric</small>
 
                     <div class='clearfix'></div>
@@ -33,6 +33,7 @@
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'details'})">Details</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'type'})">Type</a></li>
                 <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.metric({'#': 'depends_on'})">Depends On</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'code'})">SQL</a></li>
             </ul>

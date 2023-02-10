@@ -8,6 +8,7 @@ var SELECTOR_TYPE = {
     TAG: 'tag',
     SOURCE: 'source',
     EXPOSURE: 'exposure',
+    ENTITY: 'entity',
     METRIC: 'metric',
     PATH: 'path',
     FILE: 'file',
@@ -23,6 +24,7 @@ NODE_MATCHERS[SELECTOR_TYPE.FQN] = getNodesByFQN;
 NODE_MATCHERS[SELECTOR_TYPE.TAG] = getNodesByTag;
 NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
 NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
+NODE_MATCHERS[SELECTOR_TYPE.ENTITY] = getNodesByEntity;
 NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.FILE] = getNodesByFile;
@@ -80,6 +82,7 @@ function getNodesByFQN(elements, qualified_name) {
           !fqn || 
           node.resource_type == 'source' || 
           node.resource_type == 'exposure' || 
+          node.resource_type == 'entity' ||
           node.resource_type == 'metric'
         ) {
             return;
@@ -273,6 +276,27 @@ function getNodesByExposure(elements, exposure) {
         if (selected_exposure_name == '*') {
             nodes.push(node_obj.data);
         } else if (selected_exposure_name == exposure_name) {
+            nodes.push(node_obj.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesByEntity(elements, entity) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'entity') {
+            return;
+        }
+
+        var entity_name = node.name;
+        var selected_entity_name = entity;
+
+        if (selected_entity_name == '*') {
+            nodes.push(node_obj.data);
+        } else if (selected_entity_name == entity_name) {
             nodes.push(node_obj.data);
         }
     })

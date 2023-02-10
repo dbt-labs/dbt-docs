@@ -161,6 +161,21 @@ test("Test parsing specs (explicit exposure)", () => {
     });
 })
 
+test("Test parsing specs (explicit entity)", () => {
+    expect(
+        selectors.parseSpec('+entity:a')
+    ).toStrictEqual({
+        select_at: false,
+        select_children: false,
+        select_parents: true,
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'entity',
+        selector_value: 'a',
+        raw: '+entity:a',
+    });
+})
+
 test("Test parsing specs (explicit metric)", () => {
     expect(
         selectors.parseSpec('+metric:a')

@@ -7,5 +7,6 @@ require('./test');
 require('./macro');
 require('./analysis');
 require('./exposure');
+require('./entity');
 require('./metric');
 require('./operation');

@@ -87,6 +87,7 @@ angular
         $scope.tree.project = tree.project;
         $scope.tree.sources = tree.sources;
         $scope.tree.exposures = tree.exposures;
+        $scope.tree.entities = tree.entities;
         $scope.tree.metrics = tree.metrics;
 
         setTimeout(function() {

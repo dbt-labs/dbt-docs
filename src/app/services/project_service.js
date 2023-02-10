@@ -151,6 +151,11 @@ angular
                 service.files.manifest.nodes[node.unique_id] = node;
             });
             
+            // Add entities back into nodes to make site logic work
+            _.each(service.files.manifest.entities, function(node) {
+                service.files.manifest.nodes[node.unique_id] = node;
+            });
+
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
                 service.files.manifest.nodes[node.unique_id] = node;
@@ -242,7 +247,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'entity', 'metric'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -358,7 +363,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'entity', 'metric'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -370,7 +375,10 @@ angular
 
             var exposures = _.values(service.project.exposures);
             service.tree.exposures = buildExposureTree(exposures, select);
-            
+
+            var entities = _.values(service.project.entities);
+            service.tree.entities = buildEntityTree(entities, select);
+
             var metrics = _.values(service.project.metrics);
             service.tree.metrics = buildMetricTree(metrics, select);
 
@@ -402,6 +410,7 @@ angular
         service.updateSelectedInTree(select, service.tree.database);
         service.updateSelectedInTree(select, service.tree.sources);
         service.updateSelectedInTree(select, service.tree.exposures);
+        service.updateSelectedInTree(select, service.tree.entities);
         service.updateSelectedInTree(select, service.tree.metrics);
 
         return service.tree;
@@ -505,7 +514,47 @@ angular
 
         return exposures
     }
-    
+
+    function buildEntityTree(nodes, select) {
+        var entities = {}
+
+        _.each(nodes, function(node) {
+            var name = node.name;
+
+            var project = node.package_name;
+
+            var is_active = node.unique_id == select;
+
+            if (!entities[project]) {
+                entities[project] = {
+                    type: "folder",
+                    name: project,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                entities[project].active = true;
+            }
+
+            entities[project].items.push({
+                type: 'file',
+                name: node.name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'entity'
+            })
+        });
+
+        var entities = _.sortBy(_.values(entities), 'name');
+
+        _.each(entities, function(entity) {
+            entities.items = _.sortBy(entities.items, 'name');
+        });
+
+        return entities
+    }
+
     function buildMetricTree(nodes, select) {
         var metrics = {}
 
@@ -529,7 +578,7 @@ angular
 
             metrics[project].items.push({
                 type: 'file',
-                name: node.label,
+                name: node.name,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
@@ -592,7 +641,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'entity' || node.resource_type == 'metric') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {
@@ -709,6 +758,14 @@ angular
             return col.toLowerCase();
         } else {
             return col;
+        }
+    }
+
+    service.caseDimension = function(dim) {
+        if (service.project.metadata.adapter_type == 'snowflake' && dim.toUpperCase() == dim) {
+            return dim.toLowerCase();
+        } else {
+            return dim;
         }
     }
 

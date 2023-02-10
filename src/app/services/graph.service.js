@@ -187,6 +187,12 @@ angular
                     }
                 },
                 {
+                    selector: 'node[resource_type="entity"]',
+                    style: {
+                        'background-color': '#e68c3e',
+                    }
+                },
+                {
                     selector: 'node[resource_type="metric"]',
                     style: {
                         'background-color': '#ff5688',
@@ -357,7 +363,7 @@ angular
 
         _.each(_.filter(service.manifest.nodes, function(node) {
             // operation needs to be a graph type so that the parent/child mpa can be resolved even though we won't be displaying it
-            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure', 'metric', 'operation'], node.resource_type);
+            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure', 'entity','metric', 'operation'], node.resource_type);
             var is_singular_test = node.resource_type == 'test' && !node.hasOwnProperty('test_metadata');
             return is_graph_type || is_singular_test;
         }), function(node) {
@@ -378,7 +384,7 @@ angular
                 var parent_node = service.manifest.nodes[parent];
                 var child_node = service.manifest.nodes[child];
 
-                if (!_.includes(['model', 'source', 'seed', 'snapshot', 'metric'], parent_node.resource_type)) {
+                if (!_.includes(['model', 'source', 'seed', 'snapshot', 'entity', 'metric'], parent_node.resource_type)) {
                     return;
                 } else if (child_node.resource_type == 'test' && child_node.hasOwnProperty('test_metadata')) {
                     return;

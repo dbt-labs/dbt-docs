@@ -45,8 +45,10 @@ angular
                     return model.source_name + "." + model.name;
                 } else if (model.resource_type == 'macro') {
                     return model.package_name + "." + model.name;
+                } else if (model.resource_type == 'entity') {
+                    return model.name;
                 } else if (model.resource_type == 'metric') {
-                    return model.label;
+                    return model.name;
                 } else if (model.resource_type == 'exposure') {
                     return model.label;
                 } else {

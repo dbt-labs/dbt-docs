@@ -22,6 +22,8 @@ angular
         $scope.metric = metric;
         $scope.parents = dag_utils.getParents(project, metric);
         $scope.parentsLength = $scope.parents.length;
+        $scope.referencesLength = Object.keys($scope.references).length;
+
 
         $scope.versions = {
             'Definition': codeService.generateMetricSQL($scope.metric)

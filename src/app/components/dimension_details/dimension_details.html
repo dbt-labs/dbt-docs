@@ -1,0 +1,104 @@
+<div class="panel">
+    <div class="panel-body">
+        <div ng-if="_.isEmpty(model.dimensions)">
+            Dimension information is not available for this entity
+        </div>
+        <div class="table-responsive"
+             style="max-height: 800px; overflow-y: scroll;"
+             ng-if="!_.isEmpty(model.dimensions)">
+            <table class="table table-borderless table-hover">
+                <thead>
+                    <tr>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Dimension</th>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Type</th>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        ng-repeat-start="dimension in get_dimensions(model) track by dimension.index"
+                        ng-click="toggle_dimension_expanded(dimension)"
+                        class="dimension-row"
+                        ng-class="{'dimension-row-selected': dimension.expanded}"
+                        ng-style="{cursor: has_more_info(dimension) ? 'pointer' : 'auto'}">
+                        <td>
+                            <div>
+                                <span class='text-dark'>{{ get_dim_name(dimension.name) }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class='text-dark'>{{ dimension.type }}</p>
+                        </td>
+                        <td style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap; max-width: 1px;">
+                            <span ng-show="!dimension.expanded">{{ dimension.description }}</span>
+                        </td>
+                        <td>
+                            <span class="text-light" ng-show="!dimension.expanded">
+                                <span data-toggle="tooltip" title="Unique" ng-if="has_test(dimension, 'U')">U</span>
+                                <span data-toggle="tooltip" title="Not Null" ng-if="has_test(dimension, 'N')">N</span>
+                                <span data-toggle="tooltip" title="Foreign Key" ng-if="has_test(dimension, 'F')">F</span>
+                                <span data-toggle="tooltip" title="Accepted Values" ng-if="has_test(dimension, 'A')">A</span>
+                                <span data-toggle="tooltip" title="Custom Test" ng-if="has_test(dimension, '+')">+</span>
+                            </span>
+                        </td>
+                        <td class='text-center'>
+                            <span class='text-light' ng-show="has_more_info(dimension)">
+                                <span ng-if="dimension.expanded">
+                                    <svg class="icn"><use xlink:href="#icn-up"></use></svg>
+                                </span>
+                                <span ng-if="!dimension.expanded">
+                                    <svg class="icn"><use xlink:href="#icn-right"></use></svg>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr ng-repeat-end ng-show="dimension.expanded" style="background-color: white; padding: 10px">
+                        <td colspan="5" class="dimension-expanded">
+                            <div style="padding: 5px 20px">
+                                <div ng-show="dimension.meta">
+                                    <h5>Details</h5>
+                                    <div class="detail-group" style="padding-bottom: 0">
+                                        <div class="detail-body" style="padding-left: 0">
+                                            <dl class="detail"
+                                                ng-style="{'padding-left': $index == 0 ? 0 : 'auto'}"
+                                                ng-repeat="(k, v) in dimension.meta">
+                                                <dt class="detail-label">{{ k }}</dt>
+                                                <dd class="detail-value">{{ v }}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 15px" ng-if="dimension.description.length">
+                                    <h5>Description</h5>
+                                    <span marked="dimension.description"></span>
+                                </div>
+
+                                <div ng-show="dimension.tests && dimension.tests.length" style="margin-bottom: 15px">
+                                    <h5>Generic Tests</h5>
+                                    <ul class="list-unstyled" style="margin-top: 2px">
+                                        <li ng-repeat="test in dimension.tests" ng-switch on="test.short" class='text-light'>
+                                            <span ng-switch-when="F">
+                                                Foreign Key
+                                                <span ng-if="test.fk_model.unique_id">
+                                                    <a data-ui-state="getState(test.fk_model)"
+                                                        data-ui-state-params="{unique_id: test.fk_model.unique_id}">
+                                                        to {{ test.fk_model.name }}
+                                                    </a> on <code>{{ test.fk_field }}</code>
+                                                </span>
+                                            </span>
+                                            <span ng-switch-when="P">Primary Key</span>
+                                            <span ng-switch-when="U">Unique</span>
+                                            <span ng-switch-when="N">Not Null</span>
+                                            <span ng-switch-default>{{ test.label }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
