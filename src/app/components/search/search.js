@@ -28,6 +28,7 @@ angular
                 show_names : false,
                 show_descriptions: false,
                 show_columns: false,
+                show_column_descriptions: false,
                 show_code: false,
                 show_tags: false
             };
@@ -62,17 +63,18 @@ angular
                 let finalResults = [];
                 let fileIDs = [];
                 
-                const {show_names, show_descriptions, show_columns, show_code, show_tags} = checkboxStatus;
+                const {show_names, show_descriptions, show_columns, show_column_descriptions, show_code, show_tags} = checkboxStatus;
                 _.each(results, function(result){
                     _.each(result.matches, function(match){
                        if(!fileIDs.includes(result.model['unique_id'])){
                            const nameMatch = show_names && (match.key === "name" || match.key == 'label');
                            const descriptionMatch = show_descriptions && match.key == "description";
                            const columnsMatch = show_columns && match.key === "columns";
+                           const columnDescriptionMatch = show_column_descriptions && match.key === "column_description";
                            const codeMatch = show_code && match.key === "raw_code";
                            const tagsMatch = show_tags && match.key === "tags";
 
-                           if(nameMatch || descriptionMatch || columnsMatch || codeMatch || tagsMatch) {
+                           if(nameMatch || descriptionMatch || columnsMatch || columnDescriptionMatch || codeMatch || tagsMatch) {
                             fileIDs.push(result.model['unique_id']);
                             finalResults.push(result);
                            }
@@ -82,7 +84,7 @@ angular
                return finalResults;
             }
 
-            var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
+            var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_column_descriptions', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
             scope.$watchGroup(watchExpressions, function() {
                 scope.results = filterResults(projectService.search(scope.query), scope.checkboxStatus);
             });
