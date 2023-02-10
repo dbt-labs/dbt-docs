@@ -292,7 +292,7 @@ angular
                 objects.push({key: i, value: query});
             } else if (search_keys[i] === 'object') {
                 for (var column_name in obj[i]) {
-                    // there a spark bug where columns are missign from the catalog.  That needs to be fixed
+                    // there is a spark bug where columns are missing from the catalog. That needs to be fixed
                     // outside of docs but this if != null check will allow docs to continue to function now
                     // and also when the bug is fixed.
                     // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
