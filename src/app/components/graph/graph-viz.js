@@ -75,6 +75,7 @@ angular
             layout: scope.vizLayout || {name: "circle"}
         }));
 
+
         if (!window.graph) {
             window.graph = cy;
         }
@@ -105,18 +106,21 @@ angular
 
         scope.$watch('vizElements', function(nv,ov){
             cy.remove(cy.elements());
+            console.log(nv)
             cy.add(nv);
             rerender(scope, cy);
             console.log('elements changed, UPDATE');
         });
 
         scope.$watch('vizLayout', function(nv,ov){
+            console.log({vizLayout:nv})
             if(nv !== ov){
                 rerender(scope, cy);
             }
         }, true);
 
         scope.$watch('vizOptions', function(nv,ov){
+            console.log({vizOptions:nv})
             if(nv !== ov){
                 _.each(nv, function(val, key) {
                     if (!cy[key]) {

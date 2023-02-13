@@ -123,6 +123,14 @@ angular
                 }
             }
 
+            scope.resourceTypeTitle = function(item) {
+                if (item == 'entity') {
+                    return 'Entities';
+                } else {
+                    return item[0].toUpperCase() + item.slice(1) + 's'
+                }
+            }
+
             scope.selectionLabel = function(form, fallback_string) {
                 var model = selectorService.selection.dirty[form];
                 var all = selectorService.options[form];

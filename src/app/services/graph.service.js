@@ -363,7 +363,7 @@ angular
 
         _.each(_.filter(service.manifest.nodes, function(node) {
             // operation needs to be a graph type so that the parent/child mpa can be resolved even though we won't be displaying it
-            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure', 'entity','metric', 'operation'], node.resource_type);
+            var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure', 'entity', 'metric', 'operation'], node.resource_type);
             var is_singular_test = node.resource_type == 'test' && !node.hasOwnProperty('test_metadata');
             return is_graph_type || is_singular_test;
         }), function(node) {
@@ -447,6 +447,8 @@ angular
     }
 
     service.showVerticalGraph = function(node_name, force_expand) {
+        window.graph=service.graph
+        console.log(node_name)
         service.orientation = 'sidebar'
         if (force_expand) {
             service.expanded = true;
@@ -485,6 +487,7 @@ angular
         // update url with selection
         locationService.setState(selected_spec);
 
+        // console.log(nodes)
         return nodes;
     }
 

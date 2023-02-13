@@ -60,9 +60,9 @@ angular
         } else if (node && node.resource_type == 'exposure') {
             include_selection = '+exposure:' + node.name;
         } else if (node && node.resource_type == 'entity') {
-            include_selection = '+entity:' + node.name;
+            include_selection = '+entity:' + node.name + "+";
         } else if (node && node.resource_type == 'metric') {
-            include_selection = '+metric:' + node.name;
+            include_selection = '+metric:' + node.name + "+";
         } else if (node && _.includes(['analysis', 'test'], node.resource_type)) {
             include_selection = '+' + node.name;
         } else {

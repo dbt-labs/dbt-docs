@@ -6,7 +6,7 @@ require("./styles.css");
 
 angular
 .module('dbt')
-.controller('ReportCtrl', ['$scope', '$state', 'project', 'code', '$anchorScroll', '$location',
+.controller('EntityCtrl', ['$scope', '$state', 'project', 'code', '$anchorScroll', '$location',
             function($scope, $state, projectService, codeService, $anchorScroll, $location) {
 
     $scope.model_uid = $state.params.unique_id;
@@ -22,6 +22,7 @@ angular
         $scope.entity = entity;
         $scope.parents = dag_utils.getParents(project, entity);
         $scope.parentsLength = $scope.parents.length;
+        $scope.references = dag_utils.getReferences(project, entity);
         $scope.referencesLength = Object.keys($scope.references).length;
 
 

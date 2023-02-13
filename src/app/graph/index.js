@@ -8,6 +8,7 @@ angular
     '$scope', '$state', '$window', 'graph', 'project', 'selectorService',
     function($scope, $state, $window, graph, projectService, selectorService) {
 
+        console.log({graph})
         $scope.graph = graph.graph;
         $scope.graphService = graph;
 

@@ -128,7 +128,7 @@ angular
         })
         .state('dbt.entity', {
             url: 'entity/:unique_id?section&' + graph_params,
-            controller: 'ReportCtrl',
+            controller: 'EntityCtrl',
             templateUrl: templates.entity,
             params: {
                 unique_id: {type: 'string'}

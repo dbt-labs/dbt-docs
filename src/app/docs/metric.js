@@ -20,10 +20,10 @@ angular
     projectService.ready(function(project) {
         let metric = project.nodes[$scope.model_uid];
         $scope.metric = metric;
+        $scope.references = dag_utils.getReferences(project, metric);
+        $scope.referencesLength = Object.keys($scope.references).length;        
         $scope.parents = dag_utils.getParents(project, metric);
         $scope.parentsLength = $scope.parents.length;
-        $scope.referencesLength = Object.keys($scope.references).length;
-
 
         $scope.versions = {
             'Definition': codeService.generateMetricSQL($scope.metric)
