@@ -266,6 +266,7 @@ angular
             'description':'string',
             'raw_code':'string',
             'columns':'object',
+            'column_description':'n/a', // special case
             'tags': 'array',
             'arguments': 'array',
             'label': 'string',
@@ -274,13 +275,24 @@ angular
         let query_segments = _.words(query.toLowerCase());
       
         for (var i in search_keys) {
-            if (!obj[i]) {
+
+            // column descriptions are a special case because they are not a top-level key
+            if (i === 'column_description') {
+                for (var column_name in obj["columns"]) {
+                    if (obj["columns"][column_name]["description"] != null) {
+                        if (query_segments.every(segment => obj["columns"][column_name]["description"].toLowerCase().indexOf(segment) != -1)) {
+                            objects.push({key: i, value: query});
+                        }
+                    }
+                }
+            } else if (!obj[i]) {
+               // skip any other cases where the object is missing the key
                continue;
             } else if (search_keys[i] === 'string' && query_segments.every(segment => obj[i].toLowerCase().indexOf(segment) != -1))  {
                 objects.push({key: i, value: query});
             } else if (search_keys[i] === 'object') {
                 for (var column_name in obj[i]) {
-                    // there a spark bug where columns are missign from the catalog.  That needs to be fixed
+                    // there is a spark bug where columns are missing from the catalog. That needs to be fixed
                     // outside of docs but this if != null check will allow docs to continue to function now
                     // and also when the bug is fixed.
                     // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
