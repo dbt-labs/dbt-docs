@@ -1,22 +1,20 @@
 <style>
-.arg-header {
-    background-color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
+    .arg-header {
+        background-color: white;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
 
 </style>
 
 <div class="panel">
     <div class="panel-body">
         <div ng-if="macro.arguments.length == 0">
-            Details are not available for this macro
+            Details are not available for this macro. This may be due to the fact that this macro doesn't have any
+            arguments or that they haven't been documented yet.
         </div>
-        <div
-            ng-if="macro.arguments.length > 0"
-            class="table-responsive"
-            style="max-height: 800px; overflow-y: scroll;">
+        <div ng-if="macro.arguments.length > 0" class="table-responsive" style="max-height: 800px; overflow-y: scroll;">
             <table class="table table-borderless table-hover">
                 <thead>
                     <tr>
@@ -27,11 +25,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat-start="arg in macro.arguments"
-                        ng-click="arg.expanded = !arg.expanded"
+                    <tr ng-repeat-start="arg in macro.arguments" ng-click="arg.expanded = !arg.expanded"
                         ng-class="{'column-row-selected': arg.expanded}"
-                        ng-style="{cursor: arg.description ? 'pointer' : 'auto'}"
-                        class="column-row">
+                        ng-style="{cursor: arg.description ? 'pointer' : 'auto'}" class="column-row">
                         <td>
                             <div>
                                 <span class='text-dark'>{{ arg.name }}</span>
@@ -46,17 +42,19 @@
                         <td class='text-center'>
                             <span class='text-light' ng-show="arg.description">
                                 <span ng-if="arg.expanded">
-                                    <svg class="icn"><use xlink:href="#icn-up"></use></svg>
+                                    <svg class="icn">
+                                        <use xlink:href="#icn-up"></use>
+                                    </svg>
                                 </span>
                                 <span ng-if="!arg.expanded">
-                                    <svg class="icn"><use xlink:href="#icn-right"></use></svg>
+                                    <svg class="icn">
+                                        <use xlink:href="#icn-right"></use>
+                                    </svg>
                                 </span>
                             </span>
                         </td>
                     </tr>
-                    <tr ng-repeat-end
-                        ng-show="arg.expanded"
-                        style="background-color: white; padding: 10px">
+                    <tr ng-repeat-end ng-show="arg.expanded" style="background-color: white; padding: 10px">
                         <td colspan="4" class="column-expanded">
                             <div style="padding: 5px 20px">
                                 <div style="margin-bottom: 15px">
