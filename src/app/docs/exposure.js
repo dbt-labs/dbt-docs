@@ -24,6 +24,15 @@ angular
         $scope.parentsLength = $scope.parents.length;
         $scope.language = exposure.language;
 
+        var owner_identifier
+        if ($scope.exposure.owner.name && $scope.exposure.owner.email) {
+            owner_identifier = `${$scope.exposure.owner.name} <${$scope.exposure.owner.email}>`
+          } else if ($scope.exposure.owner.name) {
+            owner_identifier = `${$scope.exposure.owner.name}`
+          } else if ($scope.exposure.owner.email) {
+            owner_identifier = `${$scope.exposure.owner.email}`
+          }
+        
         $scope.extra_table_fields = [
             {
                 name: "Maturity",
@@ -31,11 +40,7 @@ angular
             },
             {
                 name: "Owner",
-                value: $scope.exposure.owner.name,
-            },
-            {
-                name: "Owner email",
-                value: $scope.exposure.owner.email,
+                value: owner_identifier
             },
             {
                 name: "Exposure name",
