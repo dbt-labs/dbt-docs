@@ -115,6 +115,10 @@ angular
                         name: "Relation",
                         value: relation
                     },
+                    {
+                        name: "Access",
+                        value: model.access
+                    },
                 ]
 
                 return _.filter(stats, function(s) { return s.value !== undefined })
