@@ -88,6 +88,7 @@ angular
         $scope.tree.sources = tree.sources;
         $scope.tree.exposures = tree.exposures;
         $scope.tree.metrics = tree.metrics;
+        $scope.tree.groups = tree.groups;
 
         setTimeout(function() {
             scrollToSelectedModel($scope.model_uid);
@@ -126,6 +127,7 @@ angular
         if (state_changed && params.unique_id) {
             var tree = projectService.updateSelected(params.unique_id);
             $scope.tree.database = tree.database;
+            $scope.tree.groups = tree.groups;
             $scope.tree.project = tree.project;
             $scope.tree.sources = tree.sources;
             $scope.search.query = ""

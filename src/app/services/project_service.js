@@ -375,6 +375,8 @@ angular
             })
 
             service.tree.database = buildDatabaseTree(nodes, select);
+            var groups = _.values(service.project.groups);
+            service.tree.groups = buildGroupTree(groups, nodes, select);
             service.tree.project = buildProjectTree(nodes, macros, select);
 
             var sources = _.values(service.project.sources);
@@ -412,6 +414,7 @@ angular
     service.updateSelected = function(select) {
         service.updateSelectedInTree(select, service.tree.project);
         service.updateSelectedInTree(select, service.tree.database);
+        service.updateSelectedInTree(select, service.tree.groups);
         service.updateSelectedInTree(select, service.tree.sources);
         service.updateSelectedInTree(select, service.tree.exposures);
         service.updateSelectedInTree(select, service.tree.metrics);
@@ -714,6 +717,114 @@ angular
         });
 
         return databases;
+    }
+
+
+    function buildGroupTree2(nodes, macros, select) {
+        var tree = {};
+
+        var nodes = nodes || [];
+        var macros = macros || [];
+
+        _.each(nodes.concat(macros), function(node) {
+            var show = _.get(node, ['docs', 'show'], true);
+            // TODO: should all these be excluded?
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'seed' || node.resource_type == 'macro') {
+                // no sources in the model tree, sorry
+                return;
+            } else if (!show) {
+                return;
+            }
+
+            if (node.original_file_path.indexOf("\\") != -1) {
+                var path_parts = node.original_file_path.split("\\");
+            } else {
+                var path_parts = node.original_file_path.split("/");
+            }
+
+            var path = [node.package_name].concat(path_parts);
+            var is_active = node.unique_id == select;
+
+            var dirpath = _.initial(path);
+
+            var fname = _.last(path);
+
+            var cur_dir = tree;
+            _.each(dirpath, function(dir) {
+                if (!cur_dir[dir]) {
+                    cur_dir[dir] = {
+                        type: 'folder',
+                        name: dir,
+                        active: is_active,
+                        items: {}
+                    };
+                } else if (is_active) {
+                    cur_dir[dir].active = true;
+                }
+                cur_dir = cur_dir[dir].items;
+            })
+            cur_dir[fname] = {
+                type: 'file',
+                name: node.name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: node.resource_type
+            }
+        });
+
+        var flat = recursiveFlattenItems(tree);
+        return flat;
+    }
+
+    function buildGroupTree(groups, nodes, select) {
+        var groups = {}
+
+        _.each(nodes, function(node) {
+            var show = _.get(node, ['docs', 'show'], true);
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
+                // no sources in the model tree, sorry
+                return;
+            } else if (!show) {
+                return;
+            } else if (node.access === "private"){
+                return;
+            }
+
+            var name = node.name;
+
+            var group = node.group;
+
+            var is_active = node.unique_id == select;
+
+            if (!groups[group]) {
+                groups[group] = {
+                    type: "folder",
+                    name: group,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                groups[group].active = true;
+            }
+
+            groups[group].items.push({
+                type: 'file',
+                name: name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'group'
+            })
+        });
+
+        var groups = _.sortBy(_.values(groups), 'name');
+
+        _.each(groups, function(groups) {
+            groups.items = _.sortBy(groups.items, 'name');
+        });
+
+        return groups
     }
 
     service.caseColumn = function(col) {

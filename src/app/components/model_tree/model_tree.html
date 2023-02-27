@@ -32,6 +32,15 @@
                         Database
                     </span>
                 </div>
+                <div class="switch">
+                    <span
+                       class="switch-label btn btn-sm"
+                       ng-class="{active: (nav_selected == 'group')}"
+                       ng-click="nav_selected = 'group'">
+                        <svg class="icn menu-icon-on"><use xlink:href="#icn-tree-on"></use></svg>
+                        Group
+                    </span>
+                </div>
             </div>
         </li>
 
@@ -88,6 +97,17 @@
                         item="item"
                         resource-type="model"
                         ng-repeat="item in tree.database"></model-tree-line>
+                </ul>
+            </div>
+        </li>
+
+        <li>
+            <div class="menu" ng-show="nav_selected == 'group'">
+                <strong>Public Models</strong>
+                <ul><model-tree-line
+                        item="item"
+                        resource-type="model"
+                        ng-repeat="item in tree.groups"></model-tree-line>
                 </ul>
             </div>
         </li>
