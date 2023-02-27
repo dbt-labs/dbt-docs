@@ -38,7 +38,6 @@ angular
 
     $('body').bind('keydown', function(e) {
         if (event.key == 't' && event.target.tagName != 'INPUT') {
-            console.log("Opening search");
             // TODO : Make a directive, broadcast events, etc etc
             $('#search').focus();
             event.preventDefault();
@@ -132,7 +131,6 @@ angular
             $scope.tree.sources = tree.sources;
             $scope.search.query = ""
 
-            console.log("updating selected model to: ", params);
             setSelectedModel(params.unique_id);
 
             setTimeout(function() {

@@ -107,7 +107,6 @@ angular
             cy.remove(cy.elements());
             cy.add(nv);
             rerender(scope, cy);
-            console.log('elements changed, UPDATE');
         });
 
         scope.$watch('vizLayout', function(nv,ov){
@@ -129,7 +128,6 @@ angular
 
         scope.$watch('vizStyle', function(nv,ov){
             if(nv !== ov) {
-                console.log("Setting styles");
                 cy.setStyle(nv);
             }
         }, true);
