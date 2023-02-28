@@ -723,13 +723,14 @@ angular
         var groups = {}
 
         _.each(nodes, function(node) {
-            var show = _.get(node, ['docs', 'show'], true);
-            var exclude_nodes = ['source', 'exposure', 'seed', 'macro']
-            if (node.resource_type in exclude_nodes || !show || node.access === "private") {
+            const show = _.get(node, ['docs', 'show'], true);
+            const excludeNodes = ['source', 'exposure', 'seed', 'macro']
+            if (node.resource_type in excludeNodes || !show || node.access === "private") {
                 return;
             }
 
             var name = node.name;
+            var name = node.access === "protected" ? `${node.name} (protected)` : node.name
 
             var group = node.group;
 
@@ -752,7 +753,7 @@ angular
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
-                node_type: 'group'
+                node_type: 'model'
             })
         });
 
