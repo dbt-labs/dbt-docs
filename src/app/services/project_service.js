@@ -375,8 +375,7 @@ angular
             })
 
             service.tree.database = buildDatabaseTree(nodes, select);
-            var groups = _.values(service.project.groups);
-            service.tree.groups = buildGroupTree(groups, nodes, select);
+            service.tree.groups = buildGroupTree(nodes, select);
             service.tree.project = buildProjectTree(nodes, macros, select);
 
             var sources = _.values(service.project.sources);
@@ -720,7 +719,7 @@ angular
     }
 
 
-    function buildGroupTree(groups, nodes, select) {
+    function buildGroupTree(nodes, select) {
         var groups = {}
 
         _.each(nodes, function(node) {
