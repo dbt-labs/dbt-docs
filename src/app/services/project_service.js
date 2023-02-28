@@ -730,7 +730,7 @@ angular
             }
 
             var name = node.name;
-            var name = node.access === "protected" ? `${node.name} (protected)` : node.name
+            var name = node.access === "protected" ? `${node.name} (protected)` : node.name;
 
             var group = node.group;
 
