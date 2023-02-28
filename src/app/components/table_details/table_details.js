@@ -75,17 +75,16 @@ angular
             }
 
             function retrieveOwner(group) {
-                var owner = project.project.groups[group].owner
-                var owner_identifier
-                if (owner.name && owner.email) {
-                    owner_identifier = `${owner.name} <${owner.email}>`
-                  } else if (model.owner.name) {
-                    owner_identifier = `${owner.name}`
-                  } else if (owner.email) {
-                    owner_identifier = `${owner.email}`
-                  }
-                
-                return owner_identifier
+                const {name, email} = project.project.groups[group].owner;
+                const result = [];
+                if (name) result.push(name);
+                if (email) {
+                    const toPush = result.length > 0
+                        ? `<${email}>`
+                        : email;
+                    result.push(toPush);
+                }
+                return result.join(" ");
             }
 
             function getBaseStats(model) {
