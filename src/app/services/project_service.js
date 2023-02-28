@@ -375,6 +375,7 @@ angular
             })
 
             service.tree.database = buildDatabaseTree(nodes, select);
+            service.tree.groups = buildGroupTree(nodes, select);
             service.tree.project = buildProjectTree(nodes, macros, select);
 
             var sources = _.values(service.project.sources);
@@ -412,6 +413,7 @@ angular
     service.updateSelected = function(select) {
         service.updateSelectedInTree(select, service.tree.project);
         service.updateSelectedInTree(select, service.tree.database);
+        service.updateSelectedInTree(select, service.tree.groups);
         service.updateSelectedInTree(select, service.tree.sources);
         service.updateSelectedInTree(select, service.tree.exposures);
         service.updateSelectedInTree(select, service.tree.metrics);
@@ -714,6 +716,54 @@ angular
         });
 
         return databases;
+    }
+
+
+    function buildGroupTree(nodes, select) {
+        var groups = {}
+
+        _.each(nodes, function(node) {
+            const show = _.get(node, ['docs', 'show'], true);
+            const excludeNodes = ['source', 'exposure', 'seed', 'macro']
+            if (node.resource_type in excludeNodes || !show || node.access === "private") {
+                return;
+            }
+
+            var name = node.name;
+            var name = node.access === "protected" ? `${node.name} (protected)` : node.name;
+
+            var group = node.group;
+
+            var is_active = node.unique_id == select;
+
+            if (!groups[group]) {
+                groups[group] = {
+                    type: "group",
+                    name: group,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                groups[group].active = true;
+            }
+
+            groups[group].items.push({
+                type: 'file',
+                name: name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'model'
+            })
+        });
+
+        var groups = _.sortBy(_.values(groups), 'name');
+
+        _.each(groups, function(group) {
+            group.items = _.sortBy(group.items, 'name');
+        });
+
+        return groups
     }
 
     service.caseColumn = function(col) {

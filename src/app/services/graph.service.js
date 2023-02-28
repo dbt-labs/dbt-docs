@@ -250,7 +250,6 @@ angular
     }
 
     function getNodeVertPosition(primary_node, parents, children, this_node) {
-        console.log("Getting position for ", this_node, ". Primary: ", primary_node);
 
         var num_nodes = 1 + Math.max(parents.length, children.length);
         var scale_x = 100 / num_nodes;
@@ -265,8 +264,6 @@ angular
             config = {set: children, index: _.indexOf(children, this_node), factor: 1, type: 'child'}
         } else {
             return {x: 0, y: 0}
-            console.log('oops');
-            debugger
         }
 
         var size = config.set.length;

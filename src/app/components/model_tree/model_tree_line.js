@@ -93,6 +93,10 @@ angular
                     file: {
                         on: 'icn-doc-on',
                         off: 'icn-doc'
+                    },
+                    group: {
+                        on: 'icn-filter',
+                        off: 'icn-filter'
                     }
                 }
 

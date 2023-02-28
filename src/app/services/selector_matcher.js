@@ -303,7 +303,6 @@ function getNodesByMetric(elements, metric) {
 function getNodesFromSpec(dag, pristine_nodes, maxHops, selector) {
     const matcher = NODE_MATCHERS[selector.selector_type];
     if (!matcher) {
-        console.log("Node matcher for selector", selector.selector_type, "is invalid");
         return {
             selected: [],
             matched: [],
