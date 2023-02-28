@@ -107,12 +107,9 @@ angular
                     relation = database + model.schema + "." + model.alias;
                 }
 
-                var owner_identifier
-                if (model.group) {
-                    owner_identifier = retrieveOwner(`group.${model.package_name}.${model.group}`)
-                } else {
-                    owner_identifier = metadata.owner
-                }
+                const owner_identifier = model.group
+                    ? retrieveOwner(`group.${model.package_name}.${model.group}`)
+                    : metadata.owner;
 
                 var stats = [
                     {
