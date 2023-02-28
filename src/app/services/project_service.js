@@ -738,7 +738,7 @@ angular
 
             if (!groups[group]) {
                 groups[group] = {
-                    type: "folder",
+                    type: "group",
                     name: group,
                     active: is_active,
                     items: []
