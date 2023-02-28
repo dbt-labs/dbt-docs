@@ -7,7 +7,7 @@ const _ = require('underscore');
 
 angular
 .module('dbt')
-.directive('tableDetails', ["$sce", "$filter", function($sce, $filter) {
+.directive('tableDetails', ["$sce", "$filter", "project" ,function($sce, $filter, project) {
     return {
         scope: {
             model: '=',
@@ -74,6 +74,19 @@ angular
                 }
             }
 
+            function retrieveOwner(group) {
+                const {name, email} = project.project.groups[group].owner;
+                const result = [];
+                if (name) result.push(name);
+                if (email) {
+                    const toPush = result.length > 0
+                        ? `<${email}>`
+                        : email;
+                    result.push(toPush);
+                }
+                return result.join(" ");
+            }
+
             function getBaseStats(model) {
                 var is_ephemeral = !model.metadata;
                 var metadata = model.metadata || {};
@@ -94,10 +107,14 @@ angular
                     relation = database + model.schema + "." + model.alias;
                 }
 
+                const owner_identifier = model.group
+                    ? retrieveOwner(`group.${model.package_name}.${model.group}`)
+                    : metadata.owner;
+
                 var stats = [
                     {
                         name: "Owner",
-                        value: metadata.owner
+                        value: owner_identifier
                     },
                     {
                         name: "Type",
