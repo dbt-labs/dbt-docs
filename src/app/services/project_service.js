@@ -759,8 +759,8 @@ angular
 
         var groups = _.sortBy(_.values(groups), 'name');
 
-        _.each(groups, function(groups) {
-            groups.items = _.sortBy(groups.items, 'name');
+        _.each(groups, function(group) {
+            group.items = _.sortBy(group.items, 'name');
         });
 
         return groups
