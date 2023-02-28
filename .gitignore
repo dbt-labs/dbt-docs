@@ -9,4 +9,5 @@ env/
 .tmp/
 dist/
 .sass-cache/
+package-lock.json
 env*
