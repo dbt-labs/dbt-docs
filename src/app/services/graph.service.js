@@ -229,6 +229,18 @@ angular
                         'background-opacity': 0.5,
                     }
                 },
+                {
+                    selector: 'node[access="private"]',
+                    style: {
+                        'shape': 'rectangle',
+                    }
+                },
+                {
+                    selector: 'node[access="public"]',
+                    style: {
+                        'shape': 'ellipse',
+                    }
+                },
             ],
             ready: function(e) {
                 console.log("graph ready");
