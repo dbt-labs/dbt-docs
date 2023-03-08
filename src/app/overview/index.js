@@ -24,7 +24,7 @@ angular
             });
             // Select project-level overviews
             if (project_name !== null) {
-                selected_overview = project.docs[`${project_name}.__${project_name}__`] || selected_overview
+                selected_overview = project.docs[`doc.${project_name}.__${project_name}__`] || selected_overview
                 let overviews = _.filter(project.docs, { name: `__${project_name}__` })
                 _.each(overviews, (overview) => {
                     if (overview.package_name !== project_name) {
