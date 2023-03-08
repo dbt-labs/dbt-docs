@@ -309,22 +309,9 @@ function getNodesByGroup(elements, group) {
 
         if (node.group == group) {
             nodes.push(node);
-        } else {
-            console.log(node);
         }
     });
     return nodes;
-    // _.each(nodes, function(node) {
-    //     const show = _.get(node, ['docs', 'show'], true);
-    //     const excludeNodes = ['source', 'exposure', 'seed', 'macro']
-    //     if (node.resource_type in excludeNodes || !show || node.access === "private") {
-    //         return;
-    //     }
-
-    //     var name = node.name;
-    //     var name = node.access === "protected" ? `${node.name} (protected)` : node.name;
-
-    //     var group = node.group;
 
 
 }
