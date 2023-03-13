@@ -2,6 +2,7 @@ version: 2
 
 models:
   - name: stg_customers
+    access: private
     columns:
       - name: customer_id
         tests:
@@ -9,6 +10,7 @@ models:
           - not_null
 
   - name: stg_orders
+    access: private
     columns:
       - name: order_id
         tests:
@@ -20,6 +22,7 @@ models:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
 
   - name: stg_payments
+    access: private
     meta:
         owner: "@drew"
         contains_pii: true

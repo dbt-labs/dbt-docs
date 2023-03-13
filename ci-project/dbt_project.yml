@@ -17,6 +17,7 @@ clean-targets:
 
 models:
   jaffle_shop:
+    +group: jaffle
     +materialized: table
     marts:
       core:
@@ -25,3 +26,6 @@ models:
     staging:
       +materialized: view
       +tags: ["staging", "hourly"]
+
+tests:
+  +group: jaffle
