@@ -9,6 +9,7 @@ var SELECTOR_TYPE = {
     SOURCE: 'source',
     EXPOSURE: 'exposure',
     METRIC: 'metric',
+    GROUP: 'group',
     PATH: 'path',
     FILE: 'file',
     PACKAGE: 'package',
@@ -24,6 +25,7 @@ NODE_MATCHERS[SELECTOR_TYPE.TAG] = getNodesByTag;
 NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
 NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
 NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
+NODE_MATCHERS[SELECTOR_TYPE.GROUP] = getNodesByGroup;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.FILE] = getNodesByFile;
 NODE_MATCHERS[SELECTOR_TYPE.PACKAGE] = getNodesByPackage;
@@ -298,6 +300,19 @@ function getNodesByMetric(elements, metric) {
         }
     })
     return nodes;
+}
+
+function getNodesByGroup(elements, group) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.group == group) {
+            nodes.push(node);
+        }
+    });
+    return nodes;
+
 }
 
 function getNodesFromSpec(dag, pristine_nodes, maxHops, selector) {
