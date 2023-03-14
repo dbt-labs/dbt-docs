@@ -248,14 +248,6 @@ angular
                         'ghost': 'no',
                     }
                 },
-                {
-                    selector: 'node[access="public"]',
-                    style: {
-                        'font-weight': 400,
-                        'border-width': 1,
-                        'border-color': '#fff',
-                    }
-                },
             ],
             ready: function(e) {
                 console.log("graph ready");
