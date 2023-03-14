@@ -313,7 +313,6 @@ function getNodesByGroup(elements, group) {
     });
     return nodes;
 
-
 }
 
 function getNodesFromSpec(dag, pristine_nodes, maxHops, selector) {
