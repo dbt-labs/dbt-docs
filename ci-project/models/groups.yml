@@ -1,0 +1,7 @@
+version: 2
+
+groups:
+  - name: jaffle
+    owner:
+      name: Chef Jaffle
+      email: chef@jaffle.shop
