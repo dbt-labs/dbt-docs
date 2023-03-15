@@ -3,6 +3,8 @@ version: 2
 models:
   - name: stg_customers
     access: private
+    docs:
+      node_color: crimson
     columns:
       - name: customer_id
         tests:
