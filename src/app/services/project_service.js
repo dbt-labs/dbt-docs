@@ -267,20 +267,28 @@ angular
             'raw_code':'string',
             'columns':'object',
             'column_description':'n/a', // special case
+            'metadata':'n/a', // special case
             'tags': 'array',
             'arguments': 'array',
             'label': 'string',
         };
         
         let query_segments = _.words(query.toLowerCase());
-      
-        for (var i in search_keys) {
 
+        for (var i in search_keys) {
             // column descriptions are a special case because they are not a top-level key
             if (i === 'column_description') {
                 for (var column_name in obj["columns"]) {
                     if (obj["columns"][column_name]["description"] != null) {
                         if (query_segments.every(segment => obj["columns"][column_name]["description"].toLowerCase().indexOf(segment) != -1)) {
+                            objects.push({key: i, value: query});
+                        }
+                    }
+                }
+            } else if (i === 'metadata'){
+                for (var meta_name in obj["meta"]) {
+                    if (obj["meta"][meta_name] != null) {
+                        if (query_segments.every(segment => obj["meta"][meta_name].toLowerCase().indexOf(segment) != -1)) {
                             objects.push({key: i, value: query});
                         }
                     }

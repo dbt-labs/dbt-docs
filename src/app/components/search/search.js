@@ -23,12 +23,15 @@ angular
             scope.show_all = false;
             scope.max_results_columns = 3;
             scope.limit_columns = {};
+            scope.limit_metadata = {};
+            scope.max_results_metadata = 3;
 
             scope.checkboxStatus = {
                 show_names : false,
                 show_descriptions: false,
                 show_columns: false,
                 show_column_descriptions: false,
+                show_metadata: false,
                 show_code: false,
                 show_tags: false
             };
@@ -63,7 +66,7 @@ angular
                 let finalResults = [];
                 let fileIDs = [];
                 
-                const {show_names, show_descriptions, show_columns, show_column_descriptions, show_code, show_tags} = checkboxStatus;
+                const {show_names, show_descriptions, show_columns, show_column_descriptions, show_metadata, show_code, show_tags} = checkboxStatus;
                 _.each(results, function(result){
                     _.each(result.matches, function(match){
                        if(!fileIDs.includes(result.model['unique_id'])){
@@ -71,10 +74,11 @@ angular
                            const descriptionMatch = show_descriptions && match.key == "description";
                            const columnsMatch = show_columns && match.key === "columns";
                            const columnDescriptionMatch = show_column_descriptions && match.key === "column_description";
+                           const metadataMatch = show_metadata && match.key === "metadata";
                            const codeMatch = show_code && match.key === "raw_code";
                            const tagsMatch = show_tags && match.key === "tags";
 
-                           if(nameMatch || descriptionMatch || columnsMatch || columnDescriptionMatch || codeMatch || tagsMatch) {
+                           if(nameMatch || descriptionMatch || columnsMatch || columnDescriptionMatch || metadataMatch || codeMatch || tagsMatch) {
                             fileIDs.push(result.model['unique_id']);
                             finalResults.push(result);
                            }
@@ -84,7 +88,7 @@ angular
                return finalResults;
             }
 
-            var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_column_descriptions', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
+            var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_column_descriptions', 'checkboxStatus.show_metadata', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
             scope.$watchGroup(watchExpressions, function() {
                 scope.results = filterResults(projectService.search(scope.query), scope.checkboxStatus);
             });
@@ -120,6 +124,7 @@ angular
                 if (nv.length == 0) {
                     scope.show_all = false;
                     scope.limit_columns = {};
+                    scope.limit_metadata = {};
                 }
             });
 
@@ -137,6 +142,22 @@ angular
 
             scope.limitColumns = function(id) {
                 return scope.limit_columns[id] !== undefined ? scope.limit_columns[id] : 3;
+            }
+
+            scope.metadataFilter = function(metadata) {
+                var matches = [];
+                let query_segments = getQueryTokens(scope.query);
+
+                for (var key in metadata) {
+                    if (query_segments.every(segment => metadata[key].toLowerCase().indexOf(segment) != -1)) {
+                        matches.push([key, '->', metadata[key]].join(''));
+                    }
+                }
+                return matches;
+            }
+
+            scope.limitMetadata = function(id) {
+                return scope.limit_metadata[id] !== undefined ? scope.limit_metadata[id] : 3;
             }
 
             //from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
