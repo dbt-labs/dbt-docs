@@ -170,6 +170,8 @@ angular
                     var nodes = graph.showVerticalGraph('exposure:' + node.name, true);
                 } else if (node && node.resource_type == 'metric') {
                     var nodes = graph.showVerticalGraph('metric:' + node.name, true);
+                // } else if (node.resource_type == 'model' && node.version != null) {
+                //     var nodes = graph.showVerticalGraph(node.label, true);
                 } else {
                     var nodes = graph.showVerticalGraph(node.name, true);
                 }
