@@ -131,7 +131,11 @@ angular
 
             // Set node labels
             _.each(service.files.manifest.nodes, function(node) {
-                node.label = node.name;
+                if (node.resource_type == 'model' && node.version != null) {
+                    node.label = node.name + "_v" + node.version;
+                } else {
+                    node.label = node.name;
+                }
             });
 
             // Add sources back into nodes to make site logic work
@@ -630,6 +634,12 @@ angular
                 var fname = _.last(path);
             }
 
+            if (node.resource_type == 'model' && node.version != null) {
+                var display_name = node.name + "_v" + node.version;
+            } else {
+                var display_name = node.name;
+            }
+
             var cur_dir = tree;
             _.each(dirpath, function(dir) {
                 if (!cur_dir[dir]) {
@@ -646,7 +656,7 @@ angular
             })
             cur_dir[fname] = {
                 type: 'file',
-                name: node.name,
+                name: display_name,
                 node: node,
                 active: is_active,
                 unique_id: node.unique_id,
@@ -728,9 +738,15 @@ angular
             if (node.resource_type in excludeNodes || !show || node.access === "private") {
                 return;
             }
+            
+            if (node.resource_type == 'model' && node.version != null) {
+                var display_name = node.name + "_v" + node.version;
+            } else {
+                var display_name = node.name;
+            }
 
-            var name = node.name;
-            var name = node.access === "protected" ? `${node.name} (protected)` : node.name;
+            var name = display_name;
+            var name = node.access === "protected" ? `${display_name} (protected)` : display_name;
 
             var group = node.group;
 

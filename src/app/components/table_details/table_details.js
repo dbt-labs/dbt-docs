@@ -136,6 +136,10 @@ angular
                         name: "Access",
                         value: model.access
                     },
+                    {
+                        name: "Version",
+                        value: model.version
+                    },
                 ]
 
                 return _.filter(stats, function(s) { return s.value !== undefined })

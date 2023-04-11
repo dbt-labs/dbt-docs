@@ -50,6 +50,8 @@ angular
                     return model.label;
                 } else if (model.resource_type == 'exposure') {
                     return model.label;
+                } else if (model.resource_type == 'model' && model.version != null) {
+                    return model.label;
                 } else {
                     return model.name;
                 }

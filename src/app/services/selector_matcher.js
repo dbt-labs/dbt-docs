@@ -34,10 +34,20 @@ NODE_MATCHERS[SELECTOR_TYPE.TEST_NAME] = getNodesByTestName;
 NODE_MATCHERS[SELECTOR_TYPE.TEST_TYPE] = getNodesByTestType;
 
 
-function isFQNMatch(node_fqn, qualified_name) {
+function isFQNMatch(node_fqn, qualified_name, is_versioned) {
 
     // if qualified_name matches exactly model name (fqn's leaf), this is a match
-    if (qualified_name === _.last(node_fqn)) {
+    var ult = node_fqn.slice(-1)[0];
+    var penult = node_fqn.slice(-2, -1)[0];
+    
+    if (qualified_name === ult) {
+        return true;
+    }
+    
+    // if this is a versioned model, match on any of these:
+    // 'dim_customers', 'v2', 'dim_customers.v2', 'dim_customers_v2'
+    version_options = [penult, penult + "_" + ult, penult + "." + ult];
+    if (is_versioned && version_options.includes(qualified_name)) {
         return true;
     }
 
@@ -77,6 +87,7 @@ function getNodesByFQN(elements, qualified_name) {
     _.each(elements, function(el) {
         var node = el.data;
         var fqn = node.fqn;
+        var is_versioned = (node.version !== null);
 
         if (
           !fqn || 
@@ -97,9 +108,9 @@ function getNodesByFQN(elements, qualified_name) {
          */
         var unscoped_fqn = _.rest(fqn);
 
-        if (isFQNMatch(fqn, qualified_name)) {
+        if (isFQNMatch(fqn, qualified_name, is_versioned)) {
             nodes.push(node);
-        } else if (isFQNMatch(unscoped_fqn, qualified_name)) {
+        } else if (isFQNMatch(unscoped_fqn, qualified_name, is_versioned)) {
             nodes.push(node);
         }
     });
