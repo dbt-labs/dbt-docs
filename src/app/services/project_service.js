@@ -738,9 +738,15 @@ angular
             if (node.resource_type in excludeNodes || !show || node.access === "private") {
                 return;
             }
+            
+            if (node.resource_type == 'model' && node.version != null) {
+                var display_name = node.name + "_v" + node.version;
+            } else {
+                var display_name = node.name;
+            }
 
-            var name = node.name;
-            var name = node.access === "protected" ? `${node.name} (protected)` : node.name;
+            var name = display_name;
+            var name = node.access === "protected" ? `${display_name} (protected)` : display_name;
 
             var group = node.group;
 
