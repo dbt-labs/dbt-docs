@@ -228,7 +228,13 @@ angular
                     }
                     var node = project.nodes[model];
                     var column = _.find(node.columns, function(col, col_name) {
-                        return col_name.toLowerCase() == test_column.toLowerCase();
+                        // strip quotes from start and end of test column if present in both locations
+                        // this is necessary to attach a test to a column when `quote: true` is set for a column
+                        let test_column_name = test_column;
+                        if (test_column.startsWith('"') && test_column.endsWith('"')) {
+                            test_column_name = test_column.substring(1, test_column.length-1);
+                        }
+                        return col_name.toLowerCase() == test_column_name.toLowerCase();
                     });
 
                     if (column) {
