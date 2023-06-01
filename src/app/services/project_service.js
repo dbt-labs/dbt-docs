@@ -15,6 +15,16 @@ function capitalizeType(type) {
     return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
+
+function getQuoteChar(project_metadata) {
+    if (project_metadata && project_metadata.adapter_type == 'bigquery') {
+        return '`';
+    } else {
+        return '"';
+    }
+}
+
+
 angular
 .module('dbt')
 .factory('project', ['$q', '$http', function($q, $http) {
@@ -227,11 +237,12 @@ angular
                         var model = depends_on[0]
                     }
                     var node = project.nodes[model];
+                    var quote_char = getQuoteChar(project.metadata);
                     var column = _.find(node.columns, function(col, col_name) {
                         // strip quotes from start and end of test column if present in both locations
                         // this is necessary to attach a test to a column when `quote: true` is set for a column
                         let test_column_name = test_column;
-                        if (test_column.startsWith('"') && test_column.endsWith('"')) {
+                        if (test_column.startsWith(quote_char) && test_column.endsWith(quote_char)) {
                             test_column_name = test_column.substring(1, test_column.length-1);
                         }
                         return col_name.toLowerCase() == test_column_name.toLowerCase();
