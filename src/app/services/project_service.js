@@ -2,6 +2,7 @@
 const angular = require('angular');
 const $ = require('jquery');
 const _ = require('lodash');
+const { getQuoteChar } = require('./compat');
 
 import merge from 'deepmerge';
 
@@ -13,15 +14,6 @@ function capitalizeType(type) {
         return staticCapitalizations[type];
     }
     return type.charAt(0).toUpperCase() + type.slice(1);
-}
-
-
-function getQuoteChar(project_metadata) {
-    if (project_metadata && project_metadata.adapter_type == 'bigquery') {
-        return '`';
-    } else {
-        return '"';
-    }
 }
 
 
