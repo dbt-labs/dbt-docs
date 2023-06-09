@@ -2,6 +2,7 @@
 const angular = require('angular');
 const $ = require('jquery');
 const _ = require('lodash');
+const { getQuoteChar } = require('./compat');
 
 import merge from 'deepmerge';
 
@@ -14,6 +15,7 @@ function capitalizeType(type) {
     }
     return type.charAt(0).toUpperCase() + type.slice(1);
 }
+
 
 angular
 .module('dbt')
@@ -227,8 +229,15 @@ angular
                         var model = depends_on[0]
                     }
                     var node = project.nodes[model];
+                    var quote_char = getQuoteChar(project.metadata);
                     var column = _.find(node.columns, function(col, col_name) {
-                        return col_name.toLowerCase() == test_column.toLowerCase();
+                        // strip quotes from start and end of test column if present in both locations
+                        // this is necessary to attach a test to a column when `quote: true` is set for a column
+                        let test_column_name = test_column;
+                        if (test_column.startsWith(quote_char) && test_column.endsWith(quote_char)) {
+                            test_column_name = test_column.substring(1, test_column.length-1);
+                        }
+                        return col_name.toLowerCase() == test_column_name.toLowerCase();
                     });
 
                     if (column) {
