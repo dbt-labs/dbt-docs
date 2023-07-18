@@ -34,7 +34,6 @@
                 <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'details'})">Details</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'description'})">Description</a></li>
                 <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.metric({'#': 'depends_on'})">Depends On</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.metric({'#': 'code'})">SQL</a></li>
             </ul>
         </div>
     </div>
@@ -67,13 +66,6 @@
                 </div>
             </section>
 
-
-            <section class="section">
-                <div class="section-target" id="code"></div>
-                <div class="section-content">
-                    <code-block versions="versions" default="default_version" language="language"></code-block>
-                </div>
-            </section>
         </div>
     </div>
 </div>
