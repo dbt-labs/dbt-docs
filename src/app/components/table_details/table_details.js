@@ -140,6 +140,10 @@ angular
                         name: "Version",
                         value: model.version
                     },
+                    {
+                        name: "Contract",
+                        value: model.config.contract.enforced ? "Enforced" : "Not Enforced"
+                    },
                 ]
 
                 return _.filter(stats, function(s) { return s.value !== undefined })

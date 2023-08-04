@@ -12,6 +12,7 @@
                         <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Column</th>
                         <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Type</th>
                         <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
+                        <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Constraints</th>
                         <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Tests</th>
                         <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>More?</th>
                     </tr>
@@ -33,6 +34,15 @@
                         </td>
                         <td style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap; max-width: 1px;">
                             <span ng-show="!column.expanded">{{ column.description }}</span>
+                        </td>
+                        <td>
+                            <span class="text-light" ng-show="!column.expanded">
+                                <span data-toggle="tooltip" title="Not Null" ng-if="has_constraint(column, 'not_null')">N</span>
+                                <span data-toggle="tooltip" title="Primary Key" ng-if="has_constraint(column, 'primary_key')">PK</span>
+                                <span data-toggle="tooltip" title="Foreign Key" ng-if="has_constraint(column, 'foreign_key')">FK</span>
+                                <span data-toggle="tooltip" title="Check" ng-if="has_constraint(column, 'check')">C</span>
+                                <span data-toggle="tooltip" title="Custom" ng-if="has_constraint(column, 'custom')">+</span>
+                            </span>
                         </td>
                         <td>
                             <span class="text-light" ng-show="!column.expanded">
@@ -74,6 +84,23 @@
                                 <div style="margin-bottom: 15px" ng-if="column.description.length">
                                     <h5>Description</h5>
                                     <span marked="column.description"></span>
+                                </div>
+
+                                <div ng-show="column.constraints && column.constraints.length" style="margin-bottom: 15px">
+                                    <h5>Constraints</h5>
+                                    <div class="detail-group" style="padding-bottom: 0">
+                                        <div class="detail-body" style="padding-left: 0">
+                                            <dl class="detail" ng-style="{'padding-left': $index == 0 ? 0 : 'auto'}"
+                                                ng-repeat="constraint in column.constraints">
+                                                <dt class="detail-label">Name</dt>
+                                                <dd class="detail-value">{{ constraint.name }}</dd>
+                                                <dt class="detail-label">Type</dt>
+                                                <dd class="detail-value">{{ constraint.type }}</dd>
+                                                <dt class="detail-label">Expression</dt>
+                                                <dd class="detail-value">{{ constraint.expression }}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div ng-show="column.tests && column.tests.length" style="margin-bottom: 15px">
