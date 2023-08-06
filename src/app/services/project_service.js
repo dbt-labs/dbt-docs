@@ -687,11 +687,7 @@ angular
 
             var dirpath = _.initial(path);
 
-            if (node.resource_type == 'macro') {
-                var fname = node.name;
-            } else {
-                var fname = _.last(path);
-            }
+            var fname = `${node.resource_type}.${_.last(path)}.${node.name}`;
 
             if (node.resource_type == 'model' && node.version != null) {
                 var display_name = node.name + "_v" + node.version;
@@ -701,17 +697,18 @@ angular
 
             var cur_dir = tree;
             _.each(dirpath, function(dir) {
-                if (!cur_dir[dir]) {
-                    cur_dir[dir] = {
+                var dname = `dir.${dir}`
+                if (!cur_dir[dname]) {
+                    cur_dir[dname] = {
                         type: 'folder',
                         name: dir,
                         active: is_active,
                         items: {}
                     };
                 } else if (is_active) {
-                    cur_dir[dir].active = true;
+                    cur_dir[dname].active = true;
                 }
-                cur_dir = cur_dir[dir].items;
+                cur_dir = cur_dir[dname].items;
             })
             cur_dir[fname] = {
                 type: 'file',
