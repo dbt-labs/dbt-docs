@@ -18,13 +18,18 @@ angular
                 var test_types = _.pluck(col.tests, 'short');
                 return test_types.indexOf(test_name) != -1;
             }
+            
+            scope.has_constraint = function(col, constraint_name) {
+                return col.constraints.some(constraint => constraint.type === constraint_name)
+            }
 
             scope.has_more_info = function(column) {
                 var tests = (column.tests || []);
                 var description = (column.description || "");
                 var meta = (column.meta || {});
+                var constraints = (column.constraints || []);
 
-                return tests.length || description.length || !_.isEmpty(meta);
+                return tests.length || description.length || constraints.length || !_.isEmpty(meta);
             }
 
             scope.toggle_column_expanded = function(column) {
