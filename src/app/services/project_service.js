@@ -162,6 +162,12 @@ angular
                 service.files.manifest.nodes[node.unique_id] = node;
             });
 
+            // Add semantic models back into nodes to make site logic work
+            _.each(service.files.manifest.semantic_models, function(node) {
+                service.files.manifest.nodes[node.unique_id] = node;
+                node.label = node.name;
+            });
+
             var adapter = service.files.manifest.metadata.adapter_type;
             var macros = clean_project_macros(service.files.manifest.macros, adapter);
             service.files.manifest.macros = macros;
@@ -255,7 +261,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric', 'semantic_model'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -383,7 +389,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric', 'semantic_model'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -399,6 +405,9 @@ angular
             
             var metrics = _.values(service.project.metrics);
             service.tree.metrics = buildMetricTree(metrics, select);
+            
+            var semantic_models = _.values(service.project.semantic_models);
+            service.tree.semantic_models = buildSemanticModelTree(semantic_models, select);
 
             cb(service.tree);
         });
@@ -430,6 +439,7 @@ angular
         service.updateSelectedInTree(select, service.tree.sources);
         service.updateSelectedInTree(select, service.tree.exposures);
         service.updateSelectedInTree(select, service.tree.metrics);
+        service.updateSelectedInTree(select, service.tree.semantic_models);
 
         return service.tree;
     }
@@ -573,6 +583,46 @@ angular
         return metrics
     }
 
+    function buildSemanticModelTree(nodes, select) {
+        var semantic_models = {}
+
+        _.each(nodes, function(node) {
+            var name = node.name;
+
+            var project = node.package_name;
+
+            var is_active = node.unique_id == select;
+
+            if (!semantic_models[project]) {
+                semantic_models[project] = {
+                    type: "folder",
+                    name: project,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                semantic_models[project].active = true;
+            }
+
+            semantic_models[project].items.push({
+                type: 'file',
+                name: node.name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'semantic_model'
+            })
+        });
+
+        var semantic_models = _.sortBy(_.values(semantic_models), 'name');
+
+        _.each(semantic_models, function(semantic_model) {
+            semantic_models.items = _.sortBy(semantic_models.items, 'name');
+        });
+
+        return semantic_models
+    }
+
     function consolidateAdapterMacros(macros, adapter) {
         var adapter_macros = {};
         _.each(macros, function(macro) {
@@ -619,7 +669,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric' || node.resource_type == 'semantic_model') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {

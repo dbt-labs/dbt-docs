@@ -61,7 +61,7 @@ angular
         query.push("from " + rel)
         return query.join("\n");
     }
-
+    // TODO: revisit this
     service.generateMetricSQL = function(metric) {
         if (metric.calculation_method == 'derived') {
             return "-- derived\n" + metric.expression;

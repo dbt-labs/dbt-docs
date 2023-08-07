@@ -40,13 +40,15 @@ angular
                 } else if (type == 'analysis') {
                     return 'Analyses';
                 } else if (type == 'macro') {
-                      return 'Macros';
+                    return 'Macros';
                 } else if (type == 'exposure') {
-                      return 'Exposures';
+                    return 'Exposures';
                 } else if (type == 'metric') {
-                      return 'Metrics';
+                    return 'Metrics';
+                } else if (type == 'semantic_model') {
+                    return 'Semantic Models';
                 } else if (type == 'operation') {
-                        return 'Operations';
+                    return 'Operations';
                 } else {
                     return 'Nodes';
                 }

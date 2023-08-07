@@ -8,4 +8,5 @@ require('./macro');
 require('./analysis');
 require('./exposure');
 require('./metric');
+require('./semantic_model');
 require('./operation');

@@ -23,9 +23,9 @@ angular
         $scope.parents = dag_utils.getParents(project, metric);
         $scope.parentsLength = $scope.parents.length;
 
-        $scope.versions = {
-            'Definition': codeService.generateMetricSQL($scope.metric)
-        }
+        // $scope.versions = {
+        //     'Definition': codeService.generateMetricSQL($scope.metric)
+        // }
 
         const metric_type =  $scope.metric.type === 'expression'
             ? 'Expression metric'

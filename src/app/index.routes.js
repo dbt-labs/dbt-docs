@@ -18,6 +18,7 @@ const templates = {
     macro: require('./docs/macro.html'),
     exposure: require('./docs/exposure.html'),
     metric: require('./docs/metric.html'),
+    semantic_model: require('./docs/semantic_model.html'),
     operation: require('./docs/operation.html'),
 }
 
@@ -129,6 +130,14 @@ angular
             url: 'metric/:unique_id?section&' + graph_params,
             controller: 'MetricCtrl',
             templateUrl: templates.metric,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.semantic_model', {
+            url: 'semantic_model/:unique_id?section&' + graph_params,
+            controller: 'SemanticModelCtrl',
+            templateUrl: templates.semantic_model,
             params: {
                 unique_id: {type: 'string'}
             },

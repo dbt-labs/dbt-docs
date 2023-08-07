@@ -48,6 +48,8 @@ angular
                     return model.package_name + "." + model.name;
                 } else if (model.resource_type == 'metric') {
                     return model.label;
+                } else if (model.resource_type == 'semantic_model') {
+                    return model.name;
                 } else if (model.resource_type == 'exposure') {
                     return model.label;
                 } else if (model.resource_type == 'model' && model.version != null) {

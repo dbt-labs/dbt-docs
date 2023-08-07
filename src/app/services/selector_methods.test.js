@@ -176,6 +176,21 @@ test("Test parsing specs (explicit metric)", () => {
     });
 })
 
+test("Test parsing specs (explicit semantic model)", () => {
+    expect(
+        selectors.parseSpec('+semantic_model:a')
+    ).toStrictEqual({
+        select_at: false,
+        select_children: false,
+        select_parents: true,
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'semantic_model',
+        selector_value: 'a',
+        raw: '+semantic_model:a',
+    });
+})
+
 test("Test parsing specs (scoped fqn)", () => {
     expect(
         selectors.parseSpec('a.b.c+')
