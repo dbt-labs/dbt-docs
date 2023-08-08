@@ -61,28 +61,6 @@ angular
         query.push("from " + rel)
         return query.join("\n");
     }
-    // TODO: revisit this
-    service.generateMetricSQL = function(metric) {
-        if (metric.calculation_method == 'derived') {
-            return "-- derived\n" + metric.expression;
-        }
-
-        const queryParts = [
-            `select ${metric.calculation_method}(${metric.expression})` ,
-            `from {{ ${metric.model} }}`,
-        ];
-
-        if (metric.filters.length > 0) {
-            const filterExprs = metric.filters.map(filter => (
-                `${filter.field} ${filter.operator} ${filter.value}`
-            ));
-
-            const filters = filterExprs.join(' AND ');
-            queryParts.push(`where ${filters}`);
-        }
-
-        return queryParts.join('\n');
-    }
 
     return service;
 

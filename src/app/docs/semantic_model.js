@@ -23,10 +23,6 @@ angular
         $scope.parents = dag_utils.getParents(project, semantic_model);
         $scope.parentsLength = $scope.parents.length;
 
-        // $scope.versions = {
-        //     'Definition': codeService.generateSemanticModelSQL($scope.semantic_model)
-        // }
-
         const semantic_model_type =  $scope.semantic_model.type === 'expression'
             ? 'Expression semantic_model'
             : 'Aggregate semantic_model';

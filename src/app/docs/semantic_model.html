@@ -58,6 +58,38 @@
                 </div>
             </section>
 
+            <section class="section" ng-show = "semantic_model.entities.length != 0">
+                <div class="section-target" id="entities"></div>
+                <div class="section-content">
+                    <h6>Entities</h6>
+
+                <div class="panel">
+                    <div class="detail-group" style="padding-bottom: 0">
+                        <div class="detail-body" style="padding-left: 0">
+                            <dl class="detail" ng-style="{'padding-left': $index == 0 ? 0 : 'auto'}"
+                                ng-repeat="entity in semantic_model.entities">
+                                <dt class="detail-label">Name</dt>
+                                <dd class="detail-value" ng-if="entity.name">{{ entity.name }}</dd>
+                                <dd class="detail-value" ng-if="!entity.name">None</dd>
+                                <dt class="detail-label">Type</dt>
+                                <dd class="detail-value" ng-if="entity.type">{{ entity.type }}</dd>
+                                <dd class="detail-value" ng-if="!entity.type">None</dd>
+                                <dt class="detail-label">Description</dt>
+                                <dd class="detail-value" ng-if="entity.description">{{ entity.description }}</dd>
+                                <dd class="detail-value" ng-if="!entity.description">None</dd>
+                                <dt class="detail-label">Role</dt>
+                                <dd class="detail-value" ng-if="entity.role">{{ entity.role }}</dd>
+                                <dd class="detail-value" ng-if="!entity.role">None</dd>
+                                <dt class="detail-label">Expression</dt>
+                                <dd class="detail-value" ng-if="entity.expr">{{ entity.expr }}</dd>
+                                <dd class="detail-value" ng-if="!entity.expr">None</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
             <section class="section" ng-show = "parentsLength != 0">
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
