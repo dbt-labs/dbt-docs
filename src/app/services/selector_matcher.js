@@ -9,6 +9,7 @@ var SELECTOR_TYPE = {
     SOURCE: 'source',
     EXPOSURE: 'exposure',
     METRIC: 'metric',
+    SEMANTIC_MODEL: 'semantic_model',
     GROUP: 'group',
     PATH: 'path',
     FILE: 'file',
@@ -25,6 +26,7 @@ NODE_MATCHERS[SELECTOR_TYPE.TAG] = getNodesByTag;
 NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
 NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
 NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
+NODE_MATCHERS[SELECTOR_TYPE.SEMANTIC_MODEL] = getNodesBySemanticModel;
 NODE_MATCHERS[SELECTOR_TYPE.GROUP] = getNodesByGroup;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.FILE] = getNodesByFile;
@@ -93,7 +95,8 @@ function getNodesByFQN(elements, qualified_name) {
           !fqn || 
           node.resource_type == 'source' || 
           node.resource_type == 'exposure' || 
-          node.resource_type == 'metric'
+          node.resource_type == 'metric' || 
+          node.resource_type == 'semantic_model'
         ) {
             return;
         }
@@ -307,6 +310,27 @@ function getNodesByMetric(elements, metric) {
         if (selected_metric_name == '*') {
             nodes.push(node_obj.data);
         } else if (selected_metric_name == metric_name) {
+            nodes.push(node_obj.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesBySemanticModel(elements, semantic_model) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'semantic_model') {
+            return;
+        }
+
+        var semantic_model_name = node.name;
+        var selected_semantic_model_name = semantic_model;
+
+        if (selected_semantic_model_name == '*') {
+            nodes.push(node_obj.data);
+        } else if (selected_semantic_model_name == semantic_model_name) {
             nodes.push(node_obj.data);
         }
     })

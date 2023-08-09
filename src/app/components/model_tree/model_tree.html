@@ -78,6 +78,17 @@
                     </ul>
                     <br />
                 </div>
+                
+                <div ng-show="tree.semantic_models.length > 0">
+                    <strong>Semantic Models</strong>
+                    <ul style="display: block">
+                        <model-tree-line
+                            item="item"
+                            resource-type="semantic_model"
+                            ng-repeat="item in tree.semantic_models"></model-tree-line>
+                    </ul>
+                    <br />
+                </div>
 
                 <strong>Projects</strong>
                 <ul>
