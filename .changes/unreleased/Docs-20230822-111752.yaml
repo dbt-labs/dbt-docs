@@ -1,0 +1,6 @@
+kind: Docs
+body: Make logo clickable to return to the overview page.
+time: 2023-08-22T11:17:52.419273558+02:00
+custom:
+  Author: jochemvandooren
+  Issue: "446"
