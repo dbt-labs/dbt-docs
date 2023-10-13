@@ -21,7 +21,14 @@ angular
 .module('dbt')
 .factory('project', ['$q', '$http', function($q, $http) {
 
-    var TARGET_PATH = '';
+    // These tokens will pass-through any webpack process, and
+    // enable replacement of the strings for objects containing
+    // the data for the manifest and catalog (manifest.json and
+    // catalog.json).
+    var INLINE_FILES = {
+      'manifest': 'MANIFEST.JSON INLINE DATA',
+      'catalog': 'CATALOG.JSON INLINE DATA'
+    }
 
     var service = {
         project: {},
@@ -95,6 +102,16 @@ angular
     }
 
     function loadFile(label, path) {
+
+        // If there is an INLINE_FILES that isn't a string (must be JSON data),
+        // use it directly.
+        if (label in INLINE_FILES && typeof INLINE_FILES[label] === "object") {
+          return {
+            label: label,
+            data: INLINE_FILES[label]
+          }
+        }
+
         return $http({
             method: 'GET',
             url: path
@@ -118,8 +135,8 @@ angular
     service.loadProject = function() {
         var cache_bust = "?cb=" + (new Date()).getTime();
         var promises = [
-            loadFile('manifest', TARGET_PATH + "manifest.json" + cache_bust),
-            loadFile('catalog', TARGET_PATH + "catalog.json" + cache_bust),
+            loadFile('manifest', "manifest.json" + cache_bust),
+            loadFile('catalog', "catalog.json" + cache_bust),
         ]
 
         $q.all(promises).then(function(files) {
