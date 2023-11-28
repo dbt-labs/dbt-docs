@@ -32,7 +32,9 @@ angular
     }
 
     service.isHosted = function() {
-        return window.location.hostname.indexOf('.getdbt.com') > -1;
+        hostedgetdbt = window.location.hostname.indexOf('.getdbt.com') > -1;
+        hosteddbt = window.location.hostname.indexOf('.dbt.com') > -1;
+        return hostedgetdbt || hosteddbt;
     }
 
     service.turn_on_tracking = function() {
@@ -52,7 +54,12 @@ angular
         }
 
         if (service.isHosted()) {
-            trackerParams.cookieDomain = '.getdbt.com';
+            if (window.location.hostname.indexOf('.getdbt.com') > -1) {
+                trackerParams.cookieDomain = '.getdbt.com';
+            }
+            else {
+                trackerParams.cookieDomain = '.dbt.com';
+            }
         }
 
         service.snowplow = window.snowplow;
