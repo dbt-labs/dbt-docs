@@ -1,10 +1,6 @@
-** replace `dbt-docs` with your repository name in all docs
-
-
 # Contributing to `dbt-docs`
 
-`dbt-docs` is a template for open source software projects at dbt Labs.
-
+`dbt-docs` contains code for generating a documentation site for dbt projects.
 
 1. [About this document](#about-this-document)
 2. [Getting the code](#getting-the-code)
