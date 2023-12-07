@@ -10,6 +10,7 @@
 6. [Debugging](#debugging)
 7. [Adding or modifying a changelog entry](#adding-or-modifying-a-changelog-entry)
 8. [Submitting a Pull Request](#submitting-a-pull-request)
+9. [Troubleshooting Tips](#troubleshooting-tips)
 
 ## About this document
 
@@ -110,4 +111,5 @@ Automated tests run via GitHub Actions. If you're a first-time contributor, all 
 
 Once all tests are passing and your PR has been approved, a `dbt-docs` maintainer will merge your changes into the active development branch. And that's it! Happy developing :tada:
 
-Sometimes, the content license agreement auto-check bot doesn't find a user's entry in its roster. If you need to force a rerun, add `@cla-bot check` in a comment on the pull request.
+## Troubleshooting Tips
+- Sometimes, the content license agreement auto-check bot doesn't find a user's entry in its roster. If you need to force a rerun, add `@cla-bot check` in a comment on the pull request.
