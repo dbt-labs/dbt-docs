@@ -9,7 +9,7 @@
     "angular-loader": "~1.5.0",
     "angular-marked": "^1.2.2",
     "angular-route": "^1.5.0",
-    "angular-ui-router": "~1.0.0",
+    "angular-ui-router": "~1.0.30",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-es2015": "^6.24.1",
