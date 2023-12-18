@@ -67,7 +67,7 @@ jobs:
 
       - name: upload changelog artifacts
         id: retrieve_changelogs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: |
@@ -123,7 +123,7 @@ jobs:
         run: npx webpack
 
       - name: upload index.html artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: dist/index.html
