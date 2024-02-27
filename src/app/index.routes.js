@@ -14,6 +14,7 @@ const templates = {
     snapshot: require('./docs/snapshot.html'),
     seed: require('./docs/seed.html'),
     test: require('./docs/test.html'),
+    unit_test: require('./docs/test.html'),
     analysis: require('./docs/analysis.html'),
     macro: require('./docs/macro.html'),
     exposure: require('./docs/exposure.html'),
@@ -80,6 +81,14 @@ angular
         })
         .state('dbt.test', {
             url: 'test/:unique_id?section&' + graph_params,
+            controller: 'TestCtrl',
+            templateUrl: templates.test,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.unit_test', {
+            url: 'unit_test/:unique_id?section&' + graph_params,
             controller: 'TestCtrl',
             templateUrl: templates.test,
             params: {

@@ -34,7 +34,9 @@ angular
                 } else if (type == 'seed') {
                     return 'Seeds';
                 } else if (type == 'test') {
-                    return 'Tests';
+                    return 'Data Tests';
+                } else if (type == 'unit_test') {
+                    return "Unit Tests';
                 } else if (type == 'snapshot') {
                     return 'Snapshots'
                 } else if (type == 'analysis') {

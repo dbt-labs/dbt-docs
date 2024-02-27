@@ -13,7 +13,7 @@
                         <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Type</th>
                         <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
                         <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Constraints</th>
-                        <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Tests</th>
+                        <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;">Data Tests</th>
                         <th style="width: 1px; background-color: white; position: sticky; top: 0; z-index: 1;" class='text-center'>More?</th>
                     </tr>
                 </thead>
@@ -104,7 +104,7 @@
                                 </div>
 
                                 <div ng-show="column.tests && column.tests.length" style="margin-bottom: 15px">
-                                    <h5>Generic Tests</h5>
+                                    <h5>Generic Data Tests</h5>
                                     <ul class="list-unstyled" style="margin-top: 2px">
                                         <li ng-repeat="test in column.tests" ng-switch on="test.short" class='text-light'>
                                             <span ng-switch-when="F">
