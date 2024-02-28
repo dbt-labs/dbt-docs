@@ -36,7 +36,7 @@ angular
                 } else if (type == 'test') {
                     return 'Data Tests';
                 } else if (type == 'unit_test') {
-                    return "Unit Tests';
+                    return 'Unit Tests';
                 } else if (type == 'snapshot') {
                     return 'Snapshots'
                 } else if (type == 'analysis') {
