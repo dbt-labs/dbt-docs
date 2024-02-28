@@ -63,11 +63,11 @@ jobs:
 
     steps:
       - name: Checkout dbt-docs repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: upload changelog artifacts
         id: retrieve_changelogs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: |
@@ -94,7 +94,7 @@ jobs:
     steps:
 
       - name: Checkout dbt-docs repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Update submodules
         run: git submodule update --init --recursive 
@@ -123,7 +123,7 @@ jobs:
         run: npx webpack
 
       - name: upload index.html artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: dist/index.html
@@ -136,7 +136,7 @@ jobs:
 
     steps:
       - name: Check out dbt-core main branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: dbt-labs/dbt-core
           ref: main
@@ -152,13 +152,13 @@ jobs:
           git status
 
       - name: Download index artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/include"
       
       - name: Download changelog artifact(s)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: ".changes/unreleased"
@@ -195,7 +195,7 @@ jobs:
 
     steps:
       - name: Checkout dbt-docs repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: dbt-labs/dbt-docs # redundant but calling it out for clarity
       
