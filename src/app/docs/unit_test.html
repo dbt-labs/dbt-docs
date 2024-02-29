@@ -27,8 +27,8 @@
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
-                <li ui-sref-active='active'><a ui-sref="dbt.unit_test({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.unit_test({'#': 'depends_on'})">Depends On</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.unit_test({'#': 'description'})">Description of Unit Test</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.unit_test({'#': 'depends_on'})">Unit Test Depends On</a></li>
             </ul>
         </div>
     </div>
@@ -37,7 +37,7 @@
             <section class="section">
                 <div class="section-target" id="description"></div>
                 <div class="section-content">
-                    <h6>Description</h6>
+                    <h6>Description of Unit Test</h6>
                     <div class="panel">
                         <div class="panel-body">
                             <div ng-if="model.description" class="model-markdown" marked="model.description"></div>
@@ -50,7 +50,7 @@
             <section class="section" ng-show = "parentsLength != 0">
                 <div class="section-target" id="depends_on"></div>
                 <div class="section-content">
-                    <h6>Depends On</h6>
+                    <h6>Unit Test Depends On</h6>
                     <reference-list references="parents" node="model" />
                 </div>
             </section>
