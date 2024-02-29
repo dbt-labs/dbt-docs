@@ -155,7 +155,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
-          path: "core/dbt/include"
+          path: "core/dbt/task/docs"
       
       - name: Download changelog artifact(s)
         uses: actions/download-artifact@v4
