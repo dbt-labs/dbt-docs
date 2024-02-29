@@ -14,7 +14,7 @@ const templates = {
     snapshot: require('./docs/snapshot.html'),
     seed: require('./docs/seed.html'),
     test: require('./docs/test.html'),
-    unit_test: require('./docs/test.html'),
+    unit_test: require('./docs/unit_test.html'),
     analysis: require('./docs/analysis.html'),
     macro: require('./docs/macro.html'),
     exposure: require('./docs/exposure.html'),
