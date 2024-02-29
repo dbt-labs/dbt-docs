@@ -21,15 +21,14 @@
             <div class="app-frame app-pad app-flush-bottom">
                 <h1>
                     <span class="break">{{ model.name }}</span>
-                    <small>test</small>
+                    <small>unit test</small>
                 </h1>
             </div>
         </div>
         <div class="app-frame app-pad-h">
             <ul class="nav nav-tabs">
-                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'description'})">Description</a></li>
-                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.test({'#': 'depends_on'})">Depends On</a></li>
-                <li ui-sref-active='active'><a ui-sref="dbt.test({'#': 'code'})">SQL</a></li>
+                <li ui-sref-active='active'><a ui-sref="dbt.unit_test({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.unit_test({'#': 'depends_on'})">Depends On</a></li>
             </ul>
         </div>
     </div>
