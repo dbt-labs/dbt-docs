@@ -82,7 +82,7 @@ angular
         .state('dbt.unit_test', {
             url: 'unit_test/:unique_id?section&' + graph_params,
             controller: 'TestCtrl',
-            templateUrl: templates.test,
+            templateUrl: templates.unit_test,
             params: {
                 unique_id: {type: 'string'}
             },
