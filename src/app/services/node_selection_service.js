@@ -18,6 +18,7 @@ angular
             'snapshot',
             'source',
             'test',
+            'unit_test',
             'analysis',
             'exposure',
             'metric',
@@ -37,7 +38,7 @@ angular
         options: {
             packages: [],
             tags: [null],
-            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric', 'semantic_model'],
+            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric', 'semantic_model', 'unit_test'],
         }
     };
 
@@ -63,7 +64,7 @@ angular
             include_selection = '+metric:' + node.name;
         } else if (node && node.resource_type == 'semantic_model') {
             include_selection = '+semantic_model:' + node.name;
-        } else if (node && _.includes(['analysis', 'test'], node.resource_type)) {
+        } else if (node && _.includes(['analysis', 'test', 'unit_test'], node.resource_type)) {
             include_selection = '+' + node.name;
         } else {
             include_selection = "";

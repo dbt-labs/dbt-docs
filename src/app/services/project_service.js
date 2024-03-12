@@ -185,6 +185,12 @@ angular
                 node.label = node.name;
             });
 
+            // Add unit tests into nodes
+            _.each(service.files.manifest.unit_tests, function(node) {
+                service.files.manifest.nodes[node.unique_id] = node;
+                node.label = node.name;
+            });
+
             var adapter = service.files.manifest.metadata.adapter_type;
             var macros = clean_project_macros(service.files.manifest.macros, adapter);
             service.files.manifest.macros = macros;
