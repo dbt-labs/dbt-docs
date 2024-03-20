@@ -90,7 +90,7 @@ angular
 
             var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_column_descriptions', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
             scope.$watchGroup(watchExpressions, function() {
-                scope.results = filterResults(projectService.search(scope.query), scope.checkboxStatus);
+                scope.filteredResults = filterResults(scope.results, scope.checkboxStatus);
             });
 
             scope.shorten = function(text) {
