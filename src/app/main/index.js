@@ -161,6 +161,7 @@ angular
         };
         _.each(results, function(result){
             result.overallWeight = 0;
+            result.overallNameWeight = 0;
             _.each(Object.keys(criteriaArr), function(criteria){
                 if(result.model[criteria] != undefined){
                     let count = 0;
@@ -197,6 +198,19 @@ angular
                             }
                         });
                     }
+                    else if(criteria === "name"){
+                        const calculateNameMatchWeight = (body, query) => {
+                            if (body === query) return 10;
+                            const lowerBody = body.toLowerCase();
+                            if (lowerBody.startsWith(query)) return 5;
+                            if (lowerBody.endsWith(query)) return 3;
+                            if (lowerBody.includes(query)) return 1;
+                            return 0;
+                        };
+
+                        count += calculateNameMatchWeight(body, ($scope.search.query).toLowerCase());
+                        result.overallNameWeight += (count * criteriaArr[criteria]);
+                    }
                     else{
                         body = body.toLowerCase();
                         let index = 0;
@@ -210,7 +224,8 @@ angular
                     result.overallWeight += (count * criteriaArr[criteria]);
                 }
             });
-        }); 
+        });
+        results.sort((a, b) => b.overallNameWeight - a.overallNameWeight || b.overallWeight - a.overallWeight);
         return results;
     }
 

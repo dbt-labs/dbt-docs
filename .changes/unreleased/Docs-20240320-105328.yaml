@@ -1,0 +1,6 @@
+kind: Docs
+body: Search results are now sorted by first name weight and then overall weight score.
+time: 2024-03-20T10:53:28.284686+01:00
+custom:
+  Author: sercancicek
+  Issue: "217"

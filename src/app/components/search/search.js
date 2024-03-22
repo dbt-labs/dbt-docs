@@ -90,15 +90,15 @@ angular
 
             var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_column_descriptions', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
             scope.$watchGroup(watchExpressions, function() {
-                scope.results = filterResults(projectService.search(scope.query), scope.checkboxStatus);
+                scope.filteredResults = filterResults(scope.results, scope.checkboxStatus);
             });
 
             scope.shorten = function(text) {
-                if(text != null && text.trim().length > 0 && scope.query != null && scope.query.trim().length > 0){  
-                    let modified = text.replace(/\s+/g, ' '); 
-                    //choose the first word in the search as the anchor for shortening. 
+                if(text != null && text.trim().length > 0 && scope.query != null && scope.query.trim().length > 0){
+                    let modified = text.replace(/\s+/g, ' ');
+                    //choose the first word in the search as the anchor for shortening.
                     //Escaping in case the first token is "*" or another reserved regex character
-                    let first_token = escapeRegExp(getQueryTokens(scope.query)[0]); 
+                    let first_token = escapeRegExp(getQueryTokens(scope.query)[0]);
                     let indexOfInstance = modified.search(new RegExp(first_token));
                     let startIndex = (indexOfInstance - 75) < 0 ? 0 : indexOfInstance - 75;
                     let endIndex = (indexOfInstance + 75) > modified.length ? modified.length : indexOfInstance + 75;
@@ -116,7 +116,7 @@ angular
                 //e.g. "hello WORLD" changes to "(hello)|(world)"
                 let query_segments = getQueryTokens(scope.query);
                 let escaped_segments = query_segments.map(segment => escapeRegExp(segment));
-                let highlight_words = "(" + escaped_segments.join(")|(") + ")"; 
+                let highlight_words = "(" + escaped_segments.join(")|(") + ")";
                 return $sce.trustAsHtml(text.replace(new RegExp(highlight_words, 'gi'), '<span class="search-result-match">$&</span>'));
             }
 
@@ -154,3 +154,4 @@ angular
         }
     }
 }]);
+
