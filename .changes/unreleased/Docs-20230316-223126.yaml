@@ -1,0 +1,6 @@
+kind: Docs
+body: Enable search on metadata values.
+time: 2023-03-16T22:31:26.269408+01:00
+custom:
+  Author: vmjulio
+  Issue: "396"
