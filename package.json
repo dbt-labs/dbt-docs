@@ -45,6 +45,7 @@
     "webpack-inline-svg-plugin": "^1.1.4"
   },
   "dependencies": {
+    "mermaid": "^9.4.0",
     "prismjs": "^1.28.0"
   }
 }

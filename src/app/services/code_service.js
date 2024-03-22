@@ -5,6 +5,9 @@ const _ = require('underscore');
 import Prism from 'prismjs';
 window.Prism = Prism;
 
+import mermaid from 'mermaid';
+window.mermaid = mermaid;
+
 import 'prismjs/components/prism-sql';
 import 'prismjs/components/prism-python';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
