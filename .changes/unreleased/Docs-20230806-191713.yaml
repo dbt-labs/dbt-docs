@@ -1,0 +1,6 @@
+kind: Docs
+body: Fix crash when folder had the same name as a macro
+time: 2023-08-06T19:17:13.611347561Z
+custom:
+  Author: etnnth
+  Issue: "442"
