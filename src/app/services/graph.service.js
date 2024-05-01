@@ -381,8 +381,9 @@ angular
         _.each(_.filter(service.manifest.nodes, function(node) {
             // operation needs to be a graph type so that the parent/child map can be resolved even though we won't be displaying it
             var is_graph_type = _.includes(['model', 'seed', 'source', 'snapshot', 'analysis', 'exposure', 'metric', 'semantic_model', 'operation'], node.resource_type);
-            var is_singular_test = node.resource_type == 'test' && !node.hasOwnProperty('test_metadata');
-            return is_graph_type || is_singular_test;
+            var is_singular_test = node.resource_type === 'test' && !node.hasOwnProperty('test_metadata');
+            var is_unit_test = node.resource_type === 'unit_test';
+            return is_graph_type || is_singular_test || is_unit_test;
         }), function(node) {
             var node_obj = {
                 group: "nodes",
