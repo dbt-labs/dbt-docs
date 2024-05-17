@@ -50,6 +50,8 @@ angular
                     return model.label;
                 } else if (model.resource_type == 'semantic_model') {
                     return model.name;
+                } else if (model.resource_type == 'saved_query') {
+                    return model.name;
                 } else if (model.resource_type == 'exposure') {
                     return model.label;
                 } else if (model.resource_type == 'model' && model.version != null) {

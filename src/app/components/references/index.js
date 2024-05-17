@@ -49,6 +49,8 @@ angular
                     return 'Metrics';
                 } else if (type == 'semantic_model') {
                     return 'Semantic Models';
+                } else if (type == 'saved_query') {
+                    return 'Saved Queries';
                 } else if (type == 'operation') {
                     return 'Operations';
                 } else {
