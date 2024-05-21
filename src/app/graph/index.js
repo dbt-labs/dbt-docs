@@ -25,6 +25,8 @@ angular
                 return 'metric:' + node.name;
             } else if (node && node.resource_type == 'semantic_model') {
                 return 'semantic_model:' + node.name;
+            } else if (node && node.resource_type == 'saved_query') {
+                return 'saved_query:' + node.name;
             } else if (node && node.resource_type == 'model' && node.version != null) {
                 return node.label;
             } else if (node.name)  {

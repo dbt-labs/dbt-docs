@@ -157,6 +157,8 @@ angular
                     var nodes = graph.showFullGraph('metric:' + node.name);
                 } else if (node && node.resource_type == 'semantic_model') {
                     var nodes = graph.showFullGraph('semantic_model:' + node.name);
+                } else if (node && node.resource_type == 'saved_query') {
+                    var nodes = graph.showFullGraph('saved_query:' + node.name);
                 } else {
                     var nodes = graph.showFullGraph(node_name);
                 }
@@ -174,6 +176,8 @@ angular
                     var nodes = graph.showVerticalGraph('metric:' + node.name, true);
                 } else if (node && node.resource_type == 'semantic_model') {
                     var nodes = graph.showVerticalGraph('semantic_model:' + node.name, true);
+                } else if (node && node.resource_type == 'saved_query') {
+                    var nodes = graph.showVerticalGraph('saved_query:' + node.name, true);
                 } else {
                     var nodes = graph.showVerticalGraph(node.name, true);
                 }

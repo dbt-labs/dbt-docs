@@ -88,6 +88,7 @@ angular
         $scope.tree.exposures = tree.exposures;
         $scope.tree.metrics = tree.metrics;
         $scope.tree.semantic_models = tree.semantic_models;
+        $scope.tree.saved_queries = tree.saved_queries;
         $scope.tree.groups = tree.groups;
 
         setTimeout(function() {

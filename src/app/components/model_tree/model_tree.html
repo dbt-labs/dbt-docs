@@ -90,6 +90,18 @@
                     <br />
                 </div>
 
+
+                <div ng-show="tree.saved_queries.length > 0">
+                    <strong>Saved Queries</strong>
+                    <ul style="display: block">
+                        <model-tree-line
+                            item="item"
+                            resource-type="saved_query"
+                            ng-repeat="item in tree.saved_queries"></model-tree-line>
+                    </ul>
+                    <br />
+                </div>
+
                 <strong>Projects</strong>
                 <ul>
                     <model-tree-line

@@ -191,6 +191,21 @@ test("Test parsing specs (explicit semantic model)", () => {
     });
 })
 
+test("Test parsing specs (explicit saved query)", () => {
+    expect(
+        selectors.parseSpec('+saved_query:a')
+    ).toStrictEqual({
+        select_at: false,
+        select_children: false,
+        select_parents: true,
+        parents_depth: null,
+        children_depth: null,
+        selector_type: 'saved_query',
+        selector_value: 'a',
+        raw: '+saved_query:a',
+    });
+})
+
 test("Test parsing specs (scoped fqn)", () => {
     expect(
         selectors.parseSpec('a.b.c+')

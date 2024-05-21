@@ -9,4 +9,5 @@ require('./analysis');
 require('./exposure');
 require('./metric');
 require('./semantic_model');
+require('./saved_query');
 require('./operation');

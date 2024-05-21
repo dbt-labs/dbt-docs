@@ -10,6 +10,7 @@ var SELECTOR_TYPE = {
     EXPOSURE: 'exposure',
     METRIC: 'metric',
     SEMANTIC_MODEL: 'semantic_model',
+    SAVED_QUERY: 'saved_query',
     GROUP: 'group',
     PATH: 'path',
     FILE: 'file',
@@ -27,6 +28,7 @@ NODE_MATCHERS[SELECTOR_TYPE.SOURCE] = getNodesBySource;
 NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
 NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
 NODE_MATCHERS[SELECTOR_TYPE.SEMANTIC_MODEL] = getNodesBySemanticModel;
+NODE_MATCHERS[SELECTOR_TYPE.SAVED_QUERY] = getNodesBySavedQuery;
 NODE_MATCHERS[SELECTOR_TYPE.GROUP] = getNodesByGroup;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.FILE] = getNodesByFile;
@@ -96,7 +98,8 @@ function getNodesByFQN(elements, qualified_name) {
           node.resource_type == 'source' || 
           node.resource_type == 'exposure' || 
           node.resource_type == 'metric' || 
-          node.resource_type == 'semantic_model'
+          node.resource_type == 'semantic_model' ||
+          node.resource_type == 'saved_query'
         ) {
             return;
         }
@@ -331,6 +334,27 @@ function getNodesBySemanticModel(elements, semantic_model) {
         if (selected_semantic_model_name == '*') {
             nodes.push(node_obj.data);
         } else if (selected_semantic_model_name == semantic_model_name) {
+            nodes.push(node_obj.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesBySavedQuery(elements, saved_query) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'saved_query') {
+            return;
+        }
+
+        var saved_query_name = node.name;
+        var selected_saved_query_name = saved_query;
+
+        if (selected_saved_query_name == '*') {
+            nodes.push(node_obj.data);
+        } else if (selected_saved_query_name == saved_query_name) {
             nodes.push(node_obj.data);
         }
     })
