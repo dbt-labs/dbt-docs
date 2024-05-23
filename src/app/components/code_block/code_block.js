@@ -38,6 +38,10 @@ angular
                     // for good measure, also use Prism's built-in mechanism to identify and
                     // highlight all `code` elements based on their `language-xxxx` class
                     Prism.highlightAll();
+
+                    // Call to Prism above turns <pre><code class="lang-mermaid"></code></pre>
+                    // into <pre><code class="language-mermaid"></code></pre>.
+                    mermaid.init({}, 'code.language-mermaid');
                 })
             }
 

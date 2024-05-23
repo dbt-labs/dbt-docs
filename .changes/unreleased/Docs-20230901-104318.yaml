@@ -1,0 +1,6 @@
+kind: Docs
+body: 'Integrate mermaid.js to render graphs in markdown'
+time: 2023-09-01T10:43:18.986433+02:00
+custom:
+  Author: matthieucan
+  Issue: "338"
