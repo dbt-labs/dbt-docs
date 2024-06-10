@@ -1,0 +1,8 @@
+kind: Docs
+body: 'Adds an additional step to the relevance calculation process. Now, a weight 
+       value is also computed and stored for the name field. Finally, the results are 
+       sorted first by overallNameWeight and then by overallWeight.'
+time: 2024-06-10T11:14:20.093791+02:00
+custom:
+  Author: sercancicek
+  Issue: "217"
