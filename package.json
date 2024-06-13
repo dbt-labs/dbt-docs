@@ -19,7 +19,7 @@
     "base64-inline-loader": "^1.1.1",
     "bootstrap": "3",
     "css-loader": "^1.0.0",
-    "cytoscape": "https://github.com/dbt-labs/cytoscape.js.git#feature/cubic-bezier-edges",
+    "cytoscape": "github:dbt-labs/cytoscape.js#feature/cubic-bezier-edges",
     "cytoscape-context-menus": "3.0.5",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-expand-collapse": "^3.1.1",
