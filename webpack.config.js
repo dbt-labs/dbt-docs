@@ -1,7 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
+const HtmlInlineScriptPlugin = require("html-inline-script-webpack-plugin");
 
 const BUILD_ENV = process.env.DBT_DOCS_ENV || "production";
 
