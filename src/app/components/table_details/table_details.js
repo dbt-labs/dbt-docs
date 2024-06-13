@@ -111,6 +111,10 @@ angular
                     ? retrieveOwner(`group.${model.package_name}.${model.group}`)
                     : metadata.owner;
 
+                const config_enforced = model.hasOwnProperty('config') && model.config.hasOwnProperty('contract')
+                    ? model.config.contract.enforced
+                    : false;
+
                 var stats = [
                     {
                         name: "Owner",
@@ -142,7 +146,7 @@ angular
                     },
                     {
                         name: "Contract",
-                        value: model.config.contract.enforced ? "Enforced" : "Not Enforced"
+                        value: config_enforced ? "Enforced" : "Not Enforced"
                     },
                 ]
 

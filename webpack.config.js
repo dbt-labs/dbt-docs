@@ -1,7 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackInlineSourcePlugin = require("html-webpack-inline-source-plugin");
+const HtmlInlineScriptPlugin = require("html-inline-script-webpack-plugin");
 
 const BUILD_ENV = process.env.DBT_DOCS_ENV || "production";
 
@@ -32,7 +32,7 @@ module.exports = {
       inlineSource: ".(js|css)$",
     }),
 
-    new HtmlWebpackInlineSourcePlugin(),
+    new HtmlInlineScriptPlugin(),
   ],
   mode: BUILD_ENV,
   module: {

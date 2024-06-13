@@ -20,7 +20,11 @@ angular
             }
             
             scope.has_constraint = function(col, constraint_name) {
-                return col.constraints.some(constraint => constraint.type === constraint_name)
+                if (!col.hasOwnProperty('constraints')) {
+                    return false;
+                }
+
+                return col.constraints.some(constraint => constraint.type === constraint_name);
             }
 
             scope.has_more_info = function(column) {
