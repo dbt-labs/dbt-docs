@@ -24,6 +24,8 @@
             <label for="column" style="margin-right:25px;">Column</label> 
             <input type="checkbox" id="column_description" ng-model="checkboxStatus.show_column_descriptions" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
             <label for="column_description" style="margin-right:25px;">Column Description</label>
+            <input type="checkbox" id="metadata" ng-model="checkboxStatus.show_metadata" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
+            <label for="column_metadata" style="margin-right:25px;">Metadata</label>
             <input type="checkbox" id="code" ng-model="checkboxStatus.show_code" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
             <label for="code" style="margin-right:15px;">SQL</label>
             <input type="checkbox" id="tag" ng-model="checkboxStatus.show_tags" ng-click = "filterResults(results, checkboxStatus)" style = "margin-right:5px">
@@ -70,6 +72,16 @@
                             <span ng-bind-html="highlight(tag + ',')" ng-show="$last === false"></span>
                             <span ng-bind-html="highlight(tag)" ng-show="$last === true"></span>
                         </span>
+                        </div>
+                        <div class="sub-results" ng-show="query.length > 0">
+                        <span ng-repeat="meta_key in metadataFilter(result.model.meta) | limitTo:limitMetadata(result.model.unique_id)">
+                            <span ng-show="$first === true">metadata:</span>
+                            <span ng-bind-html="highlight(meta_key + ',')" ng-show="$last === false"></span>
+                            <span ng-bind-html="highlight(meta_key)" ng-show="$last === true"></span>
+                        </span>
+                        <a
+                            ng-show="metadataFilter(result.model.meta).length > max_results_metadata && !limit_metadata[result.model.unique_id]"
+                            ng-click="$event.stopPropagation(); limit_metadata[result.model.unique_id] = 100">Show {{ metadataFilter(result.model.meta).length - max_results_metadata }} more</a>
                         </div>
                 </div>
                 <a
