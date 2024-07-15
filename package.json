@@ -22,7 +22,7 @@
     "cytoscape": "github:dbt-labs/cytoscape.js#feature/cubic-bezier-edges",
     "cytoscape-context-menus": "3.0.5",
     "cytoscape-dagre": "^2.2.1",
-    "cytoscape-expand-collapse": "^3.1.1",
+    "cytoscape-expand-collapse": "^4.1.0",
     "dagre": "^0.8.5",
     "deepmerge": "^2.1.1",
     "file-loader": "^1.1.11",
