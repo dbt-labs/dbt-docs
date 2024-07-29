@@ -37,7 +37,7 @@
     "md5": "^2.2.1",
     "ngtemplate-loader": "^2.0.1",
     "prism-themes": "^1.4.0",
-    "sass-loader": "^7.0.3",
+    "sass-loader": "^16.0.0",
     "style-loader": "^0.21.0",
     "svg-url-loader": "^5.0.1",
     "underscore": "^1.13.4",
