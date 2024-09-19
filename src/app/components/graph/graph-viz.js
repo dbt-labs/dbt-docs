@@ -205,7 +205,8 @@ angular
                     coreAsWell: true,
                     onClickFunction: function(event) {
                         var options = {
-                            bg: '#005e7a'
+                            bg: '#005e7a',
+                            full: true
                         };
                         var png64 = cy.png(options);
                         var link = document.createElement('a');
