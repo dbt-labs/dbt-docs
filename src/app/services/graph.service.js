@@ -497,6 +497,7 @@ angular
 
         if (node_name) {
             selected_spec.include = "+" + node_name + "+";
+            selected_spec.hops = 1;
             selected_spec.exclude = "";
         } else {
             selected_spec.include = "";
