@@ -25,7 +25,7 @@
     "cytoscape-expand-collapse": "^3.1.1",
     "dagre": "^0.8.5",
     "deepmerge": "^2.1.1",
-    "file-loader": "^1.1.11",
+    "file-loader": "^6.2.0",
     "html-inline-script-webpack-plugin": "^1.1.6",
     "html-loader": "^0.5.5",
     "html-webpack-inline-svg-plugin": "^1.2.4",
