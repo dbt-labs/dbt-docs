@@ -1,0 +1,37 @@
+<div class="panel">
+    <div class="panel-body">
+        <div ng-if="_.isEmpty(model.dimensions)">
+            Dimension information is not available for this seed
+        </div>
+        <div class="table-responsive"
+             style="max-height: 800px; overflow-y: scroll;"
+             ng-if="!_.isEmpty(model.dimensions)">
+            <table class="table table-borderless table-hover">
+                <thead>
+                    <tr>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">dimension</th>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Type</th>
+                        <th style="background-color: white; position: sticky; top: 0; z-index: 1;">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        ng-repeat="dimension in dimensions track by dimension.index"
+                        class="column-row">
+                        <td>
+                            <div>
+                                <span class='text-dark'>{{ get_dim_name(dimension.name) }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class='text-dark'>{{ dimension.type }}</p>
+                        </td>
+                        <td>
+                            <span class='text-dark'>{{ dimension.description }}</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
