@@ -45,7 +45,7 @@
     "webpack-inline-svg-plugin": "^1.1.4",
     "body-parser": ">=1.20.3",
     "braces": ">=3.0.3",
-    "ws": ">=8.17.1"
+    "ws": ">=8.18.2"
   },
   "dependencies": {
     "prismjs": "^1.28.0"
