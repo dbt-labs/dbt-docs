@@ -83,6 +83,15 @@
                 </div>
             </div>
         </section>
+        
+        <section class="section" ng-show = "semantic_model.dimensions.length != 0">
+                <div class="section-target" id="dimensions"></div>
+                <div class="section-content">
+                    <h6>Dimensions</h6>
+
+                <dimension-details model="semantic_model" />
+            </div>
+        </section>
 
             <section class="section" ng-show = "parentsLength != 0">
                 <div class="section-target" id="depends_on"></div>
