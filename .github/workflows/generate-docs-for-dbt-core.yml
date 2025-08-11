@@ -152,13 +152,13 @@ jobs:
           git status
 
       - name: Download index artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: ${{ needs.set_variables.outputs.index_artifact_name }}
           path: "core/dbt/task/docs"
       
       - name: Download changelog artifact(s)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: ${{ needs.set_variables.outputs.changie_artifact_name }}
           path: ".changes/unreleased"
