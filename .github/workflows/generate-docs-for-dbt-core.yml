@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - name: Checkout dbt-docs repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: upload changelog artifacts
         id: retrieve_changelogs
@@ -94,7 +94,7 @@ jobs:
     steps:
 
       - name: Checkout dbt-docs repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Update submodules
         run: git submodule update --init --recursive 
@@ -136,7 +136,7 @@ jobs:
 
     steps:
       - name: Check out dbt-core main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: dbt-labs/dbt-core
           ref: main
@@ -195,7 +195,7 @@ jobs:
 
     steps:
       - name: Checkout dbt-docs repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: dbt-labs/dbt-docs # redundant but calling it out for clarity
       
