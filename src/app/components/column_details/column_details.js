@@ -6,7 +6,7 @@ const _ = require('underscore');
 
 angular
 .module('dbt')
-.directive('columnDetails', ['project', function(projectService) {
+.directive('columnDetails', ['project', '$location', '$anchorScroll', '$timeout', function(projectService, $location, $anchorScroll, $timeout) {
     return {
         scope: {
             model: '=',
@@ -14,11 +14,35 @@ angular
         templateUrl: template,
         link: function(scope) {
 
+            scope.column_anchor = function(column, $event) {
+                $event.stopPropagation();
+                $location.hash('column-' + column.name);
+                if (scope.has_more_info(column)) {
+                    column.expanded = true;
+                }
+            }
+
+            scope.$watch('model.columns', function(columns) {
+                if (!columns || _.isEmpty(columns)) return;
+                var hash = $location.hash();
+                if (!hash || hash.indexOf('column-') !== 0) return;
+                var col_name = hash.substring('column-'.length);
+                var target = _.find(columns, function(col) {
+                    return col.name === col_name || col.name.toLowerCase() === col_name.toLowerCase();
+                });
+                if (target && scope.has_more_info(target)) {
+                    target.expanded = true;
+                }
+                $timeout(function() {
+                    $anchorScroll();
+                }, 0);
+            });
+
             scope.has_test = function(col, test_name) {
                 var test_types = _.pluck(col.tests, 'short');
                 return test_types.indexOf(test_name) != -1;
             }
-            
+
             scope.has_constraint = function(col, constraint_name) {
                 if (!col.hasOwnProperty('constraints')) {
                     return false;
@@ -67,4 +91,3 @@ angular
         }
     }
 }]);
-
