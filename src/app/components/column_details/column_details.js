@@ -6,7 +6,7 @@ const _ = require('underscore');
 
 angular
 .module('dbt')
-.directive('columnDetails', ['project', '$location', '$anchorScroll', '$timeout', function(projectService, $location, $anchorScroll, $timeout) {
+.directive('columnDetails', ['project', '$location', function(projectService, $location) {
     return {
         scope: {
             model: '=',
@@ -33,9 +33,17 @@ angular
                 if (target && scope.has_more_info(target)) {
                     target.expanded = true;
                 }
-                $timeout(function() {
-                    $anchorScroll();
-                }, 0);
+                // Adjust scroll after model controller's $anchorScroll() completes
+                // Use native setTimeout to avoid triggering an Angular digest cycle
+                setTimeout(function() {
+                    var el = document.getElementById(hash);
+                    if (!el) return;
+                    var appScroll = el.closest('.app-scroll');
+                    var stickyHeader = appScroll && appScroll.querySelector('.app-sticky');
+                    if (appScroll && stickyHeader) {
+                        appScroll.scrollTop -= stickyHeader.offsetHeight;
+                    }
+                }, 200);
             });
 
             scope.has_test = function(col, test_name) {
