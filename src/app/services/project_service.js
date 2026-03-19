@@ -197,6 +197,12 @@ angular
                 node.label = node.name;
             });
 
+            // Add functions back into nodes to make site logic work
+            _.each(service.files.manifest.functions, function(node) {
+                node.label = node.name;
+                service.files.manifest.nodes[node.unique_id] = node;
+            });
+
             var adapter = service.files.manifest.metadata.adapter_type;
             var macros = clean_project_macros(service.files.manifest.macros, adapter);
             service.files.manifest.macros = macros;
@@ -290,7 +296,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric', 'semantic_model', 'saved_query'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric', 'semantic_model', 'saved_query', 'function'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -418,7 +424,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric', 'semantic_model', 'saved_query'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric', 'semantic_model', 'saved_query', 'function'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -440,6 +446,9 @@ angular
 
             var saved_queries = _.values(service.project.saved_queries);
             service.tree.saved_queries = buildSavedQueryTree(saved_queries, select);
+
+            var functions = _.filter(service.project.nodes, {resource_type: 'function'});
+            service.tree.functions = buildFunctionTree(functions, select);
 
             cb(service.tree);
         });
@@ -473,6 +482,7 @@ angular
         service.updateSelectedInTree(select, service.tree.metrics);
         service.updateSelectedInTree(select, service.tree.semantic_models);
         service.updateSelectedInTree(select, service.tree.saved_queries);
+        service.updateSelectedInTree(select, service.tree.functions);
 
         return service.tree;
     }
@@ -696,6 +706,43 @@ angular
         return saved_queries
     }
 
+    function buildFunctionTree(nodes, select) {
+        var functions = {}
+
+        _.each(nodes, function(node) {
+            var project = node.package_name;
+            var is_active = node.unique_id == select;
+
+            if (!functions[project]) {
+                functions[project] = {
+                    type: "folder",
+                    name: project,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                functions[project].active = true;
+            }
+
+            functions[project].items.push({
+                type: 'file',
+                name: node.name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'function'
+            })
+        });
+
+        var functions = _.sortBy(_.values(functions), 'name');
+
+        _.each(functions, function(fn) {
+            fn.items = _.sortBy(fn.items, 'name');
+        });
+
+        return functions
+    }
+
     function consolidateAdapterMacros(macros, adapter) {
         var adapter_macros = {};
         _.each(macros, function(macro) {
@@ -742,7 +789,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric' || node.resource_type == 'semantic_model' || node.resource_type == 'saved_query') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric' || node.resource_type == 'semantic_model' || node.resource_type == 'saved_query' || node.resource_type == 'function') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {

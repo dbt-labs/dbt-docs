@@ -11,6 +11,7 @@ var SELECTOR_TYPE = {
     METRIC: 'metric',
     SEMANTIC_MODEL: 'semantic_model',
     SAVED_QUERY: 'saved_query',
+    FUNCTION: 'function',
     GROUP: 'group',
     PATH: 'path',
     FILE: 'file',
@@ -29,6 +30,7 @@ NODE_MATCHERS[SELECTOR_TYPE.EXPOSURE] = getNodesByExposure;
 NODE_MATCHERS[SELECTOR_TYPE.METRIC] = getNodesByMetric;
 NODE_MATCHERS[SELECTOR_TYPE.SEMANTIC_MODEL] = getNodesBySemanticModel;
 NODE_MATCHERS[SELECTOR_TYPE.SAVED_QUERY] = getNodesBySavedQuery;
+NODE_MATCHERS[SELECTOR_TYPE.FUNCTION] = getNodesByFunction;
 NODE_MATCHERS[SELECTOR_TYPE.GROUP] = getNodesByGroup;
 NODE_MATCHERS[SELECTOR_TYPE.PATH] = getNodesByPath;
 NODE_MATCHERS[SELECTOR_TYPE.FILE] = getNodesByFile;
@@ -99,7 +101,8 @@ function getNodesByFQN(elements, qualified_name) {
           node.resource_type == 'exposure' || 
           node.resource_type == 'metric' || 
           node.resource_type == 'semantic_model' ||
-          node.resource_type == 'saved_query'
+          node.resource_type == 'saved_query' ||
+          node.resource_type == 'function'
         ) {
             return;
         }
@@ -355,6 +358,26 @@ function getNodesBySavedQuery(elements, saved_query) {
         if (selected_saved_query_name == '*') {
             nodes.push(node_obj.data);
         } else if (selected_saved_query_name == saved_query_name) {
+            nodes.push(node_obj.data);
+        }
+    })
+    return nodes;
+}
+
+function getNodesByFunction(elements, fn_name) {
+    var nodes = [];
+    _.each(elements, function(node_obj) {
+        var node = node_obj.data;
+
+        if (node.resource_type != 'function') {
+            return;
+        }
+
+        var function_name = node.name;
+
+        if (fn_name == '*') {
+            nodes.push(node_obj.data);
+        } else if (fn_name == function_name) {
             nodes.push(node_obj.data);
         }
     })

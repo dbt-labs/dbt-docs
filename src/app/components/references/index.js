@@ -51,6 +51,8 @@ angular
                     return 'Semantic Models';
                 } else if (type == 'saved_query') {
                     return 'Saved Queries';
+                } else if (type == 'function') {
+                    return 'Functions';
                 } else if (type == 'operation') {
                     return 'Operations';
                 } else {

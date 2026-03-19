@@ -102,6 +102,17 @@
                     <br />
                 </div>
 
+                <div ng-show="tree.functions.length > 0">
+                    <strong>Functions</strong>
+                    <ul style="display: block">
+                        <model-tree-line
+                            item="item"
+                            resource-type="function"
+                            ng-repeat="item in tree.functions"></model-tree-line>
+                    </ul>
+                    <br />
+                </div>
+
                 <strong>Projects</strong>
                 <ul>
                     <model-tree-line

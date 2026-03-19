@@ -21,6 +21,7 @@ const templates = {
     metric: require('./docs/metric.html'),
     semantic_model: require('./docs/semantic_model.html'),
     saved_query: require('./docs/saved_query.html'),
+    function: require('./docs/function.html'),
     operation: require('./docs/operation.html'),
 }
 
@@ -156,6 +157,14 @@ angular
             url: 'saved_query/:unique_id?section&' + graph_params,
             controller: 'SavedQueryCtrl',
             templateUrl: templates.saved_query,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.function', {
+            url: 'function/:unique_id?section&' + graph_params,
+            controller: 'FunctionCtrl',
+            templateUrl: templates.function,
             params: {
                 unique_id: {type: 'string'}
             },

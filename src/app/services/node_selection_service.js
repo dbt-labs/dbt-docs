@@ -23,7 +23,8 @@ angular
             'exposure',
             'metric',
             'semantic_model',
-            'saved_query'
+            'saved_query',
+            'function'
         ],
         depth: 1,
     };
@@ -39,7 +40,7 @@ angular
         options: {
             packages: [],
             tags: [null],
-            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric', 'semantic_model', 'unit_test', 'saved_query'],
+            resource_types: ['model', 'seed', 'snapshot', 'source', 'test', 'analysis', 'exposure', 'metric', 'semantic_model', 'unit_test', 'saved_query', 'function'],
         }
     };
 
@@ -67,6 +68,8 @@ angular
             include_selection = '+semantic_model:' + node.name;
         } else if (node && node.resource_type == 'saved_query') {
             include_selection = '+saved_query:' + node.name;
+        } else if (node && node.resource_type == 'function') {
+            include_selection = '+function:' + node.name + '+';
         } else if (node && _.includes(['analysis', 'test', 'unit_test'], node.resource_type)) {
             include_selection = '+' + node.name;
         } else {
@@ -99,7 +102,7 @@ angular
         if (node.resource_type == 'source') {
             pre += "source:"
             node_name = node.source_name + "." + node.name;
-        } else if (['exposure', 'metric', 'semantic_model', 'saved_query'].indexOf(node.resource_type) > -1) {
+        } else if (['exposure', 'metric', 'semantic_model', 'saved_query', 'function'].indexOf(node.resource_type) > -1) {
             pre += node.resource_type + ":"
             node_name = node.name;
         } else {
