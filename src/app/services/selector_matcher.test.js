@@ -19,6 +19,28 @@ const elements = [
     },
     {
         data: {
+            id: 9,
+            fqn: ['my_package', 'calculate_total'],
+            resource_type: 'function',
+            tags: [],
+            name: 'calculate_total',
+            original_file_path: 'functions/calculate_total.sql',
+            package_name: 'my_package',
+        }
+    },
+    {
+        data: {
+            id: 10,
+            fqn: ['my_package', 'format_name'],
+            resource_type: 'function',
+            tags: [],
+            name: 'format_name',
+            original_file_path: 'functions/format_name.sql',
+            package_name: 'other_package',
+        }
+    },
+    {
+        data: {
             id: 2,
             fqn: ['my_package', 'dir', 'other_model'],
             tags: ['daily'],
@@ -365,13 +387,13 @@ test("Test getting nodes by package", () => {
     expect(
         matchByPackage('my_package')
     ).toStrictEqual(
-        [1,2,4,5,6,7,8]
+        [1,9,2,4,5,6,7,8]
     )
 
     expect(
         matchByPackage('other_package')
     ).toStrictEqual(
-        [3]
+        [10,3]
     )
 
     expect(
@@ -484,6 +506,51 @@ test("Test getting nodes by test type", () => {
 
     expect(
         matchByTestType('invalid')
+    ).toStrictEqual(
+        []
+    )
+})
+
+test("Test getting nodes by function", () => {
+    function matchByFunction(selector) {
+        var nodes = matcher.getNodesByFunction(elements, selector)
+        return _.map(nodes, (node) => node.id);
+    }
+
+    expect(
+        matchByFunction('calculate_total')
+    ).toStrictEqual(
+        [9]
+    )
+
+    expect(
+        matchByFunction('format_name')
+    ).toStrictEqual(
+        [10]
+    )
+
+    expect(
+        matchByFunction('*')
+    ).toStrictEqual(
+        [9, 10]
+    )
+
+    expect(
+        matchByFunction('nonexistent')
+    ).toStrictEqual(
+        []
+    )
+})
+
+test("Test that functions are excluded from FQN matching", () => {
+    function matchByFQN(selector) {
+        var nodes = matcher.getNodesByFQN(elements, selector)
+        return _.map(nodes, (node) => node.id);
+    }
+
+    // 'calculate_total' matches a function FQN but should not be returned
+    expect(
+        matchByFQN('calculate_total')
     ).toStrictEqual(
         []
     )

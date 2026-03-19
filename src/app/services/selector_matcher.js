@@ -451,6 +451,7 @@ module.exports = {
     getNodesByConfig,
     getNodesByTestName,
     getNodesByTestType,
+    getNodesByFunction,
 
     getNodesFromSpec,
 }
