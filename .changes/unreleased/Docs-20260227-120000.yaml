@@ -1,0 +1,6 @@
+kind: Docs
+body: Add anchor links for individual columns in model pages
+time: 2026-02-27T12:00:00.000000+09:00
+custom:
+    Author: xinkent
+    Issue: "186"

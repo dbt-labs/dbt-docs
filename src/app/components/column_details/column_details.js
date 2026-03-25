@@ -6,7 +6,7 @@ const _ = require('underscore');
 
 angular
 .module('dbt')
-.directive('columnDetails', ['project', function(projectService) {
+.directive('columnDetails', ['project', '$location', function(projectService, $location) {
     return {
         scope: {
             model: '=',
@@ -14,11 +14,43 @@ angular
         templateUrl: template,
         link: function(scope) {
 
+            scope.column_anchor = function(column, $event) {
+                $event.stopPropagation();
+                $location.hash('column-' + column.name);
+                if (scope.has_more_info(column)) {
+                    column.expanded = true;
+                }
+            }
+
+            scope.$watch('model.columns', function(columns) {
+                if (!columns || _.isEmpty(columns)) return;
+                var hash = $location.hash();
+                if (!hash || hash.indexOf('column-') !== 0) return;
+                var col_name = hash.substring('column-'.length);
+                var target = _.find(columns, function(col) {
+                    return col.name === col_name || col.name.toLowerCase() === col_name.toLowerCase();
+                });
+                if (target && scope.has_more_info(target)) {
+                    target.expanded = true;
+                }
+                // Adjust scroll after model controller's $anchorScroll() completes
+                // Use native setTimeout to avoid triggering an Angular digest cycle
+                setTimeout(function() {
+                    var el = document.getElementById(hash);
+                    if (!el) return;
+                    var appScroll = el.closest('.app-scroll');
+                    var stickyHeader = appScroll && appScroll.querySelector('.app-sticky');
+                    if (appScroll && stickyHeader) {
+                        appScroll.scrollTop -= stickyHeader.offsetHeight;
+                    }
+                }, 200);
+            });
+
             scope.has_test = function(col, test_name) {
                 var test_types = _.pluck(col.tests, 'short');
                 return test_types.indexOf(test_name) != -1;
             }
-            
+
             scope.has_constraint = function(col, constraint_name) {
                 if (!col.hasOwnProperty('constraints')) {
                     return false;
@@ -67,4 +99,3 @@ angular
         }
     }
 }]);
-

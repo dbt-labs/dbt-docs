@@ -1,3 +1,18 @@
+<style>
+.column-row .column-anchor {
+    visibility: hidden;
+    color: #adb5bd;
+    text-decoration: none;
+    margin-left: 4px;
+    font-size: 12px;
+}
+.column-row:hover .column-anchor {
+    visibility: visible;
+}
+.column-row .column-anchor:hover {
+    color: #0078d4;
+}
+</style>
 <div class="panel">
     <div class="panel-body">
         <div ng-if="_.isEmpty(model.columns)">
@@ -21,12 +36,14 @@
                     <tr
                         ng-repeat-start="column in get_columns(model) track by column.index"
                         ng-click="toggle_column_expanded(column)"
+                        id="column-{{ column.name }}"
                         class="column-row"
                         ng-class="{'column-row-selected': column.expanded}"
                         ng-style="{cursor: has_more_info(column) ? 'pointer' : 'auto'}">
                         <td>
                             <div>
                                 <span class='text-dark'>{{ get_col_name(column.name) }}</span>
+                                <a class="column-anchor" ng-click="column_anchor(column, $event)" title="Link to this column">#</a>
                             </div>
                         </td>
                         <td>
