@@ -105,7 +105,7 @@ jobs:
           node-version: 14.18.2
 
       - name: Use Ruby v2.7.5
-        uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@8aeb6ff8030dd539317f8e1769a044873b56ea71 # ruby/setup-ruby@v1
         with:
           ruby-version: '2.7.5'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
