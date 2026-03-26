@@ -39,6 +39,16 @@
                             </dl>
                         </div>
                     </div>
+                    <div class="detail-group" ng-if="hasData(external)">
+                        <div class="detail-body">
+                            <dl class="detail"
+                                ng-repeat="item in external">
+                                <dt class="detail-label">{{ item.name }}</dt>
+                                <dd class="detail-value" ng-if="!item.isUrl">{{ item.value }}</dd>
+                                <dd class="detail-value" ng-if="item.isUrl"><a ng-href="{{ item.value }}" target="_blank">{{ item.value }}</a></dd>
+                            </dl>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

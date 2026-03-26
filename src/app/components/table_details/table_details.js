@@ -19,6 +19,7 @@ angular
 
             scope.details = [];
             scope.extended = [];
+            scope.external = [];
             scope.exclude = scope.exclude || [];
             scope.meta = null;
             scope._show_expanded = false;
@@ -181,6 +182,50 @@ angular
                 return mapped;
             }
 
+            function getExternalTablesInfo(external) {
+                if (!external || _.isEmpty(external)) {
+                    return [];
+                }
+
+                var result = [];
+                _.each(external, function(value, key) {
+                    if (value === null || value === undefined) {
+                        return;
+                    }
+
+                    if (key === 'options' && typeof value === 'object') {
+                        // Expand options into separate rows
+                        _.each(value, function(optValue, optKey) {
+                            if (optValue !== null && optValue !== undefined) {
+                                result.push({
+                                    name: 'Option: ' + optKey,
+                                    value: String(optValue),
+                                    isUrl: false
+                                });
+                            }
+                        });
+                    } else if (typeof value === 'object') {
+                        // For other objects, stringify them
+                        var stringValue = JSON.stringify(value);
+                        if (stringValue !== '{}' && stringValue !== '[]') {
+                            result.push({
+                                name: key,
+                                value: stringValue,
+                                isUrl: false
+                            });
+                        }
+                    } else {
+                        result.push({
+                            name: key,
+                            value: String(value),
+                            isUrl: key === 'location' && typeof value === 'string' && value.match(/^https?:\/\//)
+                        });
+                    }
+                });
+
+                return result;
+            }
+
             scope.$watch("model", function(nv, ov) {
                 var get_type = _.property(['metadata', 'type'])
                 var rel_type = get_type(nv);
@@ -190,6 +235,7 @@ angular
                 
                 scope.details = getBaseStats(nv);
                 scope.extended = getExtendedStats(nv.stats);
+                scope.external = getExternalTablesInfo(nv.external);
 
                 if (scope.extras) {
                     var extrasToAdd = _.filter(scope.extras, function(extra) {
