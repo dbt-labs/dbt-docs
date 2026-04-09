@@ -9,3 +9,4 @@ require('./column_details/column_details.js');
 require('./code_block/code_block.js');
 require('./macro_arguments/');
 require('./references/');
+require('./config_details/config_details.js');
