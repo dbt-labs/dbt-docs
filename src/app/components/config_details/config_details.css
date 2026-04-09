@@ -1,0 +1,54 @@
+.config-root {
+    margin: 0;
+}
+
+.config-entry {
+    padding: 4px 0;
+}
+
+.config-entry-scalar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+}
+
+.config-entry-scalar > .detail-label {
+    flex: 0 0 160px;
+    text-transform: uppercase;
+}
+
+.config-entry-scalar > .detail-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    word-break: break-word;
+}
+
+.config-entry-nested > .detail-label {
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.config-nested {
+    margin: 0;
+    padding-left: 20px;
+    border-left: 1px solid #e0e0e0;
+}
+
+.config-nested .config-entry {
+    padding: 2px 0;
+}
+
+.config-nested .config-entry-scalar > .detail-label {
+    flex: 0 0 140px;
+}
+
+.config-entry code {
+    margin-right: 4px;
+}
+
+.config-array-item {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    padding: 2px 0;
+}

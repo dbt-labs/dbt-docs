@@ -33,6 +33,7 @@
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.saved_query({'#': 'details'})">Details</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.saved_query({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active' ng-show="saved_query.config"><a ui-sref="dbt.saved_query({'#': 'config'})">Config</a></li>
                 <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.saved_query({'#': 'depends_on'})">Depends On</a></li>
             </ul>
         </div>
@@ -82,6 +83,11 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section class="section" ng-show="saved_query.config">
+            <div class="section-target" id="config"></div>
+            <config-details config="saved_query.config"></config-details>
         </section>
 
             <section class="section" ng-show = "parentsLength != 0">

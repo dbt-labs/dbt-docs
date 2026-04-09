@@ -33,6 +33,7 @@
             <ul class="nav nav-tabs">
                 <li ui-sref-active='active'><a ui-sref="dbt.semantic_model({'#': 'details'})">Details</a></li>
                 <li ui-sref-active='active'><a ui-sref="dbt.semantic_model({'#': 'description'})">Description</a></li>
+                <li ui-sref-active='active' ng-show="semantic_model.config"><a ui-sref="dbt.semantic_model({'#': 'config'})">Config</a></li>
                 <li ui-sref-active='active' ng-show = "parentsLength != 0"><a ui-sref="dbt.semantic_model({'#': 'depends_on'})">Depends On</a></li>
             </ul>
         </div>
@@ -82,6 +83,11 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section class="section" ng-show="semantic_model.config">
+            <div class="section-target" id="config"></div>
+            <config-details config="semantic_model.config"></config-details>
         </section>
 
             <section class="section" ng-show = "parentsLength != 0">

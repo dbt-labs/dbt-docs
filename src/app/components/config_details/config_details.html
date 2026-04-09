@@ -1,0 +1,44 @@
+<div class="section-content">
+    <h6>Config</h6>
+    <div class="panel">
+        <div class="panel-body">
+            <script type="text/ng-template" id="config-entry.html">
+                <div ng-if="entry.type === 'scalar'" class="config-entry config-entry-scalar">
+                    <dt class="detail-label" ng-bind="entry.key"></dt>
+                    <dd class="detail-value" ng-bind="entry.value"></dd>
+                </div>
+                <div ng-if="entry.type === 'array'" class="config-entry config-entry-scalar">
+                    <dt class="detail-label" ng-bind="entry.key"></dt>
+                    <dd class="detail-value">
+                        <span ng-if="entry.isSimpleArray">
+                            <code ng-repeat="item in entry.value" ng-bind="item"></code>
+                        </span>
+                        <dl ng-if="!entry.isSimpleArray" class="config-nested">
+                            <div ng-repeat="child in entry.value" class="config-array-item">
+                                <dt class="detail-label">[<span ng-bind="$index"></span>]</dt>
+                                <dd ng-if="child.type === 'scalar'" class="detail-value" ng-bind="child.value"></dd>
+                                <dd ng-if="child.type === 'object'" class="detail-value">
+                                    <dl class="config-nested">
+                                        <div ng-repeat="nestedEntry in child.entries" ng-init="entry = nestedEntry" ng-include="'config-entry.html'"></div>
+                                    </dl>
+                                </dd>
+                            </div>
+                        </dl>
+                    </dd>
+                </div>
+                <div ng-if="entry.type === 'object'" class="config-entry config-entry-nested">
+                    <dt class="detail-label" ng-bind="entry.key"></dt>
+                    <dd class="detail-value">
+                        <dl class="config-nested">
+                            <div ng-repeat="nestedEntry in entry.entries" ng-init="entry = nestedEntry" ng-include="'config-entry.html'"></div>
+                        </dl>
+                    </dd>
+                </div>
+            </script>
+            <dl class="config-root">
+                <div ng-repeat="entry in entries" ng-include="'config-entry.html'"></div>
+            </dl>
+            <div ng-if="entries.length === 0" class="text-muted">No config available</div>
+        </div>
+    </div>
+</div>
