@@ -115,6 +115,10 @@ angular
                     ? model.config.contract.enforced
                     : false;
 
+                const event_time = model.hasOwnProperty('config') && model.config.event_time
+                    ? model.config.event_time
+                    : undefined;
+
                 var stats = [
                     {
                         name: "Owner",
@@ -147,6 +151,10 @@ angular
                     {
                         name: "Contract",
                         value: config_enforced ? "Enforced" : "Not Enforced"
+                    },
+                    {
+                        name: "Event Time",
+                        value: event_time
                     },
                 ]
 
