@@ -1,0 +1,6 @@
+kind: Docs
+body: Show every node in the project tree when multiple nodes are defined in one file, such as several snapshots in a single YAML file
+time: 2026-09-20T15:40:19.343365+09:00
+custom:
+    Author: junoha
+    Issue: 586 95 442
