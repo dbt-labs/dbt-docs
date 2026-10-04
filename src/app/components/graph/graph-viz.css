@@ -53,3 +53,13 @@ select:not([multiple]).form-control {
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cG9seWxpbmUgcG9pbnRzPSI0LjUgNiA4IDkuNSAxMS41IDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwOTRiMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiAvPjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==");
     background-size: 1.25em 1.25em;
 }
+
+/* rubber band drawn by a right-button drag (see graph-box-select.js) */
+.graph-box-select {
+    position: absolute;
+    display: none;
+    border: 1px dashed #bd6bb6;
+    background: rgba(189, 107, 182, 0.15);
+    pointer-events: none;
+    z-index: 1000;
+}

@@ -13,6 +13,8 @@ cytoscape_ctx_menu(cytoscape, $);
 const dagre = require('cytoscape-dagre');
 cytoscape.use(dagre);
 
+const enableRightDragBoxSelect = require('./graph-box-select');
+
 
 angular
 .module('dbt')
@@ -78,6 +80,10 @@ angular
         if (!window.graph) {
             window.graph = cy;
         }
+
+        // right-drag draws a box and selects the nodes under it; a left-drag on
+        // a selected node then moves the whole selection (see graph-box-select)
+        enableRightDragBoxSelect(cy);
 
         if(scope.graphReady){
           $(window).on("load", function() {

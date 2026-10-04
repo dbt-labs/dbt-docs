@@ -269,6 +269,20 @@ angular
                         'ghost': 'no',
                     }
                 },
+                // cytoscape's own selection state (as set by the right-drag box
+                // select). Distinct from `selected=1`, which is this app's
+                // lineage highlight for the clicked node. Last so that it wins
+                // over the per-type border colors above.
+                {
+                    selector: 'node:selected',
+                    style: {
+                        'border-width': 4,
+                        'border-color': '#bd6bb6',
+                        'overlay-color': '#bd6bb6',
+                        'overlay-opacity': 0.15,
+                        'overlay-padding': 6,
+                    }
+                },
             ],
             ready: function(e) {
                 console.log("graph ready");

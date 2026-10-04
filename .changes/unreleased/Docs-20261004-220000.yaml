@@ -1,0 +1,6 @@
+kind: Docs
+body: Add right-button drag box selection for the lineage graph
+time: 2026-10-04T22:00:00.000000+09:00
+custom:
+    Author: seohyunjun
+    Issue: "86"
